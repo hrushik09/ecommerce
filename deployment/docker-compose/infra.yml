@@ -19,6 +19,5 @@ services:
       resources:
         limits:
           memory: 500m
-
 volumes:
   inventory-db-volume: { }
