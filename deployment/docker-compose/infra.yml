@@ -8,6 +8,8 @@ services:
       MYSQL_DATABASE: inventory-db
     ports:
       - "13306:3306"
+    volumes:
+      - inventory-db-volume:/var/lib/mysql
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 20s
@@ -17,3 +19,6 @@ services:
       resources:
         limits:
           memory: 500m
+
+volumes:
+  inventory-db-volume: { }
