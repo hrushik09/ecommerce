@@ -1,0 +1,20 @@
+name: "ecommerce-apps"
+services:
+  inventory-service:
+    image: hrushik09/ecommerce-inventory-service
+    container_name: inventory-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:mysql://inventory-db:3306/inventory-db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootroot
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    depends_on:
+      inventory-db:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 700m
