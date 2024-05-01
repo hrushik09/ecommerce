@@ -19,5 +19,6 @@
     </properties>
 
     <modules>
+        <module>inventory-service</module>
     </modules>
 </project>
