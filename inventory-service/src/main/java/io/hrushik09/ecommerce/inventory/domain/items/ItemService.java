@@ -2,9 +2,25 @@ package io.hrushik09.ecommerce.inventory.domain.items;
 
 import io.hrushik09.ecommerce.inventory.domain.items.model.CreateItemCommand;
 import io.hrushik09.ecommerce.inventory.domain.items.model.CreateItemResponse;
+import io.hrushik09.ecommerce.inventory.web.items.exceptions.ItemAlreadyExists;
 
 public class ItemService {
+    private final ItemRepository itemRepository;
+
+    public ItemService(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
+
     public CreateItemResponse create(CreateItemCommand cmd) {
-        return null;
+        if (itemRepository.existsByNameAndCategory(cmd.name(), cmd.category())) {
+            throw new ItemAlreadyExists(cmd.name(), cmd.category());
+        }
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.assignCode();
+        itemEntity.setName(cmd.name());
+        itemEntity.setCategory(cmd.category());
+        itemEntity.setQuantity(cmd.quantity());
+        ItemEntity saved = itemRepository.save(itemEntity);
+        return ItemMapper.convert(saved);
     }
 }
