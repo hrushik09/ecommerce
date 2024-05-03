@@ -24,9 +24,9 @@ class ItemEndToEndTest extends AbstractIT {
                 .post("/api/items")
                 .then()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("$.code", notNullValue())
-                .body("$.name", equalTo("Item 103"))
-                .body("$.category", equalTo("Category 4"))
-                .body("$.quantity", equalTo(10));
+                .body("code", notNullValue())
+                .body("name", equalTo("Item 103"))
+                .body("category", equalTo("Category 4"))
+                .body("quantity", equalTo(10));
     }
 }
