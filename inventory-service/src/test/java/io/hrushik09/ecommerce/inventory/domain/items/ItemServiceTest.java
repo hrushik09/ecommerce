@@ -39,7 +39,7 @@ class ItemServiceTest {
 
             assertThatThrownBy(() -> itemService.create(new CreateItemCommand(name, category, 5)))
                     .isInstanceOf(ItemAlreadyExists.class)
-                    .hasMessage("Item existing_name already exists in category existing_category");
+                    .hasMessage("Item " + name + " already exists in category " + category);
         }
 
         @Test
@@ -56,6 +56,7 @@ class ItemServiceTest {
             ArgumentCaptor<ItemEntity> itemEntityArgumentCaptor = ArgumentCaptor.forClass(ItemEntity.class);
             verify(itemRepository).save(itemEntityArgumentCaptor.capture());
             ItemEntity captorValue = itemEntityArgumentCaptor.getValue();
+            assertThat(captorValue.getCode()).isNotNull();
             assertThat(captorValue.getCode()).startsWith("item_");
             assertThat(captorValue.getName()).isEqualTo(name);
             assertThat(captorValue.getCategory()).isEqualTo(category);
@@ -75,6 +76,7 @@ class ItemServiceTest {
 
             assertThat(created).isNotNull();
             assertThat(created.code()).isNotNull();
+            assertThat(created.code()).startsWith("item_");
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.category()).isEqualTo(category);
             assertThat(created.quantity()).isEqualTo(quantity);
