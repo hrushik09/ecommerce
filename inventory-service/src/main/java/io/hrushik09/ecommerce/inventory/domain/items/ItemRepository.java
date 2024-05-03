@@ -1,11 +1,7 @@
 package io.hrushik09.ecommerce.inventory.domain.items;
 
-class ItemRepository {
-    public boolean existsByNameAndCategory(String name, String category) {
-        return false;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public ItemEntity save(ItemEntity itemEntity) {
-        return null;
-    }
+interface ItemRepository extends JpaRepository<ItemEntity, Long> {
+    boolean existsByNameAndCategory(String name, String category);
 }
