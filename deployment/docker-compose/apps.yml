@@ -8,6 +8,8 @@ services:
       - DB_URL=jdbc:mysql://inventory-db:3306/inventory-db
       - DB_USERNAME=root
       - DB_PASSWORD=rootroot
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tempo:9411
     ports:
       - "8081:8081"
     restart: unless-stopped
@@ -27,6 +29,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - INVENTORY_SERVICE_URL=http://inventory-service:8081
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tempo:9411
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -43,6 +47,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - ECOMMERCE_API_GATEWAY_URL=http://api-gateway:8989
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tempo:9411
     ports:
       - "8080:8080"
     restart: unless-stopped
