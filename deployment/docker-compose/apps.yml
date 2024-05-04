@@ -1,4 +1,4 @@
-name: "ecommerce-apps"
+name: "ecommerce"
 services:
   inventory-service:
     image: hrushik09/ecommerce-inventory-service

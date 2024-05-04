@@ -1,4 +1,4 @@
-name: "ecommerce-infra"
+name: "ecommerce"
 services:
   inventory-db:
     image: mysql:8.0.34
