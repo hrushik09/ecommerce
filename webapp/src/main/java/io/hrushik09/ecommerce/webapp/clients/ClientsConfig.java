@@ -3,6 +3,8 @@ package io.hrushik09.ecommerce.webapp.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hrushik09.ecommerce.webapp.ApplicationProperties;
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
+import org.springframework.boot.web.client.ClientHttpRequestFactories;
+import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
@@ -11,6 +13,8 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+import java.time.Duration;
 
 @Configuration
 class ClientsConfig {
@@ -26,6 +30,10 @@ class ClientsConfig {
     InventoryServiceClient inventoryServiceClient(RestClient.Builder builder) {
         RestClient restClient = builder
                 .baseUrl(applicationProperties.apiGatewayUrl())
+                .requestFactory(ClientHttpRequestFactories.get(ClientHttpRequestFactorySettings.DEFAULTS
+                        .withConnectTimeout(Duration.ofSeconds(5))
+                        .withReadTimeout(Duration.ofSeconds(5))
+                ))
                 .defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
                     ProblemDetail problemDetail = objectMapper.readValue(response.getBody(), ProblemDetail.class);
                     if (problemDetail.getProperties() != null && problemDetail.getProperties().containsKey("errors")) {
