@@ -17,12 +17,12 @@ class ItemEndToEndTest extends AbstractIT {
         void shouldCreateItemSuccessfully() {
             given().contentType(JSON)
                     .body("""
-                        {
-                        "name": "Item 103",
-                        "category": "Category 4",
-                        "quantity": 10
-                        }
-                        """)
+                            {
+                            "name": "Item 103",
+                            "category": "Category 4",
+                            "quantity": 10
+                            }
+                            """)
                     .when()
                     .post("/api/items")
                     .then()
