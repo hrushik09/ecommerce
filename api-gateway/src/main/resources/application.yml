@@ -14,6 +14,13 @@ spring:
       discovery:
         locator:
           enabled: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: false
       routes:
         - id: inventory-service
           uri: ${INVENTORY_SERVICE_URL:http://localhost:8081}
