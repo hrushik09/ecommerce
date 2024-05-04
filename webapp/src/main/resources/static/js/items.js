@@ -7,7 +7,7 @@ document.addEventListener('alpine:init', () => {
         },
         createItem() {
             $.ajax({
-                url: apiGatewayUrl + "/inventory/api/items",
+                url: "/api/items",
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",

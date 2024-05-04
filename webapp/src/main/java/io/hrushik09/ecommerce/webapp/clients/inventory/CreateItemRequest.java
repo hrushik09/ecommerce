@@ -1,0 +1,14 @@
+package io.hrushik09.ecommerce.webapp.clients.inventory;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateItemRequest(
+        @NotBlank(message = "name should be non-blank")
+        String name,
+        @NotBlank(message = "category should be non-blank")
+        String category,
+        @NotNull(message = "quantity should be non-null")
+        Integer quantity
+) {
+}
