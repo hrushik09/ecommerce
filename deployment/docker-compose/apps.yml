@@ -18,3 +18,17 @@ services:
       resources:
         limits:
           memory: 700m
+
+  api-gateway:
+    image: hrushik09/ecommerce-api-gateway
+    container_name: api-gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - INVENTORY_SERVICE_URL=http://inventory-service:8081
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
