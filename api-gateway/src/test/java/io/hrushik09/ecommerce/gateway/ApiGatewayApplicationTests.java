@@ -1,4 +1,4 @@
-package io.hrushik09.apigateway;
+package io.hrushik09.ecommerce.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
