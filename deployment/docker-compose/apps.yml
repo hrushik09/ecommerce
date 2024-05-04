@@ -32,3 +32,17 @@ services:
       resources:
         limits:
           memory: 700m
+
+  webapp:
+    image: hrushik09/ecommerce-webapp
+    container_name: webapp
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - ECOMMERCE_API_GATEWAY_URL=http://api-gateway:8989
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
