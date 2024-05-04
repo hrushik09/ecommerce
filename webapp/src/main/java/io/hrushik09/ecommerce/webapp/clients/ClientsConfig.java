@@ -3,6 +3,8 @@ package io.hrushik09.ecommerce.webapp.clients;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hrushik09.ecommerce.webapp.ApplicationProperties;
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,7 @@ import java.time.Duration;
 
 @Configuration
 class ClientsConfig {
+    private static final Logger log = LoggerFactory.getLogger(ClientsConfig.class);
     private final ApplicationProperties applicationProperties;
     private final ObjectMapper objectMapper;
 
@@ -36,6 +39,7 @@ class ClientsConfig {
                 ))
                 .defaultStatusHandler(HttpStatusCode::isError, (request, response) -> {
                     ProblemDetail problemDetail = objectMapper.readValue(response.getBody(), ProblemDetail.class);
+                    log.error("error while calling inventory service {}", problemDetail);
                     if (problemDetail.getProperties() != null && problemDetail.getProperties().containsKey("errors")) {
                         throw new ResponseStatusException(response.getStatusCode(), problemDetail.getProperties().get("errors").toString());
                     } else {
