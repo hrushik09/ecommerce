@@ -1,0 +1,26 @@
+server:
+  port: 8989
+  shutdown: graceful
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: inventory-service
+          uri: ${INVENTORY_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - RewritePath=/inventory/?(?<segment>.*), /${segment}
+  mvc:
+    problemdetails:
+      enabled: true
