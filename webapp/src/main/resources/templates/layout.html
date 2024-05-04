@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1 minimum-scale=1 user-scalable=no" name="viewport">
+    <title>BookStore</title>
+    <link href="/webjars/bootstrap/5.3.3/css/bootstrap.css" rel="stylesheet">
+    <link href="/webjars/font-awesome/6.5.1/css/all.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<main>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#" th:href="@{/}">
+                <img alt="Books Logo" height="40" src="/images/cart.jpeg" width="40"> BookStore
+            </a>
+            <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
+                    data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse"
+                    type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/orders}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart">Cart <span id="cart-item-count">(0)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" id="app">
+        <div layout:fragment="content">
+            <!-- Your Page Content Here -->
+        </div>
+    </div>
+</main>
+
+<script src="/webjars/jquery/3.7.1/jquery.js"></script>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.js"></script>
+<script defer src="/webjars/alpinejs/3.13.5/dist/cdn.min.js"></script>
+<div layout:fragment="pageScripts">
+</div>
+</body>
+</html>
