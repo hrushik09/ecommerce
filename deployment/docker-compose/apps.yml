@@ -18,6 +18,8 @@ services:
       resources:
         limits:
           memory: 700m
+    labels:
+      logging: "promtail"
 
   api-gateway:
     image: hrushik09/ecommerce-api-gateway
@@ -32,6 +34,8 @@ services:
       resources:
         limits:
           memory: 700m
+    labels:
+      logging: "promtail"
 
   webapp:
     image: hrushik09/ecommerce-webapp
@@ -46,3 +50,5 @@ services:
       resources:
         limits:
           memory: 700m
+    labels:
+      logging: "promtail"
