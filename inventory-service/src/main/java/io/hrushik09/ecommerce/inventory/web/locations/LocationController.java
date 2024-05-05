@@ -25,6 +25,8 @@ class LocationController {
     CreateLocationResponse create(@Valid @RequestBody CreateLocationRequest request) {
         log.info("requesting to create location: {}", request);
         CreateLocationCommand cmd = new CreateLocationCommand(request.name(), request.address());
-        return locationService.create(cmd);
+        CreateLocationResponse createLocationResponse = locationService.create(cmd);
+        log.info("created location: {}", createLocationResponse);
+        return createLocationResponse;
     }
 }
