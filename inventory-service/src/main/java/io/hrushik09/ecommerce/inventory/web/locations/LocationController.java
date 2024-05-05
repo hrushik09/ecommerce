@@ -34,6 +34,7 @@ class LocationController {
 
     @GetMapping
     PagedResult<LocationSummary> getLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("getting locations with page: {}", pageNo);
         return locationService.getLocations(pageNo);
     }
 }
