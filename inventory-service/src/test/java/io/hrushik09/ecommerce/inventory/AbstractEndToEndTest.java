@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(ContainersConfig.class)
 @ExtendWith(ClearDatabaseExtension.class)
 @ActiveProfiles("test")
-public abstract class AbstractIT {
+public abstract class AbstractEndToEndTest {
     @LocalServerPort
     protected int port;
 
