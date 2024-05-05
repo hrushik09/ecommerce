@@ -46,7 +46,7 @@ class LocationServiceTest {
         }
 
         @Test
-        void shouldReturnCreatedItem() {
+        void shouldReturnCreatedLocation() {
             String name = "Location 1";
             String address = "Address 1";
             when(locationRepository.save(any(LocationEntity.class)))

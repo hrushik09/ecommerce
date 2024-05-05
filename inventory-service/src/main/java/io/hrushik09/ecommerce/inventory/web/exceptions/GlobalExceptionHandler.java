@@ -1,6 +1,5 @@
 package io.hrushik09.ecommerce.inventory.web.exceptions;
 
-import io.hrushik09.ecommerce.inventory.web.items.exceptions.ItemAlreadyExists;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,15 +19,6 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ProblemDetail handleException(Exception e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         problemDetail.setTitle("Internal Server Error");
-        problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("timestamp", Instant.now());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(ItemAlreadyExists.class)
-    ProblemDetail handleItemAlreadyExists(ItemAlreadyExists e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("service", SERVICE_NAME);
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;

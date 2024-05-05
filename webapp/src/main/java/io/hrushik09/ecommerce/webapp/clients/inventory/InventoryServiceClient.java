@@ -8,9 +8,6 @@ import org.springframework.web.service.annotation.PostExchange;
 
 @HttpExchange("/inventory/api")
 public interface InventoryServiceClient {
-    @PostExchange("/items")
-    CreateItemResponse createItem(@RequestBody CreateItemRequest request);
-
     @PostExchange("/locations")
     CreateLocationResponse createLocation(@RequestBody CreateLocationRequest request);
 }
