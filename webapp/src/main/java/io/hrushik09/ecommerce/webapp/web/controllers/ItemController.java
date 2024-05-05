@@ -20,11 +20,6 @@ class ItemController {
         this.inventoryServiceClient = inventoryServiceClient;
     }
 
-    @GetMapping
-    String index() {
-        return "redirect:/items";
-    }
-
     @GetMapping("/items")
     String itemsPage() {
         return "items";
