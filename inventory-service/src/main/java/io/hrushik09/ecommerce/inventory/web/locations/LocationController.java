@@ -33,7 +33,7 @@ class LocationController {
     }
 
     @GetMapping
-    PagedResult<LocationSummary> fetchLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
-        return locationService.fetchLocations(pageNo);
+    PagedResult<LocationSummary> getLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        return locationService.getLocations(pageNo);
     }
 }

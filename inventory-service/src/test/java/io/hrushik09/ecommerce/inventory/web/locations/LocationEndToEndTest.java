@@ -39,9 +39,9 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
     }
 
     @Nested
-    class FetchLocations {
+    class GetLocations {
         @Test
-        void shouldFetchLocationsSuccessfully() {
+        void shouldGetLocationsSuccessfully() {
             Stream.iterate(1, i -> i < 16, i -> i + 1)
                     .forEach(i -> havingPersisted.location("Location " + i, "Address " + i));
 

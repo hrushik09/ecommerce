@@ -53,14 +53,14 @@ class LocationControllerTest {
     }
 
     @Nested
-    class FetchLocations {
+    class getLocations {
         @Test
-        void shouldFetchLocationsWhenPageNumberIsSpecified() throws Exception {
+        void shouldGetLocationsWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 2;
             List<LocationSummary> list = Stream.iterate(11, i -> i < 21, i -> i + 1)
                     .map(i -> new LocationSummary("item_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
-            when(locationService.fetchLocations(pageNo))
+            when(locationService.getLocations(pageNo))
                     .thenReturn(new PagedResult<>(list, 25, 2, 3, false, false, true, true));
 
             mockMvc.perform(get("/api/locations?page={pageNo}", pageNo))
@@ -106,11 +106,11 @@ class LocationControllerTest {
         }
 
         @Test
-        void shouldFetchLocationsWhenPageNumberIsNotSpecified() throws Exception {
+        void shouldGetLocationsWhenPageNumberIsNotSpecified() throws Exception {
             List<LocationSummary> list = Stream.iterate(1, i -> i < 11, i -> i + 1)
                     .map(i -> new LocationSummary("item_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
-            when(locationService.fetchLocations(1))
+            when(locationService.getLocations(1))
                     .thenReturn(new PagedResult<>(list, 15, 1, 2, true, false, true, false));
 
             mockMvc.perform(get("/api/locations"))

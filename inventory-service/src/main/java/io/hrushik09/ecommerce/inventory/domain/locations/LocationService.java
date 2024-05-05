@@ -26,7 +26,7 @@ public class LocationService {
         return LocationMapper.convert(saved);
     }
 
-    public PagedResult<LocationSummary> fetchLocations(int pageNo) {
+    public PagedResult<LocationSummary> getLocations(int pageNo) {
         return null;
     }
 }
