@@ -1,7 +1,9 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,5 +24,9 @@ public class LocationService {
         locationEntity.setAddress(cmd.address());
         LocationEntity saved = locationRepository.save(locationEntity);
         return LocationMapper.convert(saved);
+    }
+
+    public PagedResult<LocationSummary> fetchLocations(int pageNo) {
+        return null;
     }
 }

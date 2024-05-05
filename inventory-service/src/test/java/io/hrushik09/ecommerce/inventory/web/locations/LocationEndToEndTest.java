@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import java.util.stream.Stream;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
@@ -40,9 +42,8 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
     class FetchLocations {
         @Test
         void shouldFetchLocationsSuccessfully() {
-            for (int i = 1; i < 16; i++) {
-                havingPersisted.location("Location " + i, "Address " + i);
-            }
+            Stream.iterate(1, i -> i < 16, i -> i + 1)
+                    .forEach(i -> havingPersisted.location("Location " + i, "Address " + i));
 
             given().contentType(JSON)
                     .when()

@@ -1,9 +1,11 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRequest;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,5 +30,10 @@ class LocationController {
         CreateLocationResponse createLocationResponse = locationService.create(cmd);
         log.info("created location: {}", createLocationResponse);
         return createLocationResponse;
+    }
+
+    @GetMapping
+    PagedResult<LocationSummary> fetchLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        return locationService.fetchLocations(pageNo);
     }
 }
