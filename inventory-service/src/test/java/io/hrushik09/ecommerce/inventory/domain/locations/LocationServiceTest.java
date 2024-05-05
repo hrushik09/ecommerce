@@ -76,10 +76,10 @@ class LocationServiceTest {
     class GetLocations {
         @Test
         void shouldGetLocationsSuccessfully() {
-            List<LocationEntity> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
-                    .map(i -> aLocationEntity().withName("Location " + i).withAddress("Address " + i).build())
+            List<LocationSummary> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
+                    .map(i -> new LocationSummary("location_", "Location " + i, "Address " + i))
                     .toList();
-            when(locationRepository.findAll(any(Pageable.class)))
+            when(locationRepository.getLocationSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));
 
             PagedResult<LocationSummary> pagedResult = locationService.getLocations(2);

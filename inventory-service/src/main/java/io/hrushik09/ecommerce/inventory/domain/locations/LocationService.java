@@ -34,7 +34,7 @@ public class LocationService {
         Sort sort = Sort.by("id").ascending();
         int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
         Pageable pageable = PageRequest.of(pageNumber, 10, sort);
-        Page<LocationSummary> locationsPage = locationRepository.findAll(pageable).map(LocationMapper::convertToLocationSummary);
+        Page<LocationSummary> locationsPage = locationRepository.getLocationSummaries(pageable);
         return new PagedResult<>(
                 locationsPage.getContent(),
                 locationsPage.getTotalElements(),

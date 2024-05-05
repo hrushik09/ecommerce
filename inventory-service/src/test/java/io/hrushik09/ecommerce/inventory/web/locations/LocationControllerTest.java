@@ -58,7 +58,7 @@ class LocationControllerTest {
         void shouldGetLocationsWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 2;
             List<LocationSummary> list = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new LocationSummary("item_ernsdj-" + i, "Location " + i, "Address " + i))
+                    .map(i -> new LocationSummary("location_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationService.getLocations(pageNo))
                     .thenReturn(new PagedResult<>(list, 25, 2, 3, false, false, true, true));
@@ -108,7 +108,7 @@ class LocationControllerTest {
         @Test
         void shouldGetLocationsWhenPageNumberIsNotSpecified() throws Exception {
             List<LocationSummary> list = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new LocationSummary("item_ernsdj-" + i, "Location " + i, "Address " + i))
+                    .map(i -> new LocationSummary("location_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationService.getLocations(1))
                     .thenReturn(new PagedResult<>(list, 15, 1, 2, true, false, true, false));
