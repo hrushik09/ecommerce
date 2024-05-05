@@ -34,6 +34,8 @@ class LocationController {
     @ResponseBody
     CreateLocationResponse createLocation(@RequestBody CreateLocationRequest request) {
         log.info("sending request to inventory service to create location {}", request);
-        return inventoryServiceClient.createLocation(request);
+        CreateLocationResponse createLocationResponse = inventoryServiceClient.createLocation(request);
+        log.info("response from inventory service to create location {}", createLocationResponse);
+        return createLocationResponse;
     }
 }
