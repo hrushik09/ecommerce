@@ -4,7 +4,18 @@ import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCom
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
 
 public class LocationService {
+    private final LocationRepository locationRepository;
+
+    LocationService(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
+
     public CreateLocationResponse create(CreateLocationCommand cmd) {
-        return null;
+        LocationEntity locationEntity = new LocationEntity();
+        locationEntity.generateCode();
+        locationEntity.setName(cmd.name());
+        locationEntity.setAddress(cmd.address());
+        LocationEntity saved = locationRepository.save(locationEntity);
+        return LocationMapper.convert(saved);
     }
 }
