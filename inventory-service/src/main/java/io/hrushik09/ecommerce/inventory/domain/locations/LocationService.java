@@ -2,7 +2,11 @@ package io.hrushik09.ecommerce.inventory.domain.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class LocationService {
     private final LocationRepository locationRepository;
 
@@ -10,6 +14,7 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
+    @Transactional
     public CreateLocationResponse create(CreateLocationCommand cmd) {
         LocationEntity locationEntity = new LocationEntity();
         locationEntity.generateCode();

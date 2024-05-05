@@ -1,7 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
-class LocationRepository {
-    public LocationEntity save(LocationEntity locationEntity) {
-        return null;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
+
+interface LocationRepository extends JpaRepository<LocationEntity, Long> {
 }
