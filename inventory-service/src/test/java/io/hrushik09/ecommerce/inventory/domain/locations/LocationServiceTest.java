@@ -1,7 +1,9 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,6 +69,51 @@ class LocationServiceTest {
             assertThat(created.code()).startsWith("location_");
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.address()).isEqualTo(address);
+        }
+    }
+
+    @Nested
+    class GetLocations {
+        @Test
+        void shouldGetLocationsSuccessfully() {
+            List<LocationEntity> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
+                    .map(i -> aLocationEntity().withName("Location " + i).withAddress("Address " + i).build())
+                    .toList();
+            when(locationRepository.findAll(any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));
+
+            PagedResult<LocationSummary> pagedResult = locationService.getLocations(2);
+
+            assertThat(pagedResult.data()).hasSize(7);
+            List<LocationSummary> data = pagedResult.data();
+            assertThat(data.get(0).code()).isNotNull();
+            assertThat(data.get(0).name()).isEqualTo("Location 11");
+            assertThat(data.get(0).address()).isEqualTo("Address 11");
+            assertThat(data.get(1).code()).isNotNull();
+            assertThat(data.get(1).name()).isEqualTo("Location 12");
+            assertThat(data.get(1).address()).isEqualTo("Address 12");
+            assertThat(data.get(2).code()).isNotNull();
+            assertThat(data.get(2).name()).isEqualTo("Location 13");
+            assertThat(data.get(2).address()).isEqualTo("Address 13");
+            assertThat(data.get(3).code()).isNotNull();
+            assertThat(data.get(3).name()).isEqualTo("Location 14");
+            assertThat(data.get(3).address()).isEqualTo("Address 14");
+            assertThat(data.get(4).code()).isNotNull();
+            assertThat(data.get(4).name()).isEqualTo("Location 15");
+            assertThat(data.get(4).address()).isEqualTo("Address 15");
+            assertThat(data.get(5).code()).isNotNull();
+            assertThat(data.get(5).name()).isEqualTo("Location 16");
+            assertThat(data.get(5).address()).isEqualTo("Address 16");
+            assertThat(data.get(6).code()).isNotNull();
+            assertThat(data.get(6).name()).isEqualTo("Location 17");
+            assertThat(data.get(6).address()).isEqualTo("Address 17");
+            assertThat(pagedResult.totalElements()).isEqualTo(17);
+            assertThat(pagedResult.pageNumber()).isEqualTo(2);
+            assertThat(pagedResult.totalPages()).isEqualTo(2);
+            assertThat(pagedResult.isFirst()).isFalse();
+            assertThat(pagedResult.isLast()).isTrue();
+            assertThat(pagedResult.hasNext()).isFalse();
+            assertThat(pagedResult.hasPrevious()).isTrue();
         }
     }
 }
