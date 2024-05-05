@@ -33,6 +33,8 @@ class LocationServiceTest {
         void shouldSaveUsingRepositoryWhenCreatingLocation() {
             String name = "Location 1";
             String address = "Address 1";
+            when(locationRepository.save(any(LocationEntity.class)))
+                    .thenReturn(aLocationEntity().withName(name).withAddress(address).build());
 
             locationService.create(new CreateLocationCommand(name, address));
 
