@@ -3,14 +3,19 @@
       layout:decorate="~{layout}"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+      xmlns:th="http://www.thymeleaf.org">
 <body>
 <div layout:fragment="content">
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-            <a class="nav-link text-bg-secondary p-3" href="/inventory/locations/create">Create Location</a>
-        </li>
-    </ul>
+    <div th:x-data="|initData('${pageNo}')|">
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link text-bg-secondary p-3" href="/inventory/locations/create">Create Location</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/locations.js"></script>
 </div>
 </body>
 </html>
