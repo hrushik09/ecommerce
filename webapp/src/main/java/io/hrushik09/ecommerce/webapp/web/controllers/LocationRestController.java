@@ -3,12 +3,11 @@ package io.hrushik09.ecommerce.webapp.web.controllers;
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationResponse;
+import io.hrushik09.ecommerce.webapp.clients.inventory.locations.LocationSummary;
+import io.hrushik09.ecommerce.webapp.clients.inventory.locations.PagedResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/inventory/locations")
@@ -22,9 +21,17 @@ class LocationRestController {
 
     @PostMapping
     CreateLocationResponse createLocation(@RequestBody CreateLocationRequest request) {
-        log.info("sending request to inventory service to create location {}", request);
+        log.info("request to inventory service to create location {}", request);
         CreateLocationResponse createLocationResponse = inventoryServiceClient.createLocation(request);
         log.info("response from inventory service to create location {}", createLocationResponse);
         return createLocationResponse;
+    }
+
+    @GetMapping
+    PagedResult<LocationSummary> getLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("request to inventory service to get locations");
+        PagedResult<LocationSummary> pagedResult = inventoryServiceClient.getLocations(pageNo);
+        log.info("response from inventory service to get locations {}", pagedResult);
+        return pagedResult;
     }
 }
