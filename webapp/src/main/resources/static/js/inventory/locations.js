@@ -1,6 +1,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('initData', (pageNo) => ({
         pageNo: pageNo,
+        pageBaseUrl: "/inventory/locations",
         pagedResult: {
             data: []
         },
