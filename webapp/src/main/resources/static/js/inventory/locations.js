@@ -1,7 +1,7 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('initData', (pageNo) => ({
         pageNo: pageNo,
-        locations: {
+        pagedResult: {
             data: []
         },
         init() {
@@ -9,7 +9,7 @@ document.addEventListener('alpine:init', () => {
         },
         loadLocations(pageNo) {
             $.getJSON("/api/inventory/locations?page=" + pageNo, (resp) => {
-                this.locations = resp;
+                this.pagedResult = resp;
             });
         },
     }));
