@@ -7,9 +7,8 @@ document.addEventListener('alpine:init', () => {
         init() {
             this.loadLocations(this.pageNo);
         },
-        loadLocations: (pageNo) => {
+        loadLocations(pageNo) {
             $.getJSON("/api/inventory/locations?page=" + pageNo, (resp) => {
-                console.log("locations resp ", resp);
                 this.locations = resp;
             });
         },
