@@ -141,5 +141,20 @@ class LocationServiceTest {
                     .isInstanceOf(LocationDoesNotExist.class)
                     .hasMessage("Location with code " + code + " does not exist");
         }
+
+        @Test
+        void shouldGetLocationByCode() {
+            String code = "location_akn32jfnf";
+            String name = "Location 10";
+            String address = "Address 23";
+            when(locationRepository.findLocationByCode(code))
+                    .thenReturn(Optional.of(new Location(code, name, address)));
+
+            Location location = locationService.getLocationByCode(code);
+            assertThat(location).isNotNull();
+            assertThat(location.code()).isEqualTo(code);
+            assertThat(location.name()).isEqualTo(name);
+            assertThat(location.address()).isEqualTo(address);
+        }
     }
 }

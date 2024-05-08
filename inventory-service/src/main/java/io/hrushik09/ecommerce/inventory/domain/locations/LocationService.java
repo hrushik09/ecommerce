@@ -52,7 +52,6 @@ public class LocationService {
     }
 
     public Location getLocationByCode(String code) {
-        locationRepository.findLocationByCode(code).orElseThrow(() -> new LocationDoesNotExist(code));
-        return null;
+        return locationRepository.findLocationByCode(code).orElseThrow(() -> new LocationDoesNotExist(code));
     }
 }
