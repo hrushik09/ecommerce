@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${code}')|">
+        <h1 x-text="location.name"></h1>
+        <p x-text="location.address"></p>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/location.js"></script>
+</div>
+</body>
+</html>

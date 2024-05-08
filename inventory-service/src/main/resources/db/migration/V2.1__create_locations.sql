@@ -1,0 +1,11 @@
+CREATE TABLE locations
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
+    code       VARCHAR(100) NOT NULL,
+    name       VARCHAR(100) NOT NULL,
+    address    VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_locations PRIMARY KEY (id),
+    CONSTRAINT UK_locations_code UNIQUE (code)
+);
