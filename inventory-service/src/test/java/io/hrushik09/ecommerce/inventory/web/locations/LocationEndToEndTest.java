@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.inventory.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
             Stream.iterate(1, i -> i < 16, i -> i + 1)
                     .forEach(i -> havingPersisted.location("Location " + i, "Address " + i));
 
-            given().contentType(JSON)
+            given()
                     .when()
                     .get("/api/locations")
                     .then()
@@ -115,6 +116,23 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", equalTo(false))
                     .body("hasNext", equalTo(true))
                     .body("hasPrevious", equalTo(false));
+        }
+    }
+
+    @Nested
+    class GetLocationByCode {
+        @Test
+        void shouldGetLocationByCode() {
+            CreateLocationResponse created = havingPersisted.location("location 1", "address 1");
+
+            given()
+                    .when()
+                    .get("/api/locations/{code}", created.code())
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("code", equalTo(created.code()))
+                    .body("name", equalTo("location 1"))
+                    .body("address", equalTo("address 1"));
         }
     }
 }
