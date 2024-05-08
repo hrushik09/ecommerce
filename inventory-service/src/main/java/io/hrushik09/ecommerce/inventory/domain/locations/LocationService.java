@@ -50,4 +50,8 @@ public class LocationService {
                 locationsPage.hasPrevious()
         );
     }
+
+    public Location getLocationByCode(String code) {
+        return null;
+    }
 }

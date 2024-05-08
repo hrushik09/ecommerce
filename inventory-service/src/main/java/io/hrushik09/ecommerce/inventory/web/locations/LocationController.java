@@ -1,6 +1,7 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRequest;
@@ -36,5 +37,10 @@ class LocationController {
     PagedResult<LocationSummary> getLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         log.info("getting locations with page: {}", pageNo);
         return locationService.getLocations(pageNo);
+    }
+
+    @GetMapping("/{code}")
+    Location getLocationByCode(@PathVariable String code) {
+        return locationService.getLocationByCode(code);
     }
 }

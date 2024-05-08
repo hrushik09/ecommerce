@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
@@ -47,7 +48,7 @@ class LocationControllerTest {
                                     }
                                     """))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.detail", equalTo("location with name existing_location_name already exists")));
+                    .andExpect(jsonPath("$.detail", equalTo("Location with name existing_location_name already exists")));
         }
 
         @Test
@@ -171,6 +172,20 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.isLast", equalTo(false)))
                     .andExpect(jsonPath("$.hasNext", equalTo(true)))
                     .andExpect(jsonPath("$.hasPrevious", equalTo(false)));
+        }
+    }
+
+    @Nested
+    class GetLocationByCode {
+        @Test
+        void shouldReturnErrorForNonExistingLocation() throws Exception {
+            String code = "location_non_existing_akalfknaof";
+            when(locationService.getLocationByCode(code))
+                    .thenThrow(new LocationDoesNotExist(code));
+
+            mockMvc.perform(get("/api/locations/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Location with code " + code + " does not exist")));
         }
     }
 }
