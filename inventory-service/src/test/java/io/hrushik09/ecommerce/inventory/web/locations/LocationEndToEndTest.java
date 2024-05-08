@@ -36,6 +36,33 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .body("name", equalTo("Location 1"))
                     .body("address", equalTo("Address 1"));
         }
+
+        @Test
+        void shouldNotCreateWhenLocationWithNameAlreadyExists() {
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Location 1",
+                            "address": "Address 1"
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations")
+                    .then()
+                    .statusCode(HttpStatus.CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Location 1",
+                            "address": "Address 1"
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations")
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value());
+        }
     }
 
     @Nested
