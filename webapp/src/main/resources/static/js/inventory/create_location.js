@@ -4,6 +4,7 @@ document.addEventListener("alpine:init", () => {
             name: null,
             address: null,
         },
+        createLocationErrorDetail: null,
         createLocation() {
             $.ajax({
                 url: "/api/inventory/locations",
@@ -17,7 +18,7 @@ document.addEventListener("alpine:init", () => {
                 },
                 error: (err) => {
                     let responseText = JSON.parse(err.responseText);
-                    console.log(responseText.detail);
+                    this.createLocationErrorDetail = responseText.detail;
                 },
             });
         },
