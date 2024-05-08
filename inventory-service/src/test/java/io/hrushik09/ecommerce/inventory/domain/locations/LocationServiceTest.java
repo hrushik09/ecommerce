@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
@@ -125,6 +126,20 @@ class LocationServiceTest {
             assertThat(pagedResult.isLast()).isTrue();
             assertThat(pagedResult.hasNext()).isFalse();
             assertThat(pagedResult.hasPrevious()).isTrue();
+        }
+    }
+
+    @Nested
+    class GetLocationByCode {
+        @Test
+        void shouldThrownWhenLocationDoesNotExist() {
+            String code = "location_not_exist_a3irufi";
+            when(locationRepository.findLocationByCode(code))
+                    .thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> locationService.getLocationByCode(code))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + code + " does not exist");
         }
     }
 }
