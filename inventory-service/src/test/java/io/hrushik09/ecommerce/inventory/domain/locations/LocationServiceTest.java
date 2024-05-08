@@ -46,7 +46,7 @@ class LocationServiceTest {
 
             assertThatThrownBy(() -> locationService.create(new CreateLocationCommand("already_existing_location_name", "some address")))
                     .isInstanceOf(LocationAlreadyExists.class)
-                    .hasMessage("location with name already_existing_location_name already exists");
+                    .hasMessage("Location with name already_existing_location_name already exists");
         }
 
         @Test
