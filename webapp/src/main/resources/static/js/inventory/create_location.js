@@ -13,8 +13,7 @@ document.addEventListener("alpine:init", () => {
                 contentType: "application/json",
                 data: JSON.stringify(this.location),
                 success: (response) => {
-                    console.log("Location created successfully!");
-                    console.log(response);
+                    window.location = "/inventory/locations/" + response.code;
                 },
                 error: (err) => {
                     let responseText = JSON.parse(err.responseText);

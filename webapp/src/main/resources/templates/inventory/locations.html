@@ -20,8 +20,10 @@
                 <div class="col mb-3">
                     <div class="card h-100 location">
                         <div class="card-body">
-                            <h5 class="card-title" data-placement="top" data-toggle="tooltip"
-                                x-text="location.name"></h5>
+                            <a :href="pageBaseUrl + '/' + location.code">
+                                <h5 class="card-title" data-placement="top" data-toggle="tooltip"
+                                    x-text="location.name"></h5>
+                            </a>
                             <p class="card-text" data-placement="top" data-toggle="tooltip"
                                x-text="location.address"></p>
                         </div>

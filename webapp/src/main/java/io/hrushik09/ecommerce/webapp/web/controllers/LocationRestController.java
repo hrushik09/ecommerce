@@ -1,10 +1,7 @@
 package io.hrushik09.ecommerce.webapp.web.controllers;
 
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
-import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationRequest;
-import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationResponse;
-import io.hrushik09.ecommerce.webapp.clients.inventory.locations.LocationSummary;
-import io.hrushik09.ecommerce.webapp.clients.inventory.locations.PagedResult;
+import io.hrushik09.ecommerce.webapp.clients.inventory.locations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +30,13 @@ class LocationRestController {
         PagedResult<LocationSummary> pagedResult = inventoryServiceClient.getLocations(pageNo);
         log.info("response from inventory service to get locations {}", pagedResult);
         return pagedResult;
+    }
+
+    @GetMapping("/{code}")
+    Location getLocationByCode(@PathVariable String code) {
+        log.info("request to inventory service to get location by code {}", code);
+        Location location = inventoryServiceClient.getLocationByCode(code);
+        log.info("response from inventory service to get location by code {}", location);
+        return location;
     }
 }
