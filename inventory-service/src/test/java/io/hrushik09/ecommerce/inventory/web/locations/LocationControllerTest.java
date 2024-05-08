@@ -1,6 +1,7 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
@@ -186,6 +187,21 @@ class LocationControllerTest {
             mockMvc.perform(get("/api/locations/{code}", code))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.detail", equalTo("Location with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldReturnLocationByCode() throws Exception {
+            String code = "location_jfnskjdf3y";
+            String name = "some name for location";
+            String address = "some address";
+            when(locationService.getLocationByCode(code))
+                    .thenReturn(new Location(code, name, address));
+
+            mockMvc.perform(get("/api/locations/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.name", equalTo(name)))
+                    .andExpect(jsonPath("$.address", equalTo(address)));
         }
     }
 }
