@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.web.exceptions;
 
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,5 +36,14 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .toList();
         problemDetail.setProperty("errors", errors);
         return ResponseEntity.badRequest().body(problemDetail);
+    }
+
+    @ExceptionHandler(LocationAlreadyExists.class)
+    ProblemDetail handleLocationAlreadyExists(LocationAlreadyExists e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("Bad Request");
+        problemDetail.setProperty("service", SERVICE_NAME);
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
     }
 }

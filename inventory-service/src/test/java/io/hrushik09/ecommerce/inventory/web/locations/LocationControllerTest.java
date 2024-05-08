@@ -1,6 +1,7 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
@@ -32,6 +33,23 @@ class LocationControllerTest {
 
     @Nested
     class CreateLocation {
+        @Test
+        void shouldNotCreateWhenLocationWithNameAlreadyExists() throws Exception {
+            when(locationService.create(new CreateLocationCommand("existing_location_name", "random address")))
+                    .thenThrow(new LocationAlreadyExists("existing_location_name"));
+
+            mockMvc.perform(post("/api/locations")
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "existing_location_name",
+                                    "address": "random address"
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("location with name existing_location_name already exists")));
+        }
+
         @Test
         void shouldCreateLocationSuccessfully() throws Exception {
             when(locationService.create(new CreateLocationCommand("Location 2", "Address 2")))
