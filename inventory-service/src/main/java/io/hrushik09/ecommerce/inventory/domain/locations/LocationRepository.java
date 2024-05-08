@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 interface LocationRepository extends JpaRepository<LocationEntity, Long> {
     @Query("SELECT new io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary(le.code, le.name, le.address) FROM LocationEntity le")
     Page<LocationSummary> getLocationSummaries(Pageable pageable);
+
+    boolean existsByName(String name);
 }

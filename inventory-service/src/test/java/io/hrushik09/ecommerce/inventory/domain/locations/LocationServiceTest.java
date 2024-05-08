@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +38,16 @@ class LocationServiceTest {
 
     @Nested
     class CreateLocation {
+        @Test
+        void shouldThrowWhenLocationWithNameAlreadyExists() {
+            when(locationRepository.existsByName("already_existing_location_name"))
+                    .thenReturn(true);
+
+            assertThatThrownBy(() -> locationService.create(new CreateLocationCommand("already_existing_location_name", "some address")))
+                    .isInstanceOf(LocationAlreadyExists.class)
+                    .hasMessage("location with name already_existing_location_name already exists");
+        }
+
         @Test
         void shouldSaveUsingRepositoryWhenCreatingLocation() {
             String name = "Location 1";

@@ -22,6 +22,10 @@ public class LocationService {
 
     @Transactional
     public CreateLocationResponse create(CreateLocationCommand cmd) {
+        if (locationRepository.existsByName(cmd.name())) {
+            throw new LocationAlreadyExists(cmd.name());
+        }
+
         LocationEntity locationEntity = new LocationEntity();
         locationEntity.generateCode();
         locationEntity.setName(cmd.name());
