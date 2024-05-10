@@ -1,12 +1,12 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
-import io.hrushik09.ecommerce.inventory.domain.locations.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

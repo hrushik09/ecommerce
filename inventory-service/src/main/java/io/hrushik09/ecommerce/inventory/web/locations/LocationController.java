@@ -1,12 +1,8 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
-import io.hrushik09.ecommerce.inventory.domain.locations.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
-import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
-import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRequest;
-import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
-import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
