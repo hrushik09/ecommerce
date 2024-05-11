@@ -146,8 +146,8 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .body("code", equalTo(created.code()))
                     .body("name", equalTo("location 1"))
                     .body("address", equalTo("address 1"))
-                    .body("createdAt", matchesPattern(TestProperties.defaultTimestampRegex))
-                    .body("updatedAt", matchesPattern(TestProperties.defaultTimestampRegex));
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

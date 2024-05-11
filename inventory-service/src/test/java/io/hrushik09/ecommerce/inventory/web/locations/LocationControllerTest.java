@@ -203,8 +203,8 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.code", equalTo(code)))
                     .andExpect(jsonPath("$.name", equalTo(name)))
                     .andExpect(jsonPath("$.address", equalTo(address)))
-                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.defaultTimestampRegex)))
-                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.defaultTimestampRegex)));
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }
