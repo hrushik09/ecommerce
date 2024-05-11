@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
@@ -32,10 +33,12 @@ class LocationServiceTest {
     private LocationService locationService;
     @Mock
     private LocationRepository locationRepository;
+    @Mock
+    private EntityCodeGenerator generateCode;
 
     @BeforeEach
     void setUp() {
-        locationService = new LocationService(locationRepository);
+        locationService = new LocationService(locationRepository, generateCode);
     }
 
     @Nested
@@ -52,34 +55,36 @@ class LocationServiceTest {
 
         @Test
         void shouldSaveUsingRepositoryWhenCreatingLocation() {
+            String code = "location_mock_code_aakjfake";
             String name = "Location 1";
             String address = "Address 1";
+            when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
-                    .thenReturn(aLocationEntity().withName(name).withAddress(address).build());
+                    .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
 
             locationService.create(new CreateLocationCommand(name, address));
 
             ArgumentCaptor<LocationEntity> locationEntityArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
             verify(locationRepository).save(locationEntityArgumentCaptor.capture());
             LocationEntity captorValue = locationEntityArgumentCaptor.getValue();
-            assertThat(captorValue.getCode()).isNotNull();
-            assertThat(captorValue.getCode()).startsWith("location_");
+            assertThat(captorValue.getCode()).isEqualTo(code);
             assertThat(captorValue.getName()).isEqualTo(name);
             assertThat(captorValue.getAddress()).isEqualTo(address);
         }
 
         @Test
         void shouldReturnCreatedLocation() {
+            String code = "location_mock_code_asdnskf";
             String name = "Location 1";
             String address = "Address 1";
+            when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
-                    .thenReturn(aLocationEntity().withName(name).withAddress(address).build());
+                    .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
 
             CreateLocationResponse created = locationService.create(new CreateLocationCommand(name, address));
 
             assertThat(created).isNotNull();
-            assertThat(created.code()).isNotNull();
-            assertThat(created.code()).startsWith("location_");
+            assertThat(created.code()).isEqualTo(code);
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.address()).isEqualTo(address);
         }
