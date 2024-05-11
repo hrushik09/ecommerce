@@ -33,7 +33,6 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .post("/api/locations")
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
-                    .body("code", notNullValue())
                     .body("code", startsWith("location_"))
                     .body("code", hasLength(8 + 1 + 36))
                     .body("name", equalTo("Location 1"))
