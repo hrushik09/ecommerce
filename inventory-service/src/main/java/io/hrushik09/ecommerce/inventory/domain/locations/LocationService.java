@@ -64,4 +64,8 @@ public class LocationService {
                 .map(locationEntity -> LocationMapper.convertToLocation(locationEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new LocationDoesNotExist(code));
     }
+
+    public LocationEntity getLocationEntityByCode(String code) {
+        return null;
+    }
 }

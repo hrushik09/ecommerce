@@ -6,7 +6,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "locations", uniqueConstraints = @UniqueConstraint(name = "UK_locations_code", columnNames = "code"))
-class LocationEntity {
+public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,9 @@ class LocationEntity {
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
+
+    protected LocationEntity() {
+    }
 
     public Long getId() {
         return id;
