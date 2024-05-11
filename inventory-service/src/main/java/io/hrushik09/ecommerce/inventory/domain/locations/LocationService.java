@@ -13,15 +13,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class LocationService {
     private final LocationRepository locationRepository;
     private final EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter;
 
-    LocationService(LocationRepository locationRepository, EntityCodeGenerator entityCodeGenerator) {
+    LocationService(LocationRepository locationRepository, EntityCodeGenerator entityCodeGenerator, DateTimeFormatter defaultTimestampFormatter) {
         this.locationRepository = locationRepository;
         this.generateCode = entityCodeGenerator;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
     }
 
     @Transactional
@@ -35,7 +39,7 @@ public class LocationService {
         locationEntity.setName(cmd.name());
         locationEntity.setAddress(cmd.address());
         LocationEntity saved = locationRepository.save(locationEntity);
-        return LocationMapper.convertToCreateLocationResponse(saved);
+        return LocationMapper.convertToCreateLocationResponse(saved, defaultTimestampFormatter);
     }
 
     public PagedResult<LocationSummary> getLocations(int pageNo) {

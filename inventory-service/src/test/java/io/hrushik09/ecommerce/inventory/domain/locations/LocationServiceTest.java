@@ -1,5 +1,7 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.TestProperties;
+import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
@@ -17,6 +19,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -35,10 +39,11 @@ class LocationServiceTest {
     private LocationRepository locationRepository;
     @Mock
     private EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
 
     @BeforeEach
     void setUp() {
-        locationService = new LocationService(locationRepository, generateCode);
+        locationService = new LocationService(locationRepository, generateCode, defaultTimestampFormatter);
     }
 
     @Nested
@@ -87,6 +92,8 @@ class LocationServiceTest {
             assertThat(created.code()).isEqualTo(code);
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.address()).isEqualTo(address);
+            assertThat(created.createdAt()).matches(TestProperties.defaultTimestampRegex);
+            assertThat(created.updatedAt()).matches(TestProperties.defaultTimestampRegex);
         }
     }
 
