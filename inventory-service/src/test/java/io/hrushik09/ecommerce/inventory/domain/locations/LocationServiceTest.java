@@ -1,8 +1,11 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
+import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +18,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,10 +37,13 @@ class LocationServiceTest {
     private LocationService locationService;
     @Mock
     private LocationRepository locationRepository;
+    @Mock
+    private EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
 
     @BeforeEach
     void setUp() {
-        locationService = new LocationService(locationRepository);
+        locationService = new LocationService(locationRepository, generateCode, defaultTimestampFormatter);
     }
 
     @Nested
@@ -51,34 +60,36 @@ class LocationServiceTest {
 
         @Test
         void shouldSaveUsingRepositoryWhenCreatingLocation() {
+            String code = "location_mock_code_aakjfake";
             String name = "Location 1";
             String address = "Address 1";
+            when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
-                    .thenReturn(aLocationEntity().withName(name).withAddress(address).build());
+                    .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
 
             locationService.create(new CreateLocationCommand(name, address));
 
             ArgumentCaptor<LocationEntity> locationEntityArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
             verify(locationRepository).save(locationEntityArgumentCaptor.capture());
             LocationEntity captorValue = locationEntityArgumentCaptor.getValue();
-            assertThat(captorValue.getCode()).isNotNull();
-            assertThat(captorValue.getCode()).startsWith("location_");
+            assertThat(captorValue.getCode()).isEqualTo(code);
             assertThat(captorValue.getName()).isEqualTo(name);
             assertThat(captorValue.getAddress()).isEqualTo(address);
         }
 
         @Test
         void shouldReturnCreatedLocation() {
+            String code = "location_mock_code_asdnskf";
             String name = "Location 1";
             String address = "Address 1";
+            when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
-                    .thenReturn(aLocationEntity().withName(name).withAddress(address).build());
+                    .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
 
             CreateLocationResponse created = locationService.create(new CreateLocationCommand(name, address));
 
             assertThat(created).isNotNull();
-            assertThat(created.code()).isNotNull();
-            assertThat(created.code()).startsWith("location_");
+            assertThat(created.code()).isEqualTo(code);
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.address()).isEqualTo(address);
         }
@@ -134,7 +145,7 @@ class LocationServiceTest {
         @Test
         void shouldThrownWhenLocationDoesNotExist() {
             String code = "location_not_exist_a3irufi";
-            when(locationRepository.findLocationByCode(code))
+            when(locationRepository.findByCode(code))
                     .thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> locationService.getLocationByCode(code))
@@ -147,14 +158,21 @@ class LocationServiceTest {
             String code = "location_akn32jfnf";
             String name = "Location 10";
             String address = "Address 23";
-            when(locationRepository.findLocationByCode(code))
-                    .thenReturn(Optional.of(new Location(code, name, address)));
+            LocationEntityBuilder locationEntityBuilder = aLocationEntity()
+                    .withCode(code)
+                    .withName(name)
+                    .withAddress(address)
+                    .withCreatedAt(Instant.parse("2009-12-04T23:15:30.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-12-06T10:34:30.00Z"));
+            when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
 
             Location location = locationService.getLocationByCode(code);
             assertThat(location).isNotNull();
             assertThat(location.code()).isEqualTo(code);
             assertThat(location.name()).isEqualTo(name);
             assertThat(location.address()).isEqualTo(address);
+            assertThat(location.createdAt()).isEqualTo("December 04 2009, 23:15:30 (UTC+00:00)");
+            assertThat(location.updatedAt()).isEqualTo("December 06 2009, 10:34:30 (UTC+00:00)");
         }
     }
 }

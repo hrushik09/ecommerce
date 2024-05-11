@@ -1,8 +1,10 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
+import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.locations.model.Location;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.LocationSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,13 +13,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class LocationService {
     private final LocationRepository locationRepository;
+    private final EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter;
 
-    LocationService(LocationRepository locationRepository) {
+    LocationService(LocationRepository locationRepository, EntityCodeGenerator entityCodeGenerator, DateTimeFormatter defaultTimestampFormatter) {
         this.locationRepository = locationRepository;
+        this.generateCode = entityCodeGenerator;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
     }
 
     @Transactional
@@ -27,7 +35,7 @@ public class LocationService {
         }
 
         LocationEntity locationEntity = new LocationEntity();
-        locationEntity.generateCode();
+        locationEntity.setCode(generateCode.forEntityType("location"));
         locationEntity.setName(cmd.name());
         locationEntity.setAddress(cmd.address());
         LocationEntity saved = locationRepository.save(locationEntity);
@@ -52,6 +60,8 @@ public class LocationService {
     }
 
     public Location getLocationByCode(String code) {
-        return locationRepository.findLocationByCode(code).orElseThrow(() -> new LocationDoesNotExist(code));
+        return locationRepository.findByCode(code)
+                .map(locationEntity -> LocationMapper.convertToLocation(locationEntity, defaultTimestampFormatter))
+                .orElseThrow(() -> new LocationDoesNotExist(code));
     }
 }

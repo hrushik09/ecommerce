@@ -5,6 +5,8 @@ document.addEventListener('alpine:init', () => {
             code: null,
             name: null,
             address: null,
+            createdAt: null,
+            updatedAt: null,
         },
         init() {
             this.loadLocation(this.code);

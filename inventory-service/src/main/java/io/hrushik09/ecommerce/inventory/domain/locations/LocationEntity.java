@@ -3,7 +3,6 @@ package io.hrushik09.ecommerce.inventory.domain.locations;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "locations", uniqueConstraints = @UniqueConstraint(name = "UK_locations_code", columnNames = "code"))
@@ -21,10 +20,6 @@ class LocationEntity {
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
-
-    public void generateCode() {
-        this.code = "location_" + UUID.randomUUID();
-    }
 
     public Long getId() {
         return id;

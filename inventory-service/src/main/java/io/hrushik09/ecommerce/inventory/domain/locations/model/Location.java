@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.clients.inventory.locations;
+package io.hrushik09.ecommerce.inventory.domain.locations.model;
 
 public record Location(
         String code,

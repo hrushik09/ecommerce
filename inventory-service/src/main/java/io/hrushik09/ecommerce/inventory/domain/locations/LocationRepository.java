@@ -14,6 +14,5 @@ interface LocationRepository extends JpaRepository<LocationEntity, Long> {
 
     boolean existsByName(String name);
 
-    @Query("SELECT new io.hrushik09.ecommerce.inventory.domain.locations.Location(le.code, le.name, le.address) FROM LocationEntity le WHERE le.code = :code")
-    Optional<Location> findLocationByCode(String code);
+    Optional<LocationEntity> findByCode(String code);
 }
