@@ -34,6 +34,8 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body("code", notNullValue())
+                    .body("code", startsWith("location_"))
+                    .body("code", hasLength(8 + 1 + 36))
                     .body("name", equalTo("Location 1"))
                     .body("address", equalTo("Address 1"));
         }
