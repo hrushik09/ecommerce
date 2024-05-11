@@ -145,8 +145,7 @@ class LocationServiceTest {
         @Test
         void shouldThrownWhenLocationDoesNotExist() {
             String code = "location_not_exist_a3irufi";
-            when(locationRepository.findByCode(code))
-                    .thenReturn(Optional.empty());
+            when(locationRepository.findByCode(code)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> locationService.getLocationByCode(code))
                     .isInstanceOf(LocationDoesNotExist.class)
@@ -173,6 +172,37 @@ class LocationServiceTest {
             assertThat(location.address()).isEqualTo(address);
             assertThat(location.createdAt()).isEqualTo("December 04 2009, 23:15:30 (UTC+00:00)");
             assertThat(location.updatedAt()).isEqualTo("December 06 2009, 10:34:30 (UTC+00:00)");
+        }
+    }
+
+    @Nested
+    class GetLocationEntityByCode {
+        @Test
+        void shouldThrowWhenLocationDoesNotExist() {
+            String code = "location_not_exist_3ihkjsfs";
+            when(locationRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> locationService.getLocationEntityByCode(code))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetLocationEntityByCode() {
+            String code = "location_wjkjbf";
+            String name = "Some location";
+            String address = "this is an address";
+            LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(code).withName(name).withAddress(address);
+            when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
+
+            LocationEntity locationEntity = locationService.getLocationEntityByCode(code);
+            assertThat(locationEntity).isNotNull();
+            assertThat(locationEntity.getId()).isNotNull();
+            assertThat(locationEntity.getCode()).isEqualTo(code);
+            assertThat(locationEntity.getName()).isEqualTo(name);
+            assertThat(locationEntity.getAddress()).isEqualTo(address);
+            assertThat(locationEntity.getCreatedAt()).isNotNull();
+            assertThat(locationEntity.getUpdatedAt()).isNotNull();
         }
     }
 }

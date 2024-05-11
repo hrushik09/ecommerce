@@ -66,6 +66,6 @@ public class LocationService {
     }
 
     public LocationEntity getLocationEntityByCode(String code) {
-        return null;
+        return locationRepository.findByCode(code).orElseThrow(() -> new LocationDoesNotExist(code));
     }
 }
