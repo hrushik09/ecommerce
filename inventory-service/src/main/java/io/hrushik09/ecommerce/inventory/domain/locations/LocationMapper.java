@@ -4,6 +4,6 @@ import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRes
 
 class LocationMapper {
     public static CreateLocationResponse convertToCreateLocationResponse(LocationEntity locationEntity) {
-        return new CreateLocationResponse(locationEntity.getCode(), locationEntity.getName(), locationEntity.getAddress());
+        return new CreateLocationResponse(locationEntity.getCode(), locationEntity.getName(), locationEntity.getAddress(), null, null);
     }
 }

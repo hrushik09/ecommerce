@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.inventory.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
     class CreateLocation {
         @Test
         void shouldCreateLocationSuccessfully() {
-            String timestampRegex = "[a-zA-Z]+ \\d{1,2} \\d{4}, \\d{2}:\\d{2}:\\d{2} \\(UTC[+-]\\d{2}:\\d{2}\\)";
             given().contentType(JSON)
                     .body("""
                             {
@@ -38,8 +38,8 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .body("code", hasLength(8 + 1 + 36))
                     .body("name", equalTo("Location 1"))
                     .body("address", equalTo("Address 1"))
-                    .body("createdAt", matchesPattern(timestampRegex))
-                    .body("updatedAt", matchesPattern(timestampRegex));
+                    .body("createdAt", matchesPattern(TestProperties.defaultTimestampRegex))
+                    .body("updatedAt", matchesPattern(TestProperties.defaultTimestampRegex));
         }
 
         @Test
