@@ -61,11 +61,7 @@ public class LocationService {
 
     public Location getLocationByCode(String code) {
         return locationRepository.findByCode(code)
-                .map(locationEntity -> new Location(locationEntity.getCode(),
-                        locationEntity.getName(),
-                        locationEntity.getAddress(),
-                        defaultTimestampFormatter.format(locationEntity.getCreatedAt()),
-                        defaultTimestampFormatter.format(locationEntity.getUpdatedAt())))
+                .map(locationEntity -> LocationMapper.convertToLocation(locationEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new LocationDoesNotExist(code));
     }
 }
