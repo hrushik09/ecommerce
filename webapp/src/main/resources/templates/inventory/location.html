@@ -9,6 +9,8 @@
     <div th:x-data="|initData('${code}')|">
         <h1 x-text="location.name"></h1>
         <p x-text="location.address"></p>
+        <p>Created At: <span x-text="location.createdAt"></span></p>
+        <p>Updated At: <span x-text="location.updatedAt"></span></p>
     </div>
 </div>
 <div layout:fragment="pageScripts">
