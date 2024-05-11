@@ -39,7 +39,7 @@ public class LocationService {
         locationEntity.setName(cmd.name());
         locationEntity.setAddress(cmd.address());
         LocationEntity saved = locationRepository.save(locationEntity);
-        return LocationMapper.convertToCreateLocationResponse(saved, defaultTimestampFormatter);
+        return LocationMapper.convertToCreateLocationResponse(saved);
     }
 
     public PagedResult<LocationSummary> getLocations(int pageNo) {

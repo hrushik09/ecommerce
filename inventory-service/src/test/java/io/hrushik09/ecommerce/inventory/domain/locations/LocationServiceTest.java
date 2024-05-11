@@ -1,6 +1,5 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
-import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
@@ -92,8 +91,6 @@ class LocationServiceTest {
             assertThat(created.code()).isEqualTo(code);
             assertThat(created.name()).isEqualTo(name);
             assertThat(created.address()).isEqualTo(address);
-            assertThat(created.createdAt()).matches(TestProperties.defaultTimestampRegex);
-            assertThat(created.updatedAt()).matches(TestProperties.defaultTimestampRegex);
         }
     }
 
