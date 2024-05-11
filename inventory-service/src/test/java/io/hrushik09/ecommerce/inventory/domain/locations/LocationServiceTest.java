@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -144,7 +145,7 @@ class LocationServiceTest {
         @Test
         void shouldThrownWhenLocationDoesNotExist() {
             String code = "location_not_exist_a3irufi";
-            when(locationRepository.findLocationByCode(code))
+            when(locationRepository.findByCode(code))
                     .thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> locationService.getLocationByCode(code))
@@ -157,14 +158,21 @@ class LocationServiceTest {
             String code = "location_akn32jfnf";
             String name = "Location 10";
             String address = "Address 23";
-            when(locationRepository.findLocationByCode(code))
-                    .thenReturn(Optional.of(new Location(code, name, address, null, null)));
+            LocationEntityBuilder locationEntityBuilder = aLocationEntity()
+                    .withCode(code)
+                    .withName(name)
+                    .withAddress(address)
+                    .withCreatedAt(Instant.parse("2009-12-04T23:15:30.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-12-06T10:34:30.00Z"));
+            when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
 
             Location location = locationService.getLocationByCode(code);
             assertThat(location).isNotNull();
             assertThat(location.code()).isEqualTo(code);
             assertThat(location.name()).isEqualTo(name);
             assertThat(location.address()).isEqualTo(address);
+            assertThat(location.createdAt()).isEqualTo("December 04 2009, 23:15:30 (UTC+00:00)");
+            assertThat(location.updatedAt()).isEqualTo("December 06 2009, 10:34:30 (UTC+00:00)");
         }
     }
 }

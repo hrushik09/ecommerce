@@ -60,6 +60,12 @@ public class LocationService {
     }
 
     public Location getLocationByCode(String code) {
-        return locationRepository.findLocationByCode(code).orElseThrow(() -> new LocationDoesNotExist(code));
+        return locationRepository.findByCode(code)
+                .map(locationEntity -> new Location(locationEntity.getCode(),
+                        locationEntity.getName(),
+                        locationEntity.getAddress(),
+                        defaultTimestampFormatter.format(locationEntity.getCreatedAt()),
+                        defaultTimestampFormatter.format(locationEntity.getUpdatedAt())))
+                .orElseThrow(() -> new LocationDoesNotExist(code));
     }
 }
