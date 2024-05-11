@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.locations;
 
 import io.hrushik09.ecommerce.inventory.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.inventory.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -143,7 +144,9 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .statusCode(HttpStatus.OK.value())
                     .body("code", equalTo(created.code()))
                     .body("name", equalTo("location 1"))
-                    .body("address", equalTo("address 1"));
+                    .body("address", equalTo("address 1"))
+                    .body("createdAt", matchesPattern(TestProperties.defaultTimestampRegex))
+                    .body("updatedAt", matchesPattern(TestProperties.defaultTimestampRegex));
         }
     }
 }
