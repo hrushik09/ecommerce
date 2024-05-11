@@ -66,7 +66,7 @@ class LocationControllerTest {
                                     }
                                     """))
                     .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.code", notNullValue()))
+                    .andExpect(jsonPath("$.code", equalTo("location_as3dfkn32")))
                     .andExpect(jsonPath("$.name", equalTo("Location 2")))
                     .andExpect(jsonPath("$.address", equalTo("Address 2")));
         }
