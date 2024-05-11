@@ -39,10 +39,11 @@ class LocationServiceTest {
     private LocationRepository locationRepository;
     @Mock
     private EntityCodeGenerator generateCode;
-    private final DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
 
     @BeforeEach
     void setUp() {
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern)
+                .withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
         locationService = new LocationService(locationRepository, generateCode, defaultTimestampFormatter);
     }
 
@@ -50,8 +51,7 @@ class LocationServiceTest {
     class CreateLocation {
         @Test
         void shouldThrowWhenLocationWithNameAlreadyExists() {
-            when(locationRepository.existsByName("already_existing_location_name"))
-                    .thenReturn(true);
+            when(locationRepository.existsByName("already_existing_location_name")).thenReturn(true);
 
             assertThatThrownBy(() -> locationService.create(new CreateLocationCommand("already_existing_location_name", "some address")))
                     .isInstanceOf(LocationAlreadyExists.class)

@@ -64,7 +64,8 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .post("/api/locations")
                     .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.value());
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .body("detail", equalTo("Location with name Location 1 already exists"));
         }
     }
 
