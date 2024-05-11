@@ -158,7 +158,7 @@ class LocationServiceTest {
             String name = "Location 10";
             String address = "Address 23";
             when(locationRepository.findLocationByCode(code))
-                    .thenReturn(Optional.of(new Location(code, name, address)));
+                    .thenReturn(Optional.of(new Location(code, name, address, null, null)));
 
             Location location = locationService.getLocationByCode(code);
             assertThat(location).isNotNull();

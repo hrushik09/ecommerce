@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.web.locations;
 
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
@@ -18,8 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -196,13 +196,15 @@ class LocationControllerTest {
             String name = "some name for location";
             String address = "some address";
             when(locationService.getLocationByCode(code))
-                    .thenReturn(new Location(code, name, address));
+                    .thenReturn(new Location(code, name, address, "January 01 1999, 23:23:45 (UTC+00:00)", "January 02 1999, 23:23:45 (UTC+00:00)"));
 
             mockMvc.perform(get("/api/locations/{code}", code))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code", equalTo(code)))
                     .andExpect(jsonPath("$.name", equalTo(name)))
-                    .andExpect(jsonPath("$.address", equalTo(address)));
+                    .andExpect(jsonPath("$.address", equalTo(address)))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.defaultTimestampRegex)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.defaultTimestampRegex)));
         }
     }
 }
