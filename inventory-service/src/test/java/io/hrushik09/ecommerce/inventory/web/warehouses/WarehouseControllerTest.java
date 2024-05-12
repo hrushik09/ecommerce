@@ -46,5 +46,40 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.name", equalTo("Some warehouse 23")))
                     .andExpect(jsonPath("$.isRefrigerated", is(true)));
         }
+
+        @Test
+        void shouldCreateWarehouseWithSameNameButDifferentLocation() throws Exception {
+            String locationCode11 = "location_dummy_11_kdnfsdf";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode11, "Warehouse 23", false)))
+                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasdaf", "Warehouse 23", false));
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode11)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 23",
+                                    "isRefrigerated": false
+                                    }
+                                    """))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasdaf")))
+                    .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
+                    .andExpect(jsonPath("$.isRefrigerated", is(false)));
+
+            String locationCode12 = "location_dummy_12_akfnaas";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode12, "Warehouse 23", true)))
+                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasasadaf", "Warehouse 23", true));
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode12)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 23",
+                                    "isRefrigerated": true
+                                    }
+                                    """))
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasasadaf")))
+                    .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
+                    .andExpect(jsonPath("$.isRefrigerated", is(true)));
+        }
     }
 }

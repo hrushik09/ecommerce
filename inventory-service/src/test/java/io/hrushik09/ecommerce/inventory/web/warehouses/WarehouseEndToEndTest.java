@@ -38,5 +38,38 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                     .body("name", equalTo("Warehouse 1"))
                     .body("isRefrigerated", is(false));
         }
+
+        @Test
+        void shouldCreateWarehouseWithSameNameButDifferentLocation() {
+            CreateLocationResponse location11 = havingPersisted.location("Location 11", "Address 11");
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Warehouse 1",
+                            "isRefrigerated": true
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations/{locationCode}/warehouses", location11.code())
+                    .then()
+                    .statusCode(HttpStatus.CREATED.value());
+
+            CreateLocationResponse location12 = havingPersisted.location("Location 12", "Address 12");
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Warehouse 1",
+                            "isRefrigerated": false
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations/{locationCode}/warehouses", location12.code())
+                    .then()
+                    .statusCode(HttpStatus.CREATED.value())
+                    .body("code", startsWith("warehouse_"))
+                    .body("code", hasLength(9 + 1 + 36))
+                    .body("name", equalTo("Warehouse 1"))
+                    .body("isRefrigerated", is(false));
+        }
     }
 }
