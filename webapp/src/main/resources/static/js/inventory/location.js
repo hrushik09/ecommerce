@@ -8,6 +8,7 @@ document.addEventListener('alpine:init', () => {
             createdAt: null,
             updatedAt: null,
         },
+        pageBaseUrl: "/inventory/locations",
         init() {
             this.loadLocation(this.code);
         },

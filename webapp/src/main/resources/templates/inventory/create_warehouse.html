@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${locationCode}')|">
+        <form @submit.prevent="createWarehouse" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input class="form-control" id="name" type="text" x-model="warehouse.name">
+            </div>
+            <div class="mb-3 form-check">
+                <input class="form-check-input" id="isRefrigerated" type="checkbox" x-model="warehouse.isRefrigerated">
+                <label class="form-check-label" for="isRefrigerated">Is Refrigerated</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+        <template x-if="createWarehouseErrorDetail">
+            <div class="mt-3 alert alert-warning" role="alert" x-text="createWarehouseErrorDetail"></div>
+        </template>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/create_warehouse.js"></script>
+</div>
+</body>
+</html>

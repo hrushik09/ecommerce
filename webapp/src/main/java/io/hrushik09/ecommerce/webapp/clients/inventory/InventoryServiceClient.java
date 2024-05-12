@@ -18,4 +18,7 @@ public interface InventoryServiceClient {
 
     @GetExchange("/locations/{code}")
     Location getLocationByCode(@PathVariable String code);
+
+    @PostExchange("/locations/{locationCode}/warehouses")
+    CreateWarehouseResponse createWarehouse(@PathVariable String locationCode, @RequestBody CreateWarehouseRequest request);
 }
