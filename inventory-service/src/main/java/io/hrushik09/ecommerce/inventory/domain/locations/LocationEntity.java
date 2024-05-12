@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "locations", uniqueConstraints = @UniqueConstraint(name = "UK_locations_code", columnNames = "code"))
+@Table(name = "locations",
+        uniqueConstraints = {@UniqueConstraint(name = "UK_locations_code", columnNames = "code"), @UniqueConstraint(name = "UK_locations_name", columnNames = "name")}
+)
 public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String code;
     @Column(nullable = false)
     private String name;
