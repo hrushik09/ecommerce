@@ -107,8 +107,9 @@ class LocationServiceTest {
 
             PagedResult<LocationSummary> pagedResult = locationService.getLocations(2);
 
-            assertThat(pagedResult.data()).hasSize(7);
+            assertThat(pagedResult).isNotNull();
             List<LocationSummary> data = pagedResult.data();
+            assertThat(data).hasSize(7);
             assertThat(data.get(0).code()).isEqualTo("location_kfasd_11");
             assertThat(data.get(0).name()).isEqualTo("Location 11");
             assertThat(data.get(0).address()).isEqualTo("Address 11");

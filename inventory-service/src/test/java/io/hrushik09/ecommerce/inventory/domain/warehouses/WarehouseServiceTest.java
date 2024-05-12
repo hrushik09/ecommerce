@@ -1,11 +1,13 @@
 package io.hrushik09.ecommerce.inventory.domain.warehouses;
 
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseCommand;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.model.WarehouseSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntityBuilder.aWarehouseEntity;
@@ -161,6 +169,58 @@ class WarehouseServiceTest {
             assertThatThrownBy(() -> warehouseService.create(new CreateWarehouseCommand(locationCode, name, true)))
                     .isInstanceOf(WarehouseAlreadyExists.class)
                     .hasMessage("Warehouse with name " + name + " already exists in this Location");
+        }
+    }
+
+    @Nested
+    class GetWarehouses {
+        @Test
+        void shouldGetWarehousesSuccessfully() {
+            String locationCode = "location_mock_3sasfvsgf";
+            LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode);
+            when(locationService.getLocationEntityByCode(locationCode))
+                    .thenReturn(locationEntityBuilder.build());
+            int pageNo = 4;
+            List<WarehouseSummary> list = Stream.iterate(31, i -> i < 37, i -> i + 1)
+                    .map(i -> new WarehouseSummary("warehouse_mock_jhhsdfss-" + i, "Warehouse " + i, i % 2 == 0))
+                    .toList();
+            when(warehouseRepository.getWarehouseSummaries(any(LocationEntity.class), any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(3, 10), 6));
+
+            PagedResult<WarehouseSummary> pagedResult = warehouseService.getWarehouses(locationCode, pageNo);
+
+            ArgumentCaptor<LocationEntity> listArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
+            verify(warehouseRepository).getWarehouseSummaries(listArgumentCaptor.capture(), any(Pageable.class));
+            LocationEntity captorValue = listArgumentCaptor.getValue();
+            assertThat(captorValue.getCode()).isEqualTo(locationCode);
+            assertThat(pagedResult).isNotNull();
+            List<WarehouseSummary> data = pagedResult.data();
+            assertThat(data).hasSize(6);
+            assertThat(data.get(0).code()).isEqualTo("warehouse_mock_jhhsdfss-31");
+            assertThat(data.get(0).name()).isEqualTo("Warehouse 31");
+            assertThat(data.get(0).isRefrigerated()).isFalse();
+            assertThat(data.get(1).code()).isEqualTo("warehouse_mock_jhhsdfss-32");
+            assertThat(data.get(1).name()).isEqualTo("Warehouse 32");
+            assertThat(data.get(1).isRefrigerated()).isTrue();
+            assertThat(data.get(2).code()).isEqualTo("warehouse_mock_jhhsdfss-33");
+            assertThat(data.get(2).name()).isEqualTo("Warehouse 33");
+            assertThat(data.get(2).isRefrigerated()).isFalse();
+            assertThat(data.get(3).code()).isEqualTo("warehouse_mock_jhhsdfss-34");
+            assertThat(data.get(3).name()).isEqualTo("Warehouse 34");
+            assertThat(data.get(3).isRefrigerated()).isTrue();
+            assertThat(data.get(4).code()).isEqualTo("warehouse_mock_jhhsdfss-35");
+            assertThat(data.get(4).name()).isEqualTo("Warehouse 35");
+            assertThat(data.get(4).isRefrigerated()).isFalse();
+            assertThat(data.get(5).code()).isEqualTo("warehouse_mock_jhhsdfss-36");
+            assertThat(data.get(5).name()).isEqualTo("Warehouse 36");
+            assertThat(data.get(5).isRefrigerated()).isTrue();
+            assertThat(pagedResult.totalElements()).isEqualTo(36);
+            assertThat(pagedResult.pageNumber()).isEqualTo(4);
+            assertThat(pagedResult.totalPages()).isEqualTo(4);
+            assertThat(pagedResult.isFirst()).isFalse();
+            assertThat(pagedResult.isLast()).isTrue();
+            assertThat(pagedResult.hasNext()).isFalse();
+            assertThat(pagedResult.hasPrevious()).isTrue();
         }
     }
 }
