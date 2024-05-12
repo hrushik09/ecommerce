@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "warehouses", uniqueConstraints = @UniqueConstraint(name = "UK_warehouses_code", columnNames = "code"))
+@Table(name = "warehouses",
+        uniqueConstraints = {@UniqueConstraint(name = "UK_warehouses_code", columnNames = "code"),
+                @UniqueConstraint(name = "UK_warehouses_name_location_id", columnNames = "name, location_id")}
+)
 class WarehouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

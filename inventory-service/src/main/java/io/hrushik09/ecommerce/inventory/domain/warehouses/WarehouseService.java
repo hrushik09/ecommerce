@@ -1,6 +1,7 @@
 package io.hrushik09.ecommerce.inventory.domain.warehouses;
 
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseCommand;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
@@ -22,8 +23,13 @@ public class WarehouseService {
 
     @Transactional
     public CreateWarehouseResponse create(CreateWarehouseCommand cmd) {
+        LocationEntity locationEntity = locationService.getLocationEntityByCode(cmd.locationCode());
+        if (warehouseRepository.existsByNameAndLocationEntity(cmd.name(), locationEntity)) {
+            throw new WarehouseAlreadyExists(cmd.name());
+        }
+
         WarehouseEntity warehouseEntity = new WarehouseEntity();
-        warehouseEntity.setLocationEntity(locationService.getLocationEntityByCode(cmd.locationCode()));
+        warehouseEntity.setLocationEntity(locationEntity);
         warehouseEntity.setCode(generateCode.forEntityType("warehouse"));
         warehouseEntity.setName(cmd.name());
         warehouseEntity.setRefrigerated(cmd.isRefrigerated());

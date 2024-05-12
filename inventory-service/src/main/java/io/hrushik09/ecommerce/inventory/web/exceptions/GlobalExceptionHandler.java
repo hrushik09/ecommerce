@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.exceptions;
 
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -45,8 +46,8 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(problemDetail);
     }
 
-    @ExceptionHandler(LocationAlreadyExists.class)
-    ProblemDetail handleLocationAlreadyExists(LocationAlreadyExists e) {
+    @ExceptionHandler({LocationAlreadyExists.class, WarehouseAlreadyExists.class})
+    ProblemDetail handleLocationAlreadyExists(AlreadyExists e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("service", SERVICE_NAME);

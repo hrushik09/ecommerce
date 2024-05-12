@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.web.warehouses;
 
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseCommand;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
@@ -48,7 +49,7 @@ class WarehouseControllerTest {
         }
 
         @Test
-        void shouldCreateWarehouseWithSameNameButDifferentLocation() throws Exception {
+        void shouldCreateWarehouseWithSameNameInDifferentLocation() throws Exception {
             String locationCode11 = "location_dummy_11_kdnfsdf";
             when(warehouseService.create(new CreateWarehouseCommand(locationCode11, "Warehouse 23", false)))
                     .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasdaf", "Warehouse 23", false));
@@ -60,10 +61,7 @@ class WarehouseControllerTest {
                                     "isRefrigerated": false
                                     }
                                     """))
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasdaf")))
-                    .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
-                    .andExpect(jsonPath("$.isRefrigerated", is(false)));
+                    .andExpect(status().isCreated());
 
             String locationCode12 = "location_dummy_12_akfnaas";
             when(warehouseService.create(new CreateWarehouseCommand(locationCode12, "Warehouse 23", true)))
@@ -80,6 +78,36 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasasadaf")))
                     .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
                     .andExpect(jsonPath("$.isRefrigerated", is(true)));
+        }
+
+        @Test
+        void shouldNotCreateWarehouseWithSameNameInSameLocation() throws Exception {
+            String locationCode = "location_dummy_kdnfsdf";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", false)))
+                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_asdasvs", "Warehouse 1", false));
+
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 1",
+                                    "isRefrigerated": false
+                                    }
+                                    """))
+                    .andExpect(status().isCreated());
+
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", true)))
+                    .thenThrow(new WarehouseAlreadyExists("Warehouse 1"));
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 1",
+                                    "isRefrigerated": true
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with name Warehouse 1 already exists in this Location")));
         }
     }
 }

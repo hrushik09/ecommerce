@@ -40,7 +40,7 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
         }
 
         @Test
-        void shouldCreateWarehouseWithSameNameButDifferentLocation() {
+        void shouldCreateWarehouseWithSameNameInDifferentLocation() {
             CreateLocationResponse location11 = havingPersisted.location("Location 11", "Address 11");
             given().contentType(JSON)
                     .body("""
@@ -70,6 +70,36 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                     .body("code", hasLength(9 + 1 + 36))
                     .body("name", equalTo("Warehouse 1"))
                     .body("isRefrigerated", is(false));
+        }
+
+        @Test
+        void shouldNotCreateWarehouseWithSameNameInSameLocation() {
+            CreateLocationResponse location = havingPersisted.location("Location 1", "Address 1");
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Warehouse 12",
+                            "isRefrigerated": true
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations/{locationCode}/warehouses", location.code())
+                    .then()
+                    .statusCode(HttpStatus.CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Warehouse 12",
+                            "isRefrigerated": false
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations/{locationCode}/warehouses", location.code())
+                    .then()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .body("detail", equalTo("Warehouse with name Warehouse 12 already exists in this Location"));
         }
     }
 }
