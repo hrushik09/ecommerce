@@ -33,7 +33,7 @@ class WarehouseControllerTest {
             when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Some warehouse 23", true)))
                     .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dkf3uajf", "Some warehouse 23", true));
 
-            mockMvc.perform(post("/api/inventory/locations/{locationCode}/warehouses", locationCode)
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
                             .contentType(APPLICATION_JSON)
                             .content("""
                                     {

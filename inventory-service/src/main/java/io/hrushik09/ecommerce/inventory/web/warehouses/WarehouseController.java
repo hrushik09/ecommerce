@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/inventory/locations/{locationCode}/warehouses")
+@RequestMapping("/api/locations/{locationCode}/warehouses")
 class WarehouseController {
     private static final Logger log = LoggerFactory.getLogger(WarehouseController.class);
     private final WarehouseService warehouseService;

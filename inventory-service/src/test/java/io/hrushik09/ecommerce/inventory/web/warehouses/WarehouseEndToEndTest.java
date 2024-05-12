@@ -30,7 +30,7 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/inventory/locations/{locationCode}/warehouses", location.code())
+                    .post("/api/locations/{locationCode}/warehouses", location.code())
                     .then()
                     .statusCode(HttpStatus.CREATED.value())
                     .body("code", startsWith("warehouse_"))

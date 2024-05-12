@@ -14,7 +14,7 @@ public class WarehouseService {
     private final EntityCodeGenerator generateCode;
     private final LocationService locationService;
 
-    public WarehouseService(WarehouseRepository warehouseRepository, EntityCodeGenerator generateCode, LocationService locationService) {
+    WarehouseService(WarehouseRepository warehouseRepository, EntityCodeGenerator generateCode, LocationService locationService) {
         this.warehouseRepository = warehouseRepository;
         this.generateCode = generateCode;
         this.locationService = locationService;
