@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 class LocationController {
+    @GetMapping("/inventory/locations/create")
+    String createLocationPage() {
+        return "inventory/create_location";
+    }
+
     @GetMapping("/inventory/locations")
     String locationsPage(@RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("pageNo", pageNo);
         return "inventory/locations";
-    }
-
-    @GetMapping("/inventory/locations/create")
-    String createLocationPage() {
-        return "inventory/create_location";
     }
 
     @GetMapping("inventory/locations/{code}")
