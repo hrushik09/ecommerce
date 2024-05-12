@@ -100,7 +100,7 @@ class LocationServiceTest {
         @Test
         void shouldGetLocationsSuccessfully() {
             List<LocationSummary> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
-                    .map(i -> new LocationSummary("location_", "Location " + i, "Address " + i))
+                    .map(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationRepository.getLocationSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));
@@ -109,25 +109,25 @@ class LocationServiceTest {
 
             assertThat(pagedResult.data()).hasSize(7);
             List<LocationSummary> data = pagedResult.data();
-            assertThat(data.get(0).code()).isNotNull();
+            assertThat(data.get(0).code()).isEqualTo("location_kfasd_11");
             assertThat(data.get(0).name()).isEqualTo("Location 11");
             assertThat(data.get(0).address()).isEqualTo("Address 11");
-            assertThat(data.get(1).code()).isNotNull();
+            assertThat(data.get(1).code()).isEqualTo("location_kfasd_12");
             assertThat(data.get(1).name()).isEqualTo("Location 12");
             assertThat(data.get(1).address()).isEqualTo("Address 12");
-            assertThat(data.get(2).code()).isNotNull();
+            assertThat(data.get(2).code()).isEqualTo("location_kfasd_13");
             assertThat(data.get(2).name()).isEqualTo("Location 13");
             assertThat(data.get(2).address()).isEqualTo("Address 13");
-            assertThat(data.get(3).code()).isNotNull();
+            assertThat(data.get(3).code()).isEqualTo("location_kfasd_14");
             assertThat(data.get(3).name()).isEqualTo("Location 14");
             assertThat(data.get(3).address()).isEqualTo("Address 14");
-            assertThat(data.get(4).code()).isNotNull();
+            assertThat(data.get(4).code()).isEqualTo("location_kfasd_15");
             assertThat(data.get(4).name()).isEqualTo("Location 15");
             assertThat(data.get(4).address()).isEqualTo("Address 15");
-            assertThat(data.get(5).code()).isNotNull();
+            assertThat(data.get(5).code()).isEqualTo("location_kfasd_16");
             assertThat(data.get(5).name()).isEqualTo("Location 16");
             assertThat(data.get(5).address()).isEqualTo("Address 16");
-            assertThat(data.get(6).code()).isNotNull();
+            assertThat(data.get(6).code()).isEqualTo("location_kfasd_17");
             assertThat(data.get(6).name()).isEqualTo("Location 17");
             assertThat(data.get(6).address()).isEqualTo("Address 17");
             assertThat(pagedResult.totalElements()).isEqualTo(17);
