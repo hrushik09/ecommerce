@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.inventory.web.exceptions;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseDoesNotExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -47,7 +48,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({LocationAlreadyExists.class, WarehouseAlreadyExists.class})
-    ProblemDetail handleLocationAlreadyExists(AlreadyExists e) {
+    ProblemDetail handleAlreadyExists(AlreadyExists e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("service", SERVICE_NAME);
@@ -55,8 +56,8 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(LocationDoesNotExist.class)
-    ProblemDetail handleLocationDoesNotExist(LocationDoesNotExist e) {
+    @ExceptionHandler({LocationDoesNotExist.class, WarehouseDoesNotExist.class})
+    ProblemDetail handleDoesNotExist(DoesNotExist e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("service", SERVICE_NAME);

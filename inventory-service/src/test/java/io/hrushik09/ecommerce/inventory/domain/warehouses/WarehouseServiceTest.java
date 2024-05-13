@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.warehouses;
 
+import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
@@ -7,6 +8,7 @@ import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseCommand;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.model.Warehouse;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.WarehouseSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -19,7 +21,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
@@ -43,7 +49,8 @@ class WarehouseServiceTest {
 
     @BeforeEach
     void setUp() {
-        warehouseService = new WarehouseService(warehouseRepository, generateCode, locationService);
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of("UTC"));
+        warehouseService = new WarehouseService(warehouseRepository, generateCode, locationService, defaultTimestampFormatter);
     }
 
     @Nested
@@ -221,6 +228,42 @@ class WarehouseServiceTest {
             assertThat(pagedResult.isLast()).isTrue();
             assertThat(pagedResult.hasNext()).isFalse();
             assertThat(pagedResult.hasPrevious()).isTrue();
+        }
+    }
+
+    @Nested
+    class GetWarehouseByCode {
+        @Test
+        void shouldThrowWhenWarehouseDoesNotExist() {
+            String code = "warehouse_not_exist";
+            when(warehouseRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> warehouseService.getWarehouseByCode(code))
+                    .isInstanceOf(WarehouseDoesNotExist.class)
+                    .hasMessage("Warehouse with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetWarehouseByCode() {
+            String code = "warehouse_aksdask";
+            String name = "Warehouse 3";
+            boolean isRefrigerated = false;
+            WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity()
+                    .withCode(code)
+                    .withName(name)
+                    .withIsRefrigerated(isRefrigerated)
+                    .withCreatedAt(Instant.parse("2009-05-17T16:14:12.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-05-17T23:15:30.00Z"));
+            when(warehouseRepository.findByCode(code)).thenReturn(Optional.of(warehouseEntityBuilder.build()));
+
+            Warehouse warehouse = warehouseService.getWarehouseByCode(code);
+
+            assertThat(warehouse).isNotNull();
+            assertThat(warehouse.code()).isEqualTo(code);
+            assertThat(warehouse.name()).isEqualTo(name);
+            assertThat(warehouse.isRefrigerated()).isEqualTo(isRefrigerated);
+            assertThat(warehouse.createdAt()).isEqualTo("May 17 2009, 16:14:12 (UTC+00:00)");
+            assertThat(warehouse.updatedAt()).isEqualTo("May 17 2009, 23:15:30 (UTC+00:00)");
         }
     }
 }

@@ -2,7 +2,9 @@ package io.hrushik09.ecommerce.inventory.web.warehouses;
 
 import io.hrushik09.ecommerce.inventory.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.inventory.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,6 +168,26 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", is(false))
                     .body("hasNext", is(true))
                     .body("hasPrevious", is(false));
+        }
+    }
+
+    @Nested
+    class GetWarehouseByCode {
+        @Test
+        void shouldGetWarehouseByCode() {
+            CreateLocationResponse location = havingPersisted.location("Some location", "Some address");
+            CreateWarehouseResponse created = havingPersisted.warehouse(location.code(), "Warehouse 34", true);
+
+            given()
+                    .when()
+                    .get("/api/warehouses/{code}", created.code())
+                    .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("code", equalTo(created.code()))
+                    .body("name", equalTo("Warehouse 34"))
+                    .body("isRefrigerated", is(true))
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long> {
     boolean existsByNameAndLocationEntity(String name, LocationEntity locationEntity);
 
@@ -15,4 +17,6 @@ interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long> {
             WHERE w.locationEntity = :locationEntity
             """)
     Page<WarehouseSummary> getWarehouseSummaries(LocationEntity locationEntity, Pageable pageable);
+
+    Optional<WarehouseEntity> findByCode(String code);
 }

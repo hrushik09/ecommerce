@@ -1,10 +1,13 @@
 package io.hrushik09.ecommerce.inventory.web.warehouses;
 
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseCommand;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseResponse;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.model.Warehouse;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.model.WarehouseSummary;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -219,6 +222,36 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.isLast", is(false)))
                     .andExpect(jsonPath("$.hasNext", is(true)))
                     .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+    }
+
+    @Nested
+    class GetWarehouseByCode {
+        @Test
+        void shouldReturnErrorForNonExistingWarehouse() throws Exception {
+            String code = "warehouse_not_exist_aksa3n3kn";
+            when(warehouseService.getWarehouseByCode(code)).thenThrow(new WarehouseDoesNotExist(code));
+
+            mockMvc.perform(get("/api/warehouses/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldReturnWarehouseByCode() throws Exception {
+            String code = "warehouse_dummy_askdnas";
+            String name = "Warehouse 9";
+            boolean isRefrigerated = false;
+            when(warehouseService.getWarehouseByCode(code))
+                    .thenReturn(new Warehouse(code, name, isRefrigerated, "January 05 1999, 12:54:12 (UTC+00:00)", "January 06 1999, 12:54:12 (UTC+00:00)"));
+
+            mockMvc.perform(get("/api/warehouses/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.name", equalTo(name)))
+                    .andExpect(jsonPath("$.isRefrigerated", is(isRefrigerated)))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }
