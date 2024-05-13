@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.inventory.domain.locations;
 
 import java.time.Instant;
 
-class LocationEntityBuilder {
+public class LocationEntityBuilder {
     private Long id = 2L;
     private String code = "location_random-asdqwra";
     private String name = "random name";

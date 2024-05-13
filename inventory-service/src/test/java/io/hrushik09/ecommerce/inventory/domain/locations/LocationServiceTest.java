@@ -100,34 +100,35 @@ class LocationServiceTest {
         @Test
         void shouldGetLocationsSuccessfully() {
             List<LocationSummary> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
-                    .map(i -> new LocationSummary("location_", "Location " + i, "Address " + i))
+                    .map(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationRepository.getLocationSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));
 
             PagedResult<LocationSummary> pagedResult = locationService.getLocations(2);
 
-            assertThat(pagedResult.data()).hasSize(7);
+            assertThat(pagedResult).isNotNull();
             List<LocationSummary> data = pagedResult.data();
-            assertThat(data.get(0).code()).isNotNull();
+            assertThat(data).hasSize(7);
+            assertThat(data.get(0).code()).isEqualTo("location_kfasd_11");
             assertThat(data.get(0).name()).isEqualTo("Location 11");
             assertThat(data.get(0).address()).isEqualTo("Address 11");
-            assertThat(data.get(1).code()).isNotNull();
+            assertThat(data.get(1).code()).isEqualTo("location_kfasd_12");
             assertThat(data.get(1).name()).isEqualTo("Location 12");
             assertThat(data.get(1).address()).isEqualTo("Address 12");
-            assertThat(data.get(2).code()).isNotNull();
+            assertThat(data.get(2).code()).isEqualTo("location_kfasd_13");
             assertThat(data.get(2).name()).isEqualTo("Location 13");
             assertThat(data.get(2).address()).isEqualTo("Address 13");
-            assertThat(data.get(3).code()).isNotNull();
+            assertThat(data.get(3).code()).isEqualTo("location_kfasd_14");
             assertThat(data.get(3).name()).isEqualTo("Location 14");
             assertThat(data.get(3).address()).isEqualTo("Address 14");
-            assertThat(data.get(4).code()).isNotNull();
+            assertThat(data.get(4).code()).isEqualTo("location_kfasd_15");
             assertThat(data.get(4).name()).isEqualTo("Location 15");
             assertThat(data.get(4).address()).isEqualTo("Address 15");
-            assertThat(data.get(5).code()).isNotNull();
+            assertThat(data.get(5).code()).isEqualTo("location_kfasd_16");
             assertThat(data.get(5).name()).isEqualTo("Location 16");
             assertThat(data.get(5).address()).isEqualTo("Address 16");
-            assertThat(data.get(6).code()).isNotNull();
+            assertThat(data.get(6).code()).isEqualTo("location_kfasd_17");
             assertThat(data.get(6).name()).isEqualTo("Location 17");
             assertThat(data.get(6).address()).isEqualTo("Address 17");
             assertThat(pagedResult.totalElements()).isEqualTo(17);
@@ -145,8 +146,7 @@ class LocationServiceTest {
         @Test
         void shouldThrownWhenLocationDoesNotExist() {
             String code = "location_not_exist_a3irufi";
-            when(locationRepository.findByCode(code))
-                    .thenReturn(Optional.empty());
+            when(locationRepository.findByCode(code)).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> locationService.getLocationByCode(code))
                     .isInstanceOf(LocationDoesNotExist.class)
@@ -167,12 +167,44 @@ class LocationServiceTest {
             when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
 
             Location location = locationService.getLocationByCode(code);
+
             assertThat(location).isNotNull();
             assertThat(location.code()).isEqualTo(code);
             assertThat(location.name()).isEqualTo(name);
             assertThat(location.address()).isEqualTo(address);
             assertThat(location.createdAt()).isEqualTo("December 04 2009, 23:15:30 (UTC+00:00)");
             assertThat(location.updatedAt()).isEqualTo("December 06 2009, 10:34:30 (UTC+00:00)");
+        }
+    }
+
+    @Nested
+    class GetLocationEntityByCode {
+        @Test
+        void shouldThrowWhenLocationDoesNotExist() {
+            String code = "location_not_exist_3ihkjsfs";
+            when(locationRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> locationService.getLocationEntityByCode(code))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetLocationEntityByCode() {
+            String code = "location_wjkjbf";
+            String name = "Some location";
+            String address = "this is an address";
+            LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(code).withName(name).withAddress(address);
+            when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
+
+            LocationEntity locationEntity = locationService.getLocationEntityByCode(code);
+            assertThat(locationEntity).isNotNull();
+            assertThat(locationEntity.getId()).isNotNull();
+            assertThat(locationEntity.getCode()).isEqualTo(code);
+            assertThat(locationEntity.getName()).isEqualTo(name);
+            assertThat(locationEntity.getAddress()).isEqualTo(address);
+            assertThat(locationEntity.getCreatedAt()).isNotNull();
+            assertThat(locationEntity.getUpdatedAt()).isNotNull();
         }
     }
 }

@@ -1,19 +1,19 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('initData', (code) => ({
         code: code,
-        location: {
+        warehouse: {
             code: null,
             name: null,
-            address: null,
+            isRefrigerated: null,
             createdAt: null,
             updatedAt: null,
         },
         init() {
-            this.loadLocation(this.code);
+            this.loadWarehouse(this.code);
         },
-        loadLocation(code) {
-            $.getJSON("/api/inventory/locations/" + code, (resp) => {
-                this.location = resp;
+        loadWarehouse(code) {
+            $.getJSON("/api/inventory/warehouses/" + code, (resp) => {
+                this.warehouse = resp;
             });
         },
     }));

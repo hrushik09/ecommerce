@@ -9,6 +9,7 @@ public class EntityCodeGenerator {
     public String forEntityType(String entityType) {
         return switch (entityType) {
             case "location" -> "location_" + UUID.randomUUID();
+            case "warehouse" -> "warehouse_" + UUID.randomUUID();
             default -> throw new IllegalStateException("Unexpected value: " + entityType);
         };
     }

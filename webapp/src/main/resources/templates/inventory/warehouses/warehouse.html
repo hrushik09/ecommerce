@@ -7,14 +7,14 @@
 <body>
 <div layout:fragment="content">
     <div th:x-data="|initData('${code}')|">
-        <h1 x-text="location.name"></h1>
-        <p x-text="location.address"></p>
-        <p>Created At: <span x-text="location.createdAt"></span></p>
-        <p>Updated At: <span x-text="location.updatedAt"></span></p>
+        <h1 x-text="warehouse.name"></h1>
+        <p>Is Refrigerated: <span x-text="warehouse.isRefrigerated"></span></p>
+        <p>Created At: <span x-text="warehouse.createdAt"></span></p>
+        <p>Updated At: <span x-text="warehouse.updatedAt"></span></p>
     </div>
 </div>
 <div layout:fragment="pageScripts">
-    <script src="/js/inventory/location.js"></script>
+    <script src="/js/inventory/warehouses/warehouse.js"></script>
 </div>
 </body>
 </html>

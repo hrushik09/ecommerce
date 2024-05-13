@@ -13,6 +13,7 @@ document.addEventListener("alpine:init", () => {
                 contentType: "application/json",
                 data: JSON.stringify(this.location),
                 success: (response) => {
+                    this.createLocationErrorDetail = null;
                     window.location = "/inventory/locations/" + response.code;
                 },
                 error: (err) => {

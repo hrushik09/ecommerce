@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${code}', '${pageNo}')|">
+        <div class="row">
+            <div class="col">
+                <h1 x-text="location.name"></h1>
+                <p x-text="location.address"></p>
+                <p>Created At: <span x-text="location.createdAt"></span></p>
+                <p>Updated At: <span x-text="location.updatedAt"></span></p>
+            </div>
+            <div class="col">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a :href="childBaseUrl + '/warehouses/create'"
+                           class="nav-link text-bg-secondary p-3">Add New Warehouse</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div th:replace="~{fragments/pagination :: child-pagination}"></div>
+        <div class="row row-cols-1 row-cols-md-5">
+            <template x-for="warehouse in pagedResult.data">
+                <div class="col mb-3">
+                    <div class="card h-100 warehouse">
+                        <div class="card-body">
+                            <a :href="warehouseBaseUrl + '/' + warehouse.code">
+                                <h5 class="card-title" data-placement="top" data-toggle="tooltip"
+                                    x-text="warehouse.name"></h5>
+                            </a>
+                            <p class="card-text" data-placement="top" data-toggle="tooltip"
+                               x-text="warehouse.isRefrigerated"></p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/locations/location.js"></script>
+</div>
+</body>
+</html>

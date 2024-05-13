@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.web.controllers;
+package io.hrushik09.ecommerce.webapp.web.controllers.locations;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 class LocationController {
+    @GetMapping("/inventory/locations/create")
+    String createLocationPage() {
+        return "inventory/locations/create_location";
+    }
+
     @GetMapping("/inventory/locations")
     String locationsPage(@RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("pageNo", pageNo);
-        return "inventory/locations";
-    }
-
-    @GetMapping("/inventory/locations/create")
-    String createLocationPage() {
-        return "inventory/create_location";
+        return "inventory/locations/locations";
     }
 
     @GetMapping("inventory/locations/{code}")
-    String locationPage(@PathVariable String code, Model model) {
+    String locationPage(@PathVariable String code, @RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("code", code);
-        return "inventory/location";
+        model.addAttribute("pageNo", pageNo);
+        return "inventory/locations/location";
     }
 }

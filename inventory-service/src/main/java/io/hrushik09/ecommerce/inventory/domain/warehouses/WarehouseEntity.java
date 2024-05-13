@@ -1,30 +1,32 @@
-package io.hrushik09.ecommerce.inventory.domain.locations;
+package io.hrushik09.ecommerce.inventory.domain.warehouses;
 
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
 
 @Entity
-@Table(name = "locations",
-        uniqueConstraints = {@UniqueConstraint(name = "UK_locations_code", columnNames = "code"), @UniqueConstraint(name = "UK_locations_name", columnNames = "name")}
+@Table(name = "warehouses",
+        uniqueConstraints = {@UniqueConstraint(name = "UK_warehouses_code", columnNames = "code"),
+                @UniqueConstraint(name = "UK_warehouses_name_location_id", columnNames = "name, location_id")}
 )
-public class LocationEntity {
+class WarehouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
+    private LocationEntity locationEntity;
     @Column(nullable = false)
     private String code;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String address;
+    private boolean isRefrigerated;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
-
-    protected LocationEntity() {
-    }
 
     public Long getId() {
         return id;
@@ -32,6 +34,14 @@ public class LocationEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocationEntity getLocationEntity() {
+        return locationEntity;
+    }
+
+    public void setLocationEntity(LocationEntity locationEntity) {
+        this.locationEntity = locationEntity;
     }
 
     public String getCode() {
@@ -50,12 +60,12 @@ public class LocationEntity {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public boolean isRefrigerated() {
+        return isRefrigerated;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setRefrigerated(boolean refrigerated) {
+        isRefrigerated = refrigerated;
     }
 
     public Instant getCreatedAt() {
