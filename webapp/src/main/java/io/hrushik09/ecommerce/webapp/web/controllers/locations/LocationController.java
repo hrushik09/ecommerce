@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 class LocationController {
     @GetMapping("/inventory/locations/create")
     String createLocationPage() {
-        return "inventory/create_location";
+        return "inventory/locations/create_location";
     }
 
     @GetMapping("/inventory/locations")
     String locationsPage(@RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("pageNo", pageNo);
-        return "inventory/locations";
+        return "inventory/locations/locations";
     }
 
     @GetMapping("inventory/locations/{code}")
     String locationPage(@PathVariable String code, @RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("code", code);
         model.addAttribute("pageNo", pageNo);
-        return "inventory/location";
+        return "inventory/locations/location";
     }
 }
