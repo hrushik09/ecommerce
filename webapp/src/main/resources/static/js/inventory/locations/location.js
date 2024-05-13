@@ -12,7 +12,6 @@ document.addEventListener('alpine:init', () => {
         pagedResult: {
             data: []
         },
-        pageBaseUrl: "/inventory/locations",
         childBaseUrl: "/inventory/locations/" + code,
         warehouseBaseUrl: "/inventory/warehouses",
         init() {
