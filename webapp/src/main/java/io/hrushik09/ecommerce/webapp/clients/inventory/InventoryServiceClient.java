@@ -21,4 +21,7 @@ public interface InventoryServiceClient {
 
     @PostExchange("/locations/{locationCode}/warehouses")
     CreateWarehouseResponse createWarehouse(@PathVariable String locationCode, @RequestBody CreateWarehouseRequest request);
+
+    @GetExchange("/locations/{locationCode}/warehouses")
+    PagedResult<WarehouseSummary> getWarehouses(@PathVariable String locationCode, @RequestParam(name = "page") int pageNo);
 }

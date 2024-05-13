@@ -3,7 +3,7 @@ document.addEventListener("alpine:init", () => {
         locationCode: locationCode,
         warehouse: {
             name: null,
-            isRefrigerated: null,
+            isRefrigerated: false,
         },
         createWarehouseErrorDetail: null,
         createWarehouse() {
@@ -15,6 +15,7 @@ document.addEventListener("alpine:init", () => {
                 data: JSON.stringify(this.warehouse),
                 success: (response) => {
                     console.log("response ", response);
+                    this.createWarehouseErrorDetail = null;
                 },
                 error: (err) => {
                     let responseText = JSON.parse(err.responseText);

@@ -20,8 +20,9 @@ class LocationController {
     }
 
     @GetMapping("inventory/locations/{code}")
-    String locationPage(@PathVariable String code, Model model) {
+    String locationPage(@PathVariable String code, @RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("code", code);
+        model.addAttribute("pageNo", pageNo);
         return "inventory/location";
     }
 }
