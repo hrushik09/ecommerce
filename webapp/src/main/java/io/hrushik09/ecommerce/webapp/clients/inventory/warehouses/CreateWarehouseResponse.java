@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.clients.inventory.locations;
+package io.hrushik09.ecommerce.webapp.clients.inventory.warehouses;
 
 public record CreateWarehouseResponse(
         String code,
