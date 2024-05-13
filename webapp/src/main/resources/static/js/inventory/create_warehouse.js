@@ -14,8 +14,8 @@ document.addEventListener("alpine:init", () => {
                 contentType: "application/json",
                 data: JSON.stringify(this.warehouse),
                 success: (response) => {
-                    console.log("response ", response);
                     this.createWarehouseErrorDetail = null;
+                    window.location = "/inventory/warehouses/" + response.code;
                 },
                 error: (err) => {
                     let responseText = JSON.parse(err.responseText);

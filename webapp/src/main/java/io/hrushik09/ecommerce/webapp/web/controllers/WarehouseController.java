@@ -12,4 +12,10 @@ class WarehouseController {
         model.addAttribute("locationCode", locationCode);
         return "inventory/create_warehouse";
     }
+
+    @GetMapping("/inventory/warehouses/{code}")
+    String warehousePage(@PathVariable String code, Model model) {
+        model.addAttribute("code", code);
+        return "inventory/warehouse";
+    }
 }

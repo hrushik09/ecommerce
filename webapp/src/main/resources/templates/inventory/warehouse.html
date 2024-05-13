@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${code}')|">
+        <h1 x-text="warehouse.name"></h1>
+        <p>Is Refrigerated: <span x-text="warehouse.isRefrigerated"></span></p>
+        <p>Created At: <span x-text="warehouse.createdAt"></span></p>
+        <p>Updated At: <span x-text="warehouse.updatedAt"></span></p>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/warehouse.js"></script>
+</div>
+</body>
+</html>

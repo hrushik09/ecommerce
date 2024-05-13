@@ -24,4 +24,7 @@ public interface InventoryServiceClient {
 
     @GetExchange("/locations/{locationCode}/warehouses")
     PagedResult<WarehouseSummary> getWarehouses(@PathVariable String locationCode, @RequestParam(name = "page") int pageNo);
+
+    @GetExchange("/warehouses/{code}")
+    Warehouse getWarehouseByCode(@PathVariable String code);
 }

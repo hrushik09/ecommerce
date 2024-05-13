@@ -14,6 +14,7 @@ document.addEventListener('alpine:init', () => {
         },
         pageBaseUrl: "/inventory/locations",
         childBaseUrl: "/inventory/locations/" + code,
+        warehouseBaseUrl: "/inventory/warehouses",
         init() {
             this.loadLocation(this.code);
             this.loadWarehouses(this.code, this.pageNo);
