@@ -13,15 +13,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepository productRepository;
     private final EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter;
 
-    ProductService(ProductRepository productRepository, EntityCodeGenerator generateCode) {
+    ProductService(ProductRepository productRepository, EntityCodeGenerator generateCode, DateTimeFormatter defaultTimestampFormatter) {
         this.productRepository = productRepository;
         this.generateCode = generateCode;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
     }
 
     @Transactional
@@ -63,6 +67,8 @@ public class ProductService {
     }
 
     public Product getProductByCode(String code) {
-        return null;
+        return productRepository.findByCode(code)
+                .map(productEntity -> ProductMapper.convertToProduct(productEntity, defaultTimestampFormatter))
+                .orElseThrow(() -> new ProductDoesNotExist(code));
     }
 }

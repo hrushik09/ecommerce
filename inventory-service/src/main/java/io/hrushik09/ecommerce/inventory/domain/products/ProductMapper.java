@@ -2,6 +2,8 @@ package io.hrushik09.ecommerce.inventory.domain.products;
 
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 
+import java.time.format.DateTimeFormatter;
+
 public class ProductMapper {
     public static CreateProductCommand convertToCreateProductCommand(CreateProductRequest request) {
         return new CreateProductCommand(request.name(), request.description(), request.category(), request.reorderQuantity(), request.needsRefrigeration(),
@@ -40,5 +42,16 @@ public class ProductMapper {
                         new CreatePackedLengthResponse(productEntity.getPackedLengthValue().toString(), productEntity.getPackedLengthUnit()),
                         new CreatePackedWidthResponse(productEntity.getPackedWidthValue().toString(), productEntity.getPackedWidthUnit()),
                         new CreatePackedHeightResponse(productEntity.getPackedHeightValue().toString(), productEntity.getPackedHeightUnit())));
+    }
+
+    static Product convertToProduct(ProductEntity productEntity, DateTimeFormatter defaultTimestampFormatter) {
+        return new Product(productEntity.getCode(), productEntity.getName(), productEntity.getDescription(), productEntity.getCategory(),
+                productEntity.getReorderQuantity(), productEntity.isNeedsRefrigeration(),
+                new Measurement(new PackedWeight(productEntity.getPackedWeightValue().toString(), productEntity.getPackedWeightUnit()),
+                        new PackedLength(productEntity.getPackedLengthValue().toString(), productEntity.getPackedLengthUnit()),
+                        new PackedWidth(productEntity.getPackedWidthValue().toString(), productEntity.getPackedWidthUnit()),
+                        new PackedHeight(productEntity.getPackedHeightValue().toString(), productEntity.getPackedHeightUnit())),
+                defaultTimestampFormatter.format(productEntity.getCreatedAt()),
+                defaultTimestampFormatter.format(productEntity.getUpdatedAt()));
     }
 }

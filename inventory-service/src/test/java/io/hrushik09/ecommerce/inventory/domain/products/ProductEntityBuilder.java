@@ -1,8 +1,10 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 class ProductEntityBuilder {
+    private Long id = 24L;
     private String code = "product_random_jn23";
     private String name = "random product";
     private String description = "random description";
@@ -17,11 +19,14 @@ class ProductEntityBuilder {
     private String packedWidthUnit = "cm";
     private BigDecimal packedHeightValue = new BigDecimal("434.3");
     private String packedHeightUnit = "m";
+    private Instant createdAt = Instant.parse("2018-02-01T01:00:00Z");
+    private Instant updatedAt = Instant.parse("2018-02-02T02:00:00Z");
 
     private ProductEntityBuilder() {
     }
 
     private ProductEntityBuilder(ProductEntityBuilder copy) {
+        this.id = copy.id;
         this.code = copy.code;
         this.name = copy.name;
         this.description = copy.description;
@@ -36,6 +41,8 @@ class ProductEntityBuilder {
         this.packedWidthUnit = copy.packedWidthUnit;
         this.packedHeightValue = copy.packedHeightValue;
         this.packedHeightUnit = copy.packedHeightUnit;
+        this.createdAt = copy.createdAt;
+        this.updatedAt = copy.updatedAt;
     }
 
     public static ProductEntityBuilder aProductEntity() {
@@ -62,7 +69,14 @@ class ProductEntityBuilder {
         productEntity.setPackedWidthUnit(packedWidthUnit);
         productEntity.setPackedHeightValue(packedHeightValue);
         productEntity.setPackedHeightUnit(packedHeightUnit);
+        productEntity.setCreatedAt(createdAt);
+        productEntity.setUpdatedAt(updatedAt);
         return productEntity;
+    }
+
+    public ProductEntityBuilder withId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public ProductEntityBuilder withCode(String code) {
@@ -132,6 +146,16 @@ class ProductEntityBuilder {
 
     public ProductEntityBuilder withPackedHeightUnit(String packedHeightUnit) {
         this.packedHeightUnit = packedHeightUnit;
+        return this;
+    }
+
+    public ProductEntityBuilder withCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ProductEntityBuilder withUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
         return this;
     }
 }
