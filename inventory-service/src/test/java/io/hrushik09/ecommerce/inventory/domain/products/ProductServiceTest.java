@@ -1,6 +1,7 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -9,8 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder.aProductEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,6 +132,63 @@ class ProductServiceTest {
             assertThat(created.measurement().packedWidth().unit()).isEqualTo(packedWidthUnit);
             assertThat(created.measurement().packedHeight().value()).isEqualTo("2.23");
             assertThat(created.measurement().packedHeight().unit()).isEqualTo(packedHeightUnit);
+        }
+    }
+
+    @Nested
+    class GetProducts {
+        @Test
+        void shouldGetProducts() {
+            List<ProductSummary> list = Stream.iterate(21, i -> i < 29, i -> i + 1)
+                    .map(i -> new ProductSummary("product_kj23n45dfa_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+                    .toList();
+            when(productRepository.findProductSummaries(any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 8));
+
+            PagedResult<ProductSummary> pagedResult = productService.getProducts(3);
+
+            assertThat(pagedResult).isNotNull();
+            List<ProductSummary> data = pagedResult.data();
+            assertThat(data).hasSize(8);
+            assertThat(data.get(0).code()).isEqualTo("product_kj23n45dfa_21");
+            assertThat(data.get(0).name()).isEqualTo("Product 21");
+            assertThat(data.get(0).description()).isEqualTo("Description for Product 21");
+            assertThat(data.get(0).category()).isEqualTo("Category 21");
+            assertThat(data.get(1).code()).isEqualTo("product_kj23n45dfa_22");
+            assertThat(data.get(1).name()).isEqualTo("Product 22");
+            assertThat(data.get(1).description()).isEqualTo("Description for Product 22");
+            assertThat(data.get(1).category()).isEqualTo("Category 22");
+            assertThat(data.get(2).code()).isEqualTo("product_kj23n45dfa_23");
+            assertThat(data.get(2).name()).isEqualTo("Product 23");
+            assertThat(data.get(2).description()).isEqualTo("Description for Product 23");
+            assertThat(data.get(2).category()).isEqualTo("Category 23");
+            assertThat(data.get(3).code()).isEqualTo("product_kj23n45dfa_24");
+            assertThat(data.get(3).name()).isEqualTo("Product 24");
+            assertThat(data.get(3).description()).isEqualTo("Description for Product 24");
+            assertThat(data.get(3).category()).isEqualTo("Category 24");
+            assertThat(data.get(4).code()).isEqualTo("product_kj23n45dfa_25");
+            assertThat(data.get(4).name()).isEqualTo("Product 25");
+            assertThat(data.get(4).description()).isEqualTo("Description for Product 25");
+            assertThat(data.get(4).category()).isEqualTo("Category 25");
+            assertThat(data.get(5).code()).isEqualTo("product_kj23n45dfa_26");
+            assertThat(data.get(5).name()).isEqualTo("Product 26");
+            assertThat(data.get(5).description()).isEqualTo("Description for Product 26");
+            assertThat(data.get(5).category()).isEqualTo("Category 26");
+            assertThat(data.get(6).code()).isEqualTo("product_kj23n45dfa_27");
+            assertThat(data.get(6).name()).isEqualTo("Product 27");
+            assertThat(data.get(6).description()).isEqualTo("Description for Product 27");
+            assertThat(data.get(6).category()).isEqualTo("Category 27");
+            assertThat(data.get(7).code()).isEqualTo("product_kj23n45dfa_28");
+            assertThat(data.get(7).name()).isEqualTo("Product 28");
+            assertThat(data.get(7).description()).isEqualTo("Description for Product 28");
+            assertThat(data.get(7).category()).isEqualTo("Category 28");
+            assertThat(pagedResult.totalElements()).isEqualTo(28);
+            assertThat(pagedResult.pageNumber()).isEqualTo(3);
+            assertThat(pagedResult.totalPages()).isEqualTo(3);
+            assertThat(pagedResult.isFirst()).isFalse();
+            assertThat(pagedResult.isLast()).isTrue();
+            assertThat(pagedResult.hasNext()).isFalse();
+            assertThat(pagedResult.hasPrevious()).isTrue();
         }
     }
 }

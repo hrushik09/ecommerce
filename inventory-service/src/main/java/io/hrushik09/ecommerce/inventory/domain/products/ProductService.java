@@ -5,6 +5,10 @@ import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductCommand;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductResponse;
 import io.hrushik09.ecommerce.inventory.domain.products.models.ProductSummary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,19 @@ public class ProductService {
     }
 
     public PagedResult<ProductSummary> getProducts(int pageNo) {
-        return null;
+        Sort sort = Sort.by("id").ascending();
+        int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
+        Pageable pageable = PageRequest.of(pageNumber, 10, sort);
+        Page<ProductSummary> productsPage = productRepository.findProductSummaries(pageable);
+        return new PagedResult<>(
+                productsPage.getContent(),
+                productsPage.getTotalElements(),
+                productsPage.getNumber() + 1,
+                productsPage.getTotalPages(),
+                productsPage.isFirst(),
+                productsPage.isLast(),
+                productsPage.hasNext(),
+                productsPage.hasPrevious()
+        );
     }
 }
