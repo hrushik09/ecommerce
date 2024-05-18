@@ -125,10 +125,10 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .body("totalElements", equalTo(15))
                     .body("pageNumber", equalTo(1))
                     .body("totalPages", equalTo(2))
-                    .body("isFirst", equalTo(true))
-                    .body("isLast", equalTo(false))
-                    .body("hasNext", equalTo(true))
-                    .body("hasPrevious", equalTo(false));
+                    .body("isFirst", is(true))
+                    .body("isLast", is(false))
+                    .body("hasNext", is(true))
+                    .body("hasPrevious", is(false));
         }
     }
 
