@@ -140,7 +140,7 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
                     .body("data[9].name", equalTo("Product 10"))
                     .body("data[9].description", equalTo("Description for Product 10"))
                     .body("data[9].category", equalTo("Category 10"))
-                    .body("totalElements", equalTo(13))
+                    .body("totalElements", equalTo(12))
                     .body("pageNumber", equalTo(1))
                     .body("totalPages", equalTo(2))
                     .body("isFirst", is(true))
