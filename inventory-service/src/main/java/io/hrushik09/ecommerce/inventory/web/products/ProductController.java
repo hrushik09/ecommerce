@@ -3,10 +3,7 @@ package io.hrushik09.ecommerce.inventory.web.products;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductMapper;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
-import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductCommand;
-import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductRequest;
-import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductResponse;
-import io.hrushik09.ecommerce.inventory.domain.products.models.ProductSummary;
+import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,5 +34,11 @@ class ProductController {
     PagedResult<ProductSummary> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         log.info("requesting getProducts for page {}", pageNo);
         return productService.getProducts(pageNo);
+    }
+
+    @GetMapping("/{code}")
+    Product getProductByCode(@PathVariable String code) {
+        log.info("requesting getProductByCode for code {}", code);
+        return productService.getProductByCode(code);
     }
 }

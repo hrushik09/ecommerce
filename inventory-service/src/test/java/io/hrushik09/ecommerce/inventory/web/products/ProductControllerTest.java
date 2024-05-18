@@ -1,6 +1,8 @@
 package io.hrushik09.ecommerce.inventory.web.products;
 
+import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.products.ProductDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 import org.junit.jupiter.api.Nested;
@@ -213,6 +215,69 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.isLast", is(false)))
                     .andExpect(jsonPath("$.hasNext", is(true)))
                     .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+    }
+
+    @Nested
+    class GetProductByCode {
+        @Test
+        void shouldReturnErrorWhenNonExistingProduct() throws Exception {
+            String code = "product_non_existing_j73jbasd";
+            when(productService.getProductByCode(code))
+                    .thenThrow(new ProductDoesNotExist(code));
+
+            mockMvc.perform(get("/api/products/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Product with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldGetProductSuccessfully() throws Exception {
+            String code = "product_dummy_j73jbasd";
+            String name = "Product 4";
+            String description = "Description for Product 4";
+            String category = "Category 4";
+            int reorderQuantity = 2;
+            boolean needsRefrigeration = false;
+            String packedWeightValue = "33.6";
+            String packedWeightUnit = "kg";
+            String packedLengthValue = "63.34";
+            String packedLengthUnit = "m";
+            String packedWidthValue = "3452.23";
+            String packedWidthUnit = "cm";
+            String packedHeightValue = "5756.34";
+            String packedHeightUnit = "m";
+            when(productService.getProductByCode(code))
+                    .thenReturn(new Product(code, name, description, category, reorderQuantity, needsRefrigeration,
+                            new Measurement(new PackedWeight(packedWeightValue, packedWeightUnit),
+                                    new PackedLength(packedLengthValue, packedLengthUnit),
+                                    new PackedWidth(packedWidthValue, packedWidthUnit),
+                                    new PackedHeight(packedHeightValue, packedHeightUnit)),
+                            "January 3 1998, 23:12:12 (UTC+00:00)", "January 05 1998, 01:01:45 (UTC+00:00)"));
+
+            mockMvc.perform(get("/api/products/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.name", equalTo(name)))
+                    .andExpect(jsonPath("$.description", equalTo(description)))
+                    .andExpect(jsonPath("$.category", equalTo(category)))
+                    .andExpect(jsonPath("$.reorderQuantity", equalTo(reorderQuantity)))
+                    .andExpect(jsonPath("$.needsRefrigeration", is(needsRefrigeration)))
+                    .andExpect(jsonPath("$.measurement", notNullValue()))
+                    .andExpect(jsonPath("$.measurement.packedWeight", notNullValue()))
+                    .andExpect(jsonPath("$.measurement.packedWeight.value", equalTo(packedWeightValue)))
+                    .andExpect(jsonPath("$.measurement.packedWeight.unit", equalTo(packedWeightUnit)))
+                    .andExpect(jsonPath("$.measurement.packedLength", notNullValue()))
+                    .andExpect(jsonPath("$.measurement.packedLength.value", equalTo(packedLengthValue)))
+                    .andExpect(jsonPath("$.measurement.packedLength.unit", equalTo(packedLengthUnit)))
+                    .andExpect(jsonPath("$.measurement.packedWidth", notNullValue()))
+                    .andExpect(jsonPath("$.measurement.packedWidth.value", equalTo(packedWidthValue)))
+                    .andExpect(jsonPath("$.measurement.packedWidth.unit", equalTo(packedWidthUnit)))
+                    .andExpect(jsonPath("$.measurement.packedHeight", notNullValue()))
+                    .andExpect(jsonPath("$.measurement.packedHeight.value", equalTo(packedHeightValue)))
+                    .andExpect(jsonPath("$.measurement.packedHeight.unit", equalTo(packedHeightUnit)))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

@@ -4,6 +4,7 @@ import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductCommand;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductResponse;
+import io.hrushik09.ecommerce.inventory.domain.products.models.Product;
 import io.hrushik09.ecommerce.inventory.domain.products.models.ProductSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,5 +60,9 @@ public class ProductService {
                 productsPage.hasNext(),
                 productsPage.hasPrevious()
         );
+    }
+
+    public Product getProductByCode(String code) {
+        return null;
     }
 }
