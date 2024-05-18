@@ -3,7 +3,7 @@ package io.hrushik09.ecommerce.inventory.domain.products.models;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-record CreateMeasurementRequest(
+public record CreateMeasurementRequest(
         @NotNull(message = "packedWeight should be non-null")
         @Valid
         CreatePackedWeightRequest packedWeight,

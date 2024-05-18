@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-record CreatePackedWeightRequest(
+public record CreatePackedWeightRequest(
         @NotNull(message = "value should be non-null")
         @DecimalMin(value = "0", inclusive = false, message = "value should be greater than 0")
         @DecimalMax(value = "100000", inclusive = false, message = "value should be less than 100000")

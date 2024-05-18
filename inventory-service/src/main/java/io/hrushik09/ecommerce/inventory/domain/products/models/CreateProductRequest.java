@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-record CreateProductRequest(
+public record CreateProductRequest(
         @NotBlank(message = "name should be non-blank")
         String name,
         @NotBlank(message = "description should be non-blank")
