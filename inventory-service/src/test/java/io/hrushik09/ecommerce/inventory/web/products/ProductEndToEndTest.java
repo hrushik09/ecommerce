@@ -2,6 +2,8 @@ package io.hrushik09.ecommerce.inventory.web.products;
 
 import io.hrushik09.ecommerce.inventory.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.inventory.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.inventory.TestProperties;
+import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +149,43 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", is(false))
                     .body("hasNext", is(true))
                     .body("hasPrevious", is(false));
+        }
+    }
+
+    @Nested
+    class GetProductByCode {
+        @Test
+        void shouldGetProductByCodeSuccessfully() {
+            CreateProductResponse created = havingPersisted.product("Product 45", "Description for Product 45", "Category 45", 23, true,
+                    "3453.23", "kg", "9834.2", "m",
+                    "23.2", "m", "353.12", "m");
+
+            given()
+                    .when()
+                    .get("api/product/{code}", created.code())
+                    .then()
+                    .statusCode(OK.value())
+                    .body("code", equalTo(created.code()))
+                    .body("name", equalTo(created.name()))
+                    .body("description", equalTo(created.description()))
+                    .body("category", equalTo(created.category()))
+                    .body("reorderQuantity", equalTo(created.reorderQuantity()))
+                    .body("needsRefrigeration", is(created.needsRefrigeration()))
+                    .body("measurement", notNullValue())
+                    .body("measurement.packedWeight", notNullValue())
+                    .body("measurement.packedWeight.value", equalTo("3453.23"))
+                    .body("measurement.packedWeight.unit", equalTo("kg"))
+                    .body("measurement.packedLength", notNullValue())
+                    .body("measurement.packedLength.value", equalTo("9834.2"))
+                    .body("measurement.packedLength.unit", equalTo("m"))
+                    .body("measurement.packedWidth", notNullValue())
+                    .body("measurement.packedWidth.value", equalTo("23.2"))
+                    .body("measurement.packedWidth.unit", equalTo("m"))
+                    .body("measurement.packedHeight", notNullValue())
+                    .body("measurement.packedHeight.value", equalTo("353.12"))
+                    .body("measurement.packedHeight.unit", equalTo("m"))
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

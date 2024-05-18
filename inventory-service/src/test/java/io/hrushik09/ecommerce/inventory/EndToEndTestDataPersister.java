@@ -40,4 +40,15 @@ public class EndToEndTestDataPersister {
                         new CreatePackedHeightCommand(new BigDecimal("572.23"), "m")));
         return productService.create(cmd);
     }
+
+    public CreateProductResponse product(String name, String description, String category, int reorderQuantity, boolean needsRefrigeration, String packedWeightValue,
+                                         String packedWeightUnit, String packedLengthValue, String packedLengthUnit, String packedWidthValue, String packedWidthUnit,
+                                         String packedHeightValue, String packedHeightUnit) {
+        CreateProductCommand cmd = new CreateProductCommand(name, description, category, reorderQuantity, needsRefrigeration,
+                new CreateMeasurementCommand(new CreatePackedWeightCommand(new BigDecimal(packedWeightValue), packedWeightUnit),
+                        new CreatePackedLengthCommand(new BigDecimal(packedLengthValue), packedLengthUnit),
+                        new CreatePackedWidthCommand(new BigDecimal(packedWidthValue), packedWidthUnit),
+                        new CreatePackedHeightCommand(new BigDecimal(packedHeightValue), packedHeightUnit)));
+        return productService.create(cmd);
+    }
 }
