@@ -33,4 +33,12 @@ public class ProductMapper {
         return new CreatePackedHeightCommand(request.value(), request.unit());
     }
 
+    static CreateProductResponse convertToCreateProductResponse(ProductEntity productEntity) {
+        return new CreateProductResponse(productEntity.getCode(), productEntity.getName(), productEntity.getDescription(), productEntity.getCategory(),
+                productEntity.getReorderQuantity(), productEntity.isNeedsRefrigeration(),
+                new CreateMeasurementResponse(new CreatePackedWeightResponse(productEntity.getPackedWeightValue().toString(), productEntity.getPackedWeightUnit()),
+                        new CreatePackedLengthResponse(productEntity.getPackedLengthValue().toString(), productEntity.getPackedLengthUnit()),
+                        new CreatePackedWidthResponse(productEntity.getPackedWidthValue().toString(), productEntity.getPackedWidthUnit()),
+                        new CreatePackedHeightResponse(productEntity.getPackedHeightValue().toString(), productEntity.getPackedHeightUnit())));
+    }
 }

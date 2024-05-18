@@ -29,7 +29,7 @@ class ProductControllerTest {
     class CreateProduct {
         @Test
         void shouldCreateProductSuccessfully() throws Exception {
-            when(productService.createProduct(new CreateProductCommand("Product 1", "Description for Product 1", "Category 2", 43, true,
+            when(productService.create(new CreateProductCommand("Product 1", "Description for Product 1", "Category 2", 43, true,
                     new CreateMeasurementCommand(new CreatePackedWeightCommand(new BigDecimal("4.25"), "kg"), new CreatePackedLengthCommand(new BigDecimal("9.33"), "cm"),
                             new CreatePackedWidthCommand(new BigDecimal("93.2"), "cm"), new CreatePackedHeightCommand(new BigDecimal("34.32"), "cm")))))
                     .thenReturn(new CreateProductResponse("product_qkasy34", "Product 1", "Description for Product 1", "Category 2", 43, true,

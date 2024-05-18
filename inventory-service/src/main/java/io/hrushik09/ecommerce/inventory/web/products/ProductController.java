@@ -26,7 +26,7 @@ class ProductController {
     CreateProductResponse createProduct(@Valid @RequestBody CreateProductRequest request) {
         log.info("requesting to create product {}", request);
         CreateProductCommand cmd = ProductMapper.convertToCreateProductCommand(request);
-        CreateProductResponse createProductResponse = productService.createProduct(cmd);
+        CreateProductResponse createProductResponse = productService.create(cmd);
         log.info("created product {}", createProductResponse);
         return createProductResponse;
     }
