@@ -1,22 +1,56 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
-import java.math.BigDecimal;
+import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+
+@Entity
+@Table(name = "products", uniqueConstraints = {@UniqueConstraint(name = "UK_products_code", columnNames = "code")})
 class ProductEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
     private String code;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private String category;
+    @Column(nullable = false)
     private int reorderQuantity;
+    @Column(nullable = false)
     private boolean needsRefrigeration;
+    @Column(nullable = false)
     private BigDecimal packedWeightValue;
+    @Column(nullable = false)
     private String packedWeightUnit;
+    @Column(nullable = false)
     private BigDecimal packedLengthValue;
+    @Column(nullable = false)
     private String packedLengthUnit;
+    @Column(nullable = false)
     private BigDecimal packedWidthValue;
+    @Column(nullable = false)
     private String packedWidthUnit;
+    @Column(nullable = false)
     private BigDecimal packedHeightValue;
+    @Column(nullable = false)
     private String packedHeightUnit;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant createdAt;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant updatedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -128,5 +162,21 @@ class ProductEntity {
 
     public void setPackedHeightUnit(String packedHeightUnit) {
         this.packedHeightUnit = packedHeightUnit;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

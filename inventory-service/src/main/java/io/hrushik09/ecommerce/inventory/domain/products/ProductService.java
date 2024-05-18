@@ -3,16 +3,21 @@ package io.hrushik09.ecommerce.inventory.domain.products;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductCommand;
 import io.hrushik09.ecommerce.inventory.domain.products.models.CreateProductResponse;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class ProductService {
     private final ProductRepository productRepository;
     private final EntityCodeGenerator generateCode;
 
-    public ProductService(ProductRepository productRepository, EntityCodeGenerator generateCode) {
+    ProductService(ProductRepository productRepository, EntityCodeGenerator generateCode) {
         this.productRepository = productRepository;
         this.generateCode = generateCode;
     }
 
+    @Transactional
     public CreateProductResponse create(CreateProductCommand cmd) {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setCode(generateCode.forEntityType("product"));

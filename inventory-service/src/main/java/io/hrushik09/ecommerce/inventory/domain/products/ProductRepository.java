@@ -1,7 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
-class ProductRepository {
-    public ProductEntity save(ProductEntity productEntity) {
-        return null;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
+
+interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 }
