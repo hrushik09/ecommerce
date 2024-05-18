@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.products.models;
 
-import static io.hrushik09.ecommerce.inventory.domain.products.models.MeasurementBuilder.aMeasurement;
+import static io.hrushik09.ecommerce.inventory.domain.products.models.CreateMeasurementRequestBuilder.aMeasurementRequest;
 
 class CreateProductRequestBuilder {
     private String name = "Some Product";
@@ -8,7 +8,7 @@ class CreateProductRequestBuilder {
     private String category = "Some Category";
     private Integer reorderQuantity = 43;
     private Boolean needsRefrigeration = false;
-    private MeasurementBuilder measurementBuilder = aMeasurement();
+    private CreateMeasurementRequestBuilder createMeasurementRequestBuilder = aMeasurementRequest();
 
     private CreateProductRequestBuilder() {
     }
@@ -19,7 +19,7 @@ class CreateProductRequestBuilder {
         this.category = copy.category;
         this.reorderQuantity = copy.reorderQuantity;
         this.needsRefrigeration = copy.needsRefrigeration;
-        this.measurementBuilder = copy.measurementBuilder;
+        this.createMeasurementRequestBuilder = copy.createMeasurementRequestBuilder;
     }
 
     public static CreateProductRequestBuilder aRequest() {
@@ -31,7 +31,7 @@ class CreateProductRequestBuilder {
     }
 
     public CreateProductRequest build() {
-        return new CreateProductRequest(name, description, category, reorderQuantity, needsRefrigeration, measurementBuilder.build());
+        return new CreateProductRequest(name, description, category, reorderQuantity, needsRefrigeration, createMeasurementRequestBuilder.build());
     }
 
     public CreateProductRequestBuilder withName(String name) {
@@ -59,8 +59,8 @@ class CreateProductRequestBuilder {
         return this;
     }
 
-    public CreateProductRequestBuilder with(MeasurementBuilder measurementBuilder) {
-        this.measurementBuilder = measurementBuilder;
+    public CreateProductRequestBuilder with(CreateMeasurementRequestBuilder createMeasurementRequestBuilder) {
+        this.createMeasurementRequestBuilder = createMeasurementRequestBuilder;
         return this;
     }
 }

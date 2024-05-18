@@ -17,6 +17,6 @@ record CreateProductRequest(
         Boolean needsRefrigeration,
         @NotNull(message = "measurement should be non-null")
         @Valid
-        Measurement measurement
+        CreateMeasurementRequest measurement
 ) {
 }

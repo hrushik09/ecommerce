@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-record PackedLength(
+record CreatePackedWeightRequest(
         @NotNull(message = "value should be non-null")
         @DecimalMin(value = "0", inclusive = false, message = "value should be greater than 0")
         @DecimalMax(value = "100000", inclusive = false, message = "value should be less than 100000")
@@ -12,5 +12,5 @@ record PackedLength(
         BigDecimal value,
         @NotBlank(message = "unit should be non-blank")
         String unit
-) implements PackedDimension {
+) implements CreatePackedDimensionRequest {
 }
