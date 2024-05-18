@@ -25,7 +25,7 @@ class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     CreateProductResponse createProduct(@Valid @RequestBody CreateProductRequest request) {
         log.info("requesting to create product {}", request);
-        CreateProductCommand cmd = ProductMapper.convertToProductCommand(request);
+        CreateProductCommand cmd = ProductMapper.convertToCreateProductCommand(request);
         CreateProductResponse createProductResponse = productService.createProduct(cmd);
         log.info("created product {}", createProductResponse);
         return createProductResponse;

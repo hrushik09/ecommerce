@@ -3,33 +3,33 @@ package io.hrushik09.ecommerce.inventory.domain.products;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 
 public class ProductMapper {
-    public static CreateProductCommand convertToProductCommand(CreateProductRequest request) {
+    public static CreateProductCommand convertToCreateProductCommand(CreateProductRequest request) {
         return new CreateProductCommand(request.name(), request.description(), request.category(), request.reorderQuantity(), request.needsRefrigeration(),
-                convertMeasurementCommand(request.measurement()));
+                convertToCreateMeasurementCommand(request.measurement()));
     }
 
-    private static CreateMeasurementCommand convertMeasurementCommand(CreateMeasurementRequest measurement) {
+    private static CreateMeasurementCommand convertToCreateMeasurementCommand(CreateMeasurementRequest measurement) {
         return new CreateMeasurementCommand(
-                convertToPackedWeightCommand(measurement.packedWeight()),
-                convertToPackedLengthCommand(measurement.packedLength()),
-                convertToPackedWidthCommand(measurement.packedWidth()),
-                convertToPackedHeightCommand(measurement.packedHeight())
+                convertToCreatePackedWeightCommand(measurement.packedWeight()),
+                convertToCreatePackedLengthCommand(measurement.packedLength()),
+                convertToCreatePackedWidthCommand(measurement.packedWidth()),
+                convertToCreatePackedHeightCommand(measurement.packedHeight())
         );
     }
 
-    private static CreatePackedWeightCommand convertToPackedWeightCommand(CreatePackedWeightRequest request) {
+    private static CreatePackedWeightCommand convertToCreatePackedWeightCommand(CreatePackedWeightRequest request) {
         return new CreatePackedWeightCommand(request.value(), request.unit());
     }
 
-    private static CreatePackedLengthCommand convertToPackedLengthCommand(CreatePackedLengthRequest request) {
+    private static CreatePackedLengthCommand convertToCreatePackedLengthCommand(CreatePackedLengthRequest request) {
         return new CreatePackedLengthCommand(request.value(), request.unit());
     }
 
-    private static CreatePackedWidthCommand convertToPackedWidthCommand(CreatePackedWidthRequest request) {
+    private static CreatePackedWidthCommand convertToCreatePackedWidthCommand(CreatePackedWidthRequest request) {
         return new CreatePackedWidthCommand(request.value(), request.unit());
     }
 
-    private static CreatePackedHeightCommand convertToPackedHeightCommand(CreatePackedHeightRequest request) {
+    private static CreatePackedHeightCommand convertToCreatePackedHeightCommand(CreatePackedHeightRequest request) {
         return new CreatePackedHeightCommand(request.value(), request.unit());
     }
 
