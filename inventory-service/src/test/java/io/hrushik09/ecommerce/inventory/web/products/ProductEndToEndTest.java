@@ -81,7 +81,7 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
     class GetProducts {
         @Test
         void shouldGetProducts() {
-            Stream.iterate(0, i -> i < 13, i -> i + 1)
+            Stream.iterate(1, i -> i < 13, i -> i + 1)
                     .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i));
 
             given()

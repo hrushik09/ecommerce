@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.inventory.web.products;
 
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
 import org.junit.jupiter.api.Nested;
@@ -11,10 +12,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,6 +89,130 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.measurement.packedHeight", notNullValue()))
                     .andExpect(jsonPath("$.measurement.packedHeight.value", equalTo("34.32")))
                     .andExpect(jsonPath("$.measurement.packedHeight.unit", equalTo("cm")));
+        }
+    }
+
+    @Nested
+    class GetProducts {
+        @Test
+        void shouldGetProductsWhenPageNumberIsSpecified() throws Exception {
+            int pageNo = 3;
+            List<ProductSummary> data = Stream.iterate(21, i -> i < 31, i -> i + 1)
+                    .map(i -> new ProductSummary("product_dn3ja_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+                    .toList();
+            when(productService.getProducts(pageNo))
+                    .thenReturn(new PagedResult<>(data, 47, 3, 5, false, false, true, true));
+
+            mockMvc.perform(get("/api/products?page={pageNo}", pageNo))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data", hasSize(10)))
+                    .andExpect(jsonPath("$.data[0].code", equalTo("product_dn3ja_21")))
+                    .andExpect(jsonPath("$.data[0].name", equalTo("Product 21")))
+                    .andExpect(jsonPath("$.data[0].description", equalTo("Description for Product 21")))
+                    .andExpect(jsonPath("$.data[0].category", equalTo("Category 21")))
+                    .andExpect(jsonPath("$.data[1].code", equalTo("product_dn3ja_22")))
+                    .andExpect(jsonPath("$.data[1].name", equalTo("Product 22")))
+                    .andExpect(jsonPath("$.data[1].description", equalTo("Description for Product 22")))
+                    .andExpect(jsonPath("$.data[1].category", equalTo("Category 22")))
+                    .andExpect(jsonPath("$.data[2].code", equalTo("product_dn3ja_23")))
+                    .andExpect(jsonPath("$.data[2].name", equalTo("Product 23")))
+                    .andExpect(jsonPath("$.data[2].description", equalTo("Description for Product 23")))
+                    .andExpect(jsonPath("$.data[2].category", equalTo("Category 23")))
+                    .andExpect(jsonPath("$.data[3].code", equalTo("product_dn3ja_24")))
+                    .andExpect(jsonPath("$.data[3].name", equalTo("Product 24")))
+                    .andExpect(jsonPath("$.data[3].description", equalTo("Description for Product 24")))
+                    .andExpect(jsonPath("$.data[3].category", equalTo("Category 24")))
+                    .andExpect(jsonPath("$.data[4].code", equalTo("product_dn3ja_25")))
+                    .andExpect(jsonPath("$.data[4].name", equalTo("Product 25")))
+                    .andExpect(jsonPath("$.data[4].description", equalTo("Description for Product 25")))
+                    .andExpect(jsonPath("$.data[4].category", equalTo("Category 25")))
+                    .andExpect(jsonPath("$.data[5].code", equalTo("product_dn3ja_26")))
+                    .andExpect(jsonPath("$.data[5].name", equalTo("Product 26")))
+                    .andExpect(jsonPath("$.data[5].description", equalTo("Description for Product 26")))
+                    .andExpect(jsonPath("$.data[5].category", equalTo("Category 26")))
+                    .andExpect(jsonPath("$.data[6].code", equalTo("product_dn3ja_27")))
+                    .andExpect(jsonPath("$.data[6].name", equalTo("Product 27")))
+                    .andExpect(jsonPath("$.data[6].description", equalTo("Description for Product 27")))
+                    .andExpect(jsonPath("$.data[6].category", equalTo("Category 27")))
+                    .andExpect(jsonPath("$.data[7].code", equalTo("product_dn3ja_28")))
+                    .andExpect(jsonPath("$.data[7].name", equalTo("Product 28")))
+                    .andExpect(jsonPath("$.data[7].description", equalTo("Description for Product 28")))
+                    .andExpect(jsonPath("$.data[7].category", equalTo("Category 28")))
+                    .andExpect(jsonPath("$.data[8].code", equalTo("product_dn3ja_29")))
+                    .andExpect(jsonPath("$.data[8].name", equalTo("Product 29")))
+                    .andExpect(jsonPath("$.data[8].description", equalTo("Description for Product 29")))
+                    .andExpect(jsonPath("$.data[8].category", equalTo("Category 29")))
+                    .andExpect(jsonPath("$.data[9].code", equalTo("product_dn3ja_30")))
+                    .andExpect(jsonPath("$.data[9].name", equalTo("Product 30")))
+                    .andExpect(jsonPath("$.data[9].description", equalTo("Description for Product 30")))
+                    .andExpect(jsonPath("$.data[9].category", equalTo("Category 30")))
+                    .andExpect(jsonPath("$.totalElements", equalTo(47)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(3)))
+                    .andExpect(jsonPath("$.totalPages", equalTo(5)))
+                    .andExpect(jsonPath("$.isFirst", equalTo(false)))
+                    .andExpect(jsonPath("$.isLast", equalTo(false)))
+                    .andExpect(jsonPath("$.hasNext", equalTo(true)))
+                    .andExpect(jsonPath("$.hasPrevious", equalTo(true)));
+        }
+
+        @Test
+        void shouldGetProductsWhenPageNumberIsNotSpecified() throws Exception {
+            List<ProductSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
+                    .map(i -> new ProductSummary("product_j73jbasd_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+                    .toList();
+            when(productService.getProducts(1))
+                    .thenReturn(new PagedResult<>(data, 23, 1, 3, true, false, true, false));
+
+            mockMvc.perform(get("/api/products"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data", hasSize(10)))
+                    .andExpect(jsonPath("$.data[0].code", equalTo("product_j73jbasd_1")))
+                    .andExpect(jsonPath("$.data[0].name", equalTo("Product 1")))
+                    .andExpect(jsonPath("$.data[0].description", equalTo("Description for Product 1")))
+                    .andExpect(jsonPath("$.data[0].category", equalTo("Category 1")))
+                    .andExpect(jsonPath("$.data[1].code", equalTo("product_j73jbasd_2")))
+                    .andExpect(jsonPath("$.data[1].name", equalTo("Product 2")))
+                    .andExpect(jsonPath("$.data[1].description", equalTo("Description for Product 2")))
+                    .andExpect(jsonPath("$.data[1].category", equalTo("Category 2")))
+                    .andExpect(jsonPath("$.data[2].code", equalTo("product_j73jbasd_3")))
+                    .andExpect(jsonPath("$.data[2].name", equalTo("Product 3")))
+                    .andExpect(jsonPath("$.data[2].description", equalTo("Description for Product 3")))
+                    .andExpect(jsonPath("$.data[2].category", equalTo("Category 3")))
+                    .andExpect(jsonPath("$.data[3].code", equalTo("product_j73jbasd_4")))
+                    .andExpect(jsonPath("$.data[3].name", equalTo("Product 4")))
+                    .andExpect(jsonPath("$.data[3].description", equalTo("Description for Product 4")))
+                    .andExpect(jsonPath("$.data[3].category", equalTo("Category 4")))
+                    .andExpect(jsonPath("$.data[4].code", equalTo("product_j73jbasd_5")))
+                    .andExpect(jsonPath("$.data[4].name", equalTo("Product 5")))
+                    .andExpect(jsonPath("$.data[4].description", equalTo("Description for Product 5")))
+                    .andExpect(jsonPath("$.data[4].category", equalTo("Category 5")))
+                    .andExpect(jsonPath("$.data[5].code", equalTo("product_j73jbasd_6")))
+                    .andExpect(jsonPath("$.data[5].name", equalTo("Product 6")))
+                    .andExpect(jsonPath("$.data[5].description", equalTo("Description for Product 6")))
+                    .andExpect(jsonPath("$.data[5].category", equalTo("Category 6")))
+                    .andExpect(jsonPath("$.data[6].code", equalTo("product_j73jbasd_7")))
+                    .andExpect(jsonPath("$.data[6].name", equalTo("Product 7")))
+                    .andExpect(jsonPath("$.data[6].description", equalTo("Description for Product 7")))
+                    .andExpect(jsonPath("$.data[6].category", equalTo("Category 7")))
+                    .andExpect(jsonPath("$.data[7].code", equalTo("product_j73jbasd_8")))
+                    .andExpect(jsonPath("$.data[7].name", equalTo("Product 8")))
+                    .andExpect(jsonPath("$.data[7].description", equalTo("Description for Product 8")))
+                    .andExpect(jsonPath("$.data[7].category", equalTo("Category 8")))
+                    .andExpect(jsonPath("$.data[8].code", equalTo("product_j73jbasd_9")))
+                    .andExpect(jsonPath("$.data[8].name", equalTo("Product 9")))
+                    .andExpect(jsonPath("$.data[8].description", equalTo("Description for Product 9")))
+                    .andExpect(jsonPath("$.data[8].category", equalTo("Category 9")))
+                    .andExpect(jsonPath("$.data[9].code", equalTo("product_j73jbasd_10")))
+                    .andExpect(jsonPath("$.data[9].name", equalTo("Product 10")))
+                    .andExpect(jsonPath("$.data[9].description", equalTo("Description for Product 10")))
+                    .andExpect(jsonPath("$.data[9].category", equalTo("Category 10")))
+                    .andExpect(jsonPath("$.totalElements", equalTo(23)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(1)))
+                    .andExpect(jsonPath("$.totalPages", equalTo(3)))
+                    .andExpect(jsonPath("$.isFirst", equalTo(true)))
+                    .andExpect(jsonPath("$.isLast", equalTo(false)))
+                    .andExpect(jsonPath("$.hasNext", equalTo(true)))
+                    .andExpect(jsonPath("$.hasPrevious", equalTo(false)));
         }
     }
 }
