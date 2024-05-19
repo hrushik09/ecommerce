@@ -4,6 +4,7 @@ import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationR
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.Location;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.LocationSummary;
+import io.hrushik09.ecommerce.webapp.clients.inventory.products.ProductSummary;
 import io.hrushik09.ecommerce.webapp.clients.inventory.warehouses.CreateWarehouseRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.warehouses.CreateWarehouseResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.warehouses.Warehouse;
@@ -34,4 +35,7 @@ public interface InventoryServiceClient {
 
     @GetExchange("/warehouses/{code}")
     Warehouse getWarehouseByCode(@PathVariable String code);
+
+    @GetExchange("/products")
+    PagedResult<ProductSummary> getProducts(@RequestParam(name = "page") int pageNo);
 }

@@ -29,7 +29,7 @@ class WarehouseRestController {
 
     @GetMapping("/api/inventory/locations/{locationCode}/warehouses")
     PagedResult<WarehouseSummary> getWarehouses(@PathVariable String locationCode, @RequestParam(name = "page") int pageNo) {
-        log.info("request to inventory service to get warehouses for {}", locationCode);
+        log.info("request to inventory service to get warehouses for {} and pageNo {}", locationCode, pageNo);
         PagedResult<WarehouseSummary> pagedResult = inventoryServiceClient.getWarehouses(locationCode, pageNo);
         log.info("response from inventory service to get warehouses {} for locationCode {}", pagedResult, locationCode);
         return pagedResult;
