@@ -71,4 +71,8 @@ public class WarehouseService {
                 .map(warehouseEntity -> WarehouseMapper.convertToWarehouse(warehouseEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new WarehouseDoesNotExist(code));
     }
+
+    public WarehouseEntity getWarehouseEntityByCode(String code) {
+        return null;
+    }
 }

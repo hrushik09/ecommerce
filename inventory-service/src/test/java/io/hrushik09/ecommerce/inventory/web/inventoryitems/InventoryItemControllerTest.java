@@ -101,7 +101,7 @@ class InventoryItemControllerTest {
             String productCode = "product_dummy_8knsf";
             String code = "inventory_item_kaf983";
             when(inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, productCode, 46, 35, 500, 41)))
-                    .thenReturn(new CreateInventoryItemResponse(code, warehouseCode, productCode, 46, 35, 500, 41));
+                    .thenReturn(new CreateInventoryItemResponse(code, 46, 35, 500, 41));
 
             mockMvc.perform(post("/api/warehouses/{warehouseCode}/items", warehouseCode)
                             .contentType(APPLICATION_JSON)
@@ -116,8 +116,6 @@ class InventoryItemControllerTest {
                                     """.formatted(productCode)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.code", equalTo(code)))
-                    .andExpect(jsonPath("$.warehouseCode", equalTo(warehouseCode)))
-                    .andExpect(jsonPath("$.productCode", equalTo(productCode)))
                     .andExpect(jsonPath("$.quantityAvailable", equalTo(46)))
                     .andExpect(jsonPath("$.minimumStockLevel", equalTo(35)))
                     .andExpect(jsonPath("$.maximumStockLevel", equalTo(500)))

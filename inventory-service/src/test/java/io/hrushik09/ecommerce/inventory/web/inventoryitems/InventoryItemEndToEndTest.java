@@ -42,8 +42,6 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
                     .statusCode(CREATED.value())
                     .body("code", startsWith("inventory_item_"))
                     .body("code", hasLength(14 + 1 + 36))
-                    .body("warehouseCode", equalTo(warehouse.code()))
-                    .body("productCode", equalTo(product.code()))
                     .body("quantityAvailable", equalTo(34))
                     .body("minimumStockLevel", equalTo(13))
                     .body("maximumStockLevel", equalTo(67))

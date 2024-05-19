@@ -71,4 +71,8 @@ public class ProductService {
                 .map(productEntity -> ProductMapper.convertToProduct(productEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new ProductDoesNotExist(code));
     }
+
+    public ProductEntity getProductEntityByCode(String code) {
+        return null;
+    }
 }

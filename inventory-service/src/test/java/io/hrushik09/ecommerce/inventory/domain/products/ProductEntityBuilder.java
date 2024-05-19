@@ -3,7 +3,7 @@ package io.hrushik09.ecommerce.inventory.domain.products;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-class ProductEntityBuilder {
+public class ProductEntityBuilder {
     private Long id = 24L;
     private String code = "product_random_jn23";
     private String name = "random product";

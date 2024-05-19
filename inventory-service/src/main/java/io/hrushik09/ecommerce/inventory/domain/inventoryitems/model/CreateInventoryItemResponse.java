@@ -2,8 +2,6 @@ package io.hrushik09.ecommerce.inventory.domain.inventoryitems.model;
 
 public record CreateInventoryItemResponse(
         String code,
-        String warehouseCode,
-        String productCode,
         int quantityAvailable,
         int minimumStockLevel,
         int maximumStockLevel,
