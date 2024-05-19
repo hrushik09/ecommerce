@@ -30,7 +30,7 @@ class LocationRestController {
 
     @GetMapping
     PagedResult<LocationSummary> getLocations(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
-        log.info("request to inventory service to get locations");
+        log.info("request to inventory service to get locations for pageNo {}", pageNo);
         PagedResult<LocationSummary> pagedResult = inventoryServiceClient.getLocations(pageNo);
         log.info("response from inventory service to get locations {}", pagedResult);
         return pagedResult;

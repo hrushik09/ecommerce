@@ -120,10 +120,10 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.totalElements", equalTo(25)))
                     .andExpect(jsonPath("$.pageNumber", equalTo(2)))
                     .andExpect(jsonPath("$.totalPages", equalTo(3)))
-                    .andExpect(jsonPath("$.isFirst", equalTo(false)))
-                    .andExpect(jsonPath("$.isLast", equalTo(false)))
-                    .andExpect(jsonPath("$.hasNext", equalTo(true)))
-                    .andExpect(jsonPath("$.hasPrevious", equalTo(true)));
+                    .andExpect(jsonPath("$.isFirst", is(false)))
+                    .andExpect(jsonPath("$.isLast", is(false)))
+                    .andExpect(jsonPath("$.hasNext", is(true)))
+                    .andExpect(jsonPath("$.hasPrevious", is(true)));
         }
 
         @Test
@@ -170,10 +170,10 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.totalElements", equalTo(15)))
                     .andExpect(jsonPath("$.pageNumber", equalTo(1)))
                     .andExpect(jsonPath("$.totalPages", equalTo(2)))
-                    .andExpect(jsonPath("$.isFirst", equalTo(true)))
-                    .andExpect(jsonPath("$.isLast", equalTo(false)))
-                    .andExpect(jsonPath("$.hasNext", equalTo(true)))
-                    .andExpect(jsonPath("$.hasPrevious", equalTo(false)));
+                    .andExpect(jsonPath("$.isFirst", is(true)))
+                    .andExpect(jsonPath("$.isLast", is(false)))
+                    .andExpect(jsonPath("$.hasNext", is(true)))
+                    .andExpect(jsonPath("$.hasPrevious", is(false)));
         }
     }
 
