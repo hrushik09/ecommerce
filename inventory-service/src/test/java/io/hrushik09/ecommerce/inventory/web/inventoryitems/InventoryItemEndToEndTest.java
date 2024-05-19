@@ -29,7 +29,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
             given().contentType(JSON)
                     .body("""
                             {
-                            "productCode": %s,
+                            "productCode": "%s",
                             "quantityAvailable": 34,
                             "minimumStockLevel": 13,
                             "maximumStockLevel": 67,
