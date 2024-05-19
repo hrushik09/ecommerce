@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${code}')|">
+        <h1 x-text="product.name"></h1>
+        <p x-text="product.description"></p>
+        <p x-text="product.category"></p>
+        <p x-text="product.reorderQuantity"></p>
+        <p>Needs Refrigeration: <span x-text="product.needsRefrigeration"></span></p>
+        <p>Packed Weight: <span x-text="product.measurement.packedWeight.value"></span> <span
+                x-text="product.measurement.packedWeight.unit"></span></p>
+        <p>Packed Length: <span x-text="product.measurement.packedLength.value"></span> <span
+                x-text="product.measurement.packedLength.unit"></span></p>
+        <p>Packed Width: <span x-text="product.measurement.packedWidth.value"></span> <span
+                x-text="product.measurement.packedWidth.unit"></span></p>
+        <p>Packed Height: <span x-text="product.measurement.packedHeight.value"></span> <span
+                x-text="product.measurement.packedHeight.unit"></span></p>
+        <p>Created At: <span x-text="product.createdAt"></span></p>
+        <p>Updated At: <span x-text="product.updatedAt"></span></p>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/products/product.js"></script>
+</div>
+</body>
+</html>

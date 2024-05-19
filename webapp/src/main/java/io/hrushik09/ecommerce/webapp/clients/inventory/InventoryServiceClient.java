@@ -6,6 +6,7 @@ import io.hrushik09.ecommerce.webapp.clients.inventory.locations.Location;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.LocationSummary;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductResponse;
+import io.hrushik09.ecommerce.webapp.clients.inventory.products.Product;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.ProductSummary;
 import io.hrushik09.ecommerce.webapp.clients.inventory.warehouses.CreateWarehouseRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.warehouses.CreateWarehouseResponse;
@@ -43,4 +44,7 @@ public interface InventoryServiceClient {
 
     @PostExchange("/products")
     CreateProductResponse createProduct(@RequestBody CreateProductRequest request);
+
+    @GetExchange("/products/{code}")
+    Product getProductByCode(@PathVariable String code);
 }

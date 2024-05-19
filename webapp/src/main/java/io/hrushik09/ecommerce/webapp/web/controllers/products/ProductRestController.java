@@ -4,6 +4,7 @@ import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
 import io.hrushik09.ecommerce.webapp.clients.inventory.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductResponse;
+import io.hrushik09.ecommerce.webapp.clients.inventory.products.Product;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.ProductSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,5 +34,13 @@ class ProductRestController {
         PagedResult<ProductSummary> pagedResult = inventoryServiceClient.getProducts(pageNo);
         log.info("response from inventory service to get products {}", pagedResult);
         return pagedResult;
+    }
+
+    @GetMapping("/{code}")
+    Product getProductByCode(@PathVariable String code) {
+        log.info("request to inventory service to get product by code {}", code);
+        Product product = inventoryServiceClient.getProductByCode(code);
+        log.info("response from inventory service to get product by code {}", product);
+        return product;
     }
 }
