@@ -31,7 +31,7 @@ class InventoryItemControllerTest {
     class CreateInventoryItem {
         @Test
         void shouldReturnErrorWhenWarehouseDoesNotExist() throws Exception {
-            String warehouseCode = "warehouse_dummy_34naf";
+            String warehouseCode = "warehouse_does_not_exist_34naf";
             String productCode = "product_dummy_3348af";
             when(inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, productCode, 45, 1, 100, 20)))
                     .thenThrow(new WarehouseDoesNotExist(warehouseCode));
@@ -54,7 +54,7 @@ class InventoryItemControllerTest {
         @Test
         void shouldReturnErrorWhenProductDoesNotExist() throws Exception {
             String warehouseCode = "warehouse_dummy_54kf34naf";
-            String productCode = "product_dummy_4un3348af";
+            String productCode = "product_does_not_exist_4un3348af";
             when(inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, productCode, 4, 1, 10, 2)))
                     .thenThrow(new ProductDoesNotExist(productCode));
 
