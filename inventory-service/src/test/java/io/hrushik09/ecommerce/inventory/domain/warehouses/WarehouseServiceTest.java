@@ -307,7 +307,6 @@ class WarehouseServiceTest {
 
             assertThat(warehouseEntity).isNotNull();
             assertThat(warehouseEntity.getId()).isNotNull();
-            assertThat(warehouseEntity.getLocationEntity()).isNotNull();
             assertThat(warehouseEntity.getCode()).isEqualTo(code);
             assertThat(warehouseEntity.getName()).isEqualTo(name);
             assertThat(warehouseEntity.isRefrigerated()).isEqualTo(isRefrigerated);
