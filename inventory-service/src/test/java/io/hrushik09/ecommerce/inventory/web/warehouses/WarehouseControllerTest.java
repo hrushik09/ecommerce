@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.warehouses;
 
 import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
@@ -36,6 +37,24 @@ class WarehouseControllerTest {
 
     @Nested
     class CreateWarehouse {
+        @Test
+        void shouldReturnErrorWhenLocationDoesNotExist() throws Exception {
+            String locationCode = "location_does_not_exist_qjnas";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Some warehouse 3", true)))
+                    .thenThrow(new LocationDoesNotExist(locationCode));
+
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Some warehouse 3",
+                                    "isRefrigerated": true
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Location with code " + locationCode + " does not exist")));
+        }
+
         @Test
         void shouldCreateWarehouseSuccessfully() throws Exception {
             String locationCode = "location_dummy_fu3jb";

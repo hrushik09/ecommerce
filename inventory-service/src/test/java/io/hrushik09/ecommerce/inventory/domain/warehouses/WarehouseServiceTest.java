@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.inventory.domain.warehouses;
 import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
@@ -55,6 +56,16 @@ class WarehouseServiceTest {
 
     @Nested
     class CreateWarehouse {
+        @Test
+        void shouldThrowWhenLocationDoesNotExist() {
+            String locationCode = "location_does_not_exist_qrlakn";
+            when(locationService.getLocationEntityByCode(locationCode)).thenThrow(new LocationDoesNotExist(locationCode));
+
+            assertThatThrownBy(() -> warehouseService.create(new CreateWarehouseCommand(locationCode, "Some name", false)))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + locationCode + " does not exist");
+        }
+
         @Test
         void shouldSaveUsingRepositoryWhenCreatingWarehouse() {
             String locationCode = "location_mock_a3iuriah";
