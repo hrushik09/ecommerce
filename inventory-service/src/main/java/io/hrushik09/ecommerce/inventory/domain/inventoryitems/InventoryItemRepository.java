@@ -1,11 +1,9 @@
 package io.hrushik09.ecommerce.inventory.domain.inventoryitems;
 
-class InventoryItemRepository {
-    public boolean existsByWarehouseCodeAndProductCode(String warehouseCode, String productCode) {
-        return false;
-    }
+import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public InventoryItemEntity save(InventoryItemEntity inventoryItemEntity) {
-        return null;
-    }
+interface InventoryItemRepository extends JpaRepository<InventoryItemEntity, Long> {
+    boolean existsByWarehouseEntityAndProductEntity(WarehouseEntity warehouseEntity, ProductEntity productEntity);
 }

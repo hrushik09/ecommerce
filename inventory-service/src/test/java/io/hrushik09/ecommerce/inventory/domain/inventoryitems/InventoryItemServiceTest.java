@@ -4,9 +4,11 @@ import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemCommand;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemResponse;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductDoesNotExist;
+import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseDoesNotExist;
+import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntity;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,13 +72,26 @@ class InventoryItemServiceTest {
         @Test
         void shouldThrowWhenInventoryItemAlreadyExists() {
             String warehouseCode = "warehouse_k3if";
-            String productCode = "product_j3na";
-            when(inventoryItemRepository.existsByWarehouseCodeAndProductCode(warehouseCode, productCode)).thenReturn(true);
+            String productCode = "product_87j3na";
+            WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
+            when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
+            ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
+            when(productService.getProductEntityByCode(productCode)).thenReturn(productEntityBuilder.build());
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class)))
+                    .thenReturn(true);
 
             assertThatThrownBy(() -> inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, productCode,
                     3, 2, 9, 2)))
                     .isInstanceOf(InventoryItemAlreadyExists.class)
                     .hasMessage("Inventory Item with Warehouse " + warehouseCode + " and Product " + productCode + " already exists");
+
+            ArgumentCaptor<WarehouseEntity> warehouseEntityArgumentCaptor = ArgumentCaptor.forClass(WarehouseEntity.class);
+            ArgumentCaptor<ProductEntity> productEntityArgumentCaptor = ArgumentCaptor.forClass(ProductEntity.class);
+            verify(inventoryItemRepository).existsByWarehouseEntityAndProductEntity(warehouseEntityArgumentCaptor.capture(), productEntityArgumentCaptor.capture());
+            WarehouseEntity warehouseCaptorValue = warehouseEntityArgumentCaptor.getValue();
+            assertThat(warehouseCaptorValue.getCode()).isEqualTo(warehouseCode);
+            ProductEntity productCaptorValue = productEntityArgumentCaptor.getValue();
+            assertThat(productCaptorValue.getCode()).isEqualTo(productCode);
         }
 
         @Test
@@ -88,7 +103,7 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 5;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseCodeAndProductCode(warehouseCode, productCode)).thenReturn(false);
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
@@ -123,7 +138,7 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 5;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseCodeAndProductCode(warehouseCode, productCode)).thenReturn(false);
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);

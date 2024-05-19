@@ -7,7 +7,11 @@ import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntity;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class InventoryItemService {
     private final InventoryItemRepository inventoryItemRepository;
     private final WarehouseService warehouseService;
@@ -21,10 +25,11 @@ public class InventoryItemService {
         this.generateCode = generateCode;
     }
 
+    @Transactional
     public CreateInventoryItemResponse create(CreateInventoryItemCommand cmd) {
         WarehouseEntity warehouseEntity = warehouseService.getWarehouseEntityByCode(cmd.warehouseCode());
         ProductEntity productEntity = productService.getProductEntityByCode(cmd.productCode());
-        if (inventoryItemRepository.existsByWarehouseCodeAndProductCode(cmd.warehouseCode(), cmd.productCode())) {
+        if (inventoryItemRepository.existsByWarehouseEntityAndProductEntity(warehouseEntity, productEntity)) {
             throw new InventoryItemAlreadyExists(cmd.warehouseCode(), cmd.productCode());
         }
 
