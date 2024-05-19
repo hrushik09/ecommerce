@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<body>
+<div layout:fragment="content">
+    <div x-data="initData">
+        <form @submit.prevent="createProduct" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input class="form-control" id="name" type="text" x-model="product.name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <input class="form-control" id="description" type="text" x-model="product.description">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="category">Category</label>
+                <input class="form-control" id="category" type="text" x-model="product.category">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="reorderQuantity">Reorder Quantity</label>
+                <input class="form-control" id="reorderQuantity" type="number" x-model="product.reorderQuantity">
+            </div>
+            <div class="mb-3 form-check">
+                <input class="form-check-input" id="needsRefrigeration" type="checkbox"
+                       x-model="product.needsRefrigeration">
+                <label class="form-check-label" for="needsRefrigeration">Needs Refrigeration</label>
+            </div>
+            <div class="mb-3 row">
+                <label class="form-label">Packed Weight</label>
+                <div class="col">
+                    <input aria-label="Value" class="form-control" placeholder="Value" type="text"
+                           x-model="product.measurement.packedWeight.value">
+                </div>
+                <div class="col">
+                    <input aria-label="Unit" class="form-control" placeholder="Unit" type="text"
+                           x-model="product.measurement.packedWeight.unit">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="form-label">Packed Length</label>
+                <div class="col">
+                    <input aria-label="Value" class="form-control" placeholder="Value" type="text"
+                           x-model="product.measurement.packedLength.value">
+                </div>
+                <div class="col">
+                    <input aria-label="Unit" class="form-control" placeholder="Unit" type="text"
+                           x-model="product.measurement.packedLength.unit">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="form-label">Packed Width</label>
+                <div class="col">
+                    <input aria-label="Value" class="form-control" placeholder="Value" type="text"
+                           x-model="product.measurement.packedWidth.value">
+                </div>
+                <div class="col">
+                    <input aria-label="Unit" class="form-control" placeholder="Unit" type="text"
+                           x-model="product.measurement.packedWidth.unit">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="form-label">Packed Height</label>
+                <div class="col">
+                    <input aria-label="Value" class="form-control" placeholder="Value" type="text"
+                           x-model="product.measurement.packedHeight.value">
+                </div>
+                <div class="col">
+                    <input aria-label="Unit" class="form-control" placeholder="Unit" type="text"
+                           x-model="product.measurement.packedHeight.unit">
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+        <template x-if="createProductErrorDetail">
+            <div class="mt-3 alert alert-warning" role="alert" x-text="createProductErrorDetail"></div>
+        </template>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/products/create_product.js"></script>
+</div>
+</body>
+</html>

@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 class ProductController {
+    @GetMapping("/inventory/products/create")
+    String createProductPage() {
+        return "inventory/products/create_product";
+    }
+
     @GetMapping("/inventory/products")
     String productsPage(@RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("pageNo", pageNo);
