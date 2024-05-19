@@ -73,6 +73,6 @@ public class WarehouseService {
     }
 
     public WarehouseEntity getWarehouseEntityByCode(String code) {
-        return null;
+        return warehouseRepository.findByCode(code).orElseThrow(() -> new WarehouseDoesNotExist(code));
     }
 }

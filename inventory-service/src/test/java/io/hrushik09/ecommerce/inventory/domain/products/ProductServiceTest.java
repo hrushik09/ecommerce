@@ -260,4 +260,63 @@ class ProductServiceTest {
             assertThat(product.updatedAt()).isEqualTo("December 06 2009, 10:34:30 (UTC+00:00)");
         }
     }
+
+    @Nested
+    class GetProductEntityByCode {
+        @Test
+        void shouldThrowWhenProductDoesNotExist() {
+            String productCode = "product_does_not_exist_j3aj";
+            when(productRepository.findByCode(productCode)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> productService.getProductEntityByCode(productCode))
+                    .isInstanceOf(ProductDoesNotExist.class)
+                    .hasMessage("Product with code " + productCode + " does not exist");
+        }
+
+        @Test
+        void shouldGetProductEntityByCode() {
+            String code = "product_aksdask";
+            String name = "Product 3";
+            String description = "Some description for product 3";
+            String category = "Category 18";
+            int reorderQuantity = 9;
+            boolean needsRefrigeration = false;
+            String packedWeightValue = "33.6";
+            String packedWeightUnit = "kg";
+            String packedLengthValue = "63.34";
+            String packedLengthUnit = "m";
+            String packedWidthValue = "3452.23";
+            String packedWidthUnit = "cm";
+            String packedHeightValue = "5756.34";
+            String packedHeightUnit = "m";
+            ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(code).withName(name).withDescription(description).withCategory(category)
+                    .withReorderQuantity(reorderQuantity).withNeedsRefrigeration(needsRefrigeration)
+                    .withPackedWeightValue(new BigDecimal(packedWeightValue)).withPackedWeightUnit(packedWeightUnit)
+                    .withPackedLengthValue(new BigDecimal(packedLengthValue)).withPackedLengthUnit(packedLengthUnit)
+                    .withPackedWidthValue(new BigDecimal(packedWidthValue)).withPackedWidthUnit(packedWidthUnit)
+                    .withPackedHeightValue(new BigDecimal(packedHeightValue)).withPackedHeightUnit(packedHeightUnit);
+            when(productRepository.findByCode(code)).thenReturn(Optional.of(productEntityBuilder.build()));
+
+            ProductEntity productEntity = productService.getProductEntityByCode(code);
+
+            assertThat(productEntity).isNotNull();
+            assertThat(productEntity.getId()).isNotNull();
+            assertThat(productEntity.getCode()).isEqualTo(code);
+            assertThat(productEntity.getName()).isEqualTo(name);
+            assertThat(productEntity.getDescription()).isEqualTo(description);
+            assertThat(productEntity.getCategory()).isEqualTo(category);
+            assertThat(productEntity.getReorderQuantity()).isEqualTo(reorderQuantity);
+            assertThat(productEntity.isNeedsRefrigeration()).isEqualTo(needsRefrigeration);
+            assertThat(productEntity.getPackedWeightValue()).isEqualTo(packedWeightValue);
+            assertThat(productEntity.getPackedWeightUnit()).isEqualTo(packedWeightUnit);
+            assertThat(productEntity.getPackedLengthValue()).isEqualTo(packedLengthValue);
+            assertThat(productEntity.getPackedLengthUnit()).isEqualTo(packedLengthUnit);
+            assertThat(productEntity.getPackedWidthValue()).isEqualTo(packedWidthValue);
+            assertThat(productEntity.getPackedWidthUnit()).isEqualTo(packedWidthUnit);
+            assertThat(productEntity.getPackedHeightValue()).isEqualTo(packedHeightValue);
+            assertThat(productEntity.getPackedHeightUnit()).isEqualTo(packedHeightUnit);
+            assertThat(productEntity.getCreatedAt()).isNotNull();
+            assertThat(productEntity.getUpdatedAt()).isNotNull();
+        }
+    }
 }

@@ -277,4 +277,38 @@ class WarehouseServiceTest {
             assertThat(warehouse.updatedAt()).isEqualTo("May 17 2009, 23:15:30 (UTC+00:00)");
         }
     }
+
+    @Nested
+    class GetWarehouseEntityByCode {
+        @Test
+        void shouldThrowWhenWarehouseDoesNotExist() {
+            String warehouseCode = "warehouse_does_not_exist_j3qaj";
+            when(warehouseRepository.findByCode(warehouseCode)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> warehouseService.getWarehouseEntityByCode(warehouseCode))
+                    .isInstanceOf(WarehouseDoesNotExist.class)
+                    .hasMessage("Warehouse with code " + warehouseCode + " does not exist");
+        }
+
+        @Test
+        void shouldGetWarehouseEntityByCode() {
+            String code = "warehouse_aksdask";
+            String name = "Warehouse 3";
+            boolean isRefrigerated = true;
+            WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(code)
+                    .withName(name).withIsRefrigerated(isRefrigerated);
+            when(warehouseRepository.findByCode(code)).thenReturn(Optional.of(warehouseEntityBuilder.build()));
+
+            WarehouseEntity warehouseEntity = warehouseService.getWarehouseEntityByCode(code);
+
+            assertThat(warehouseEntity).isNotNull();
+            assertThat(warehouseEntity.getId()).isNotNull();
+            assertThat(warehouseEntity.getLocationEntity()).isNotNull();
+            assertThat(warehouseEntity.getCode()).isEqualTo(code);
+            assertThat(warehouseEntity.getName()).isEqualTo(name);
+            assertThat(warehouseEntity.isRefrigerated()).isEqualTo(isRefrigerated);
+            assertThat(warehouseEntity.getCreatedAt()).isNotNull();
+            assertThat(warehouseEntity.getUpdatedAt()).isNotNull();
+        }
+    }
 }

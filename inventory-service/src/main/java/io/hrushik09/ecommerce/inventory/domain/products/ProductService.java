@@ -73,6 +73,6 @@ public class ProductService {
     }
 
     public ProductEntity getProductEntityByCode(String code) {
-        return null;
+        return productRepository.findByCode(code).orElseThrow(() -> new ProductDoesNotExist(code));
     }
 }

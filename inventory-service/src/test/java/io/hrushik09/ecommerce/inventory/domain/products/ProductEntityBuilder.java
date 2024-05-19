@@ -55,6 +55,7 @@ public class ProductEntityBuilder {
 
     public ProductEntity build() {
         ProductEntity productEntity = new ProductEntity();
+        productEntity.setId(id);
         productEntity.setCode(code);
         productEntity.setName(name);
         productEntity.setDescription(description);

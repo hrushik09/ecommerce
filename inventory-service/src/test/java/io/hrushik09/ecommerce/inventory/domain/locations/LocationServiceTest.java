@@ -198,6 +198,7 @@ class LocationServiceTest {
             when(locationRepository.findByCode(code)).thenReturn(Optional.of(locationEntityBuilder.build()));
 
             LocationEntity locationEntity = locationService.getLocationEntityByCode(code);
+
             assertThat(locationEntity).isNotNull();
             assertThat(locationEntity.getId()).isNotNull();
             assertThat(locationEntity.getCode()).isEqualTo(code);
