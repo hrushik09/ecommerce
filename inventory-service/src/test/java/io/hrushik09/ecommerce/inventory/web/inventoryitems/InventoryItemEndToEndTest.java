@@ -110,7 +110,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
                     .body("data[9].code", hasLength(14 + 1 + 36))
                     .body("data[9].productName", equalTo("Product 10"))
                     .body("data[9].quantityAvailable", equalTo(10))
-                    .body("totalElements", equalTo(16))
+                    .body("totalElements", equalTo(15))
                     .body("pageNumber", equalTo(1))
                     .body("totalPages", equalTo(2))
                     .body("isFirst", is(true))
