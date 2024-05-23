@@ -1,9 +1,11 @@
 package io.hrushik09.ecommerce.inventory.web.inventoryitems;
 
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemService;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemCommand;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemRequest;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemResponse;
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.InventoryItemSummary;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,5 +29,11 @@ class InventoryItemController {
         CreateInventoryItemCommand cmd = new CreateInventoryItemCommand(warehouseCode, request.productCode(), request.quantityAvailable(),
                 request.minimumStockLevel(), request.maximumStockLevel(), request.reorderPoint());
         return inventoryItemService.create(cmd);
+    }
+
+    @GetMapping("/api/warehouses/{warehouseCode}/items")
+    PagedResult<InventoryItemSummary> getInventoryItems(@PathVariable String warehouseCode, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("Received request to get inventory items for {} and page {}", warehouseCode, pageNo);
+        return inventoryItemService.getInventoryItems(warehouseCode, pageNo);
     }
 }

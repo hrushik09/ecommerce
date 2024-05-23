@@ -1,8 +1,10 @@
 package io.hrushik09.ecommerce.inventory.domain.inventoryitems;
 
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemCommand;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemResponse;
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.InventoryItemSummary;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntity;
@@ -43,5 +45,9 @@ public class InventoryItemService {
         inventoryItemEntity.setReorderPoint(cmd.reorderPoint());
         InventoryItemEntity saved = inventoryItemRepository.save(inventoryItemEntity);
         return InventoryItemMapper.convertToCreateInventoryItemResponse(saved);
+    }
+
+    public PagedResult<InventoryItemSummary> getInventoryItems(String warehouseCode, int pageNo) {
+        return null;
     }
 }
