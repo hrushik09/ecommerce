@@ -1,8 +1,10 @@
 package io.hrushik09.ecommerce.inventory.domain.inventoryitems;
 
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemCommand;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemResponse;
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.InventoryItemSummary;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder;
@@ -18,6 +20,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemEntityBuilder.aInventoryItemEntity;
 import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder.aProductEntity;
@@ -158,6 +166,49 @@ class InventoryItemServiceTest {
             assertThat(created.minimumStockLevel()).isEqualTo(minimumStockLevel);
             assertThat(created.maximumStockLevel()).isEqualTo(maximumStockLevel);
             assertThat(created.reorderPoint()).isEqualTo(reorderPoint);
+        }
+    }
+
+    @Nested
+    class GetInventoryItems {
+        @Test
+        void shouldGetInventoryItems() {
+            String warehouseCode = "warehouse_k3ifkln";
+            WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
+            when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
+            List<InventoryItemSummary> list = Stream.iterate(11, i -> i < 16, i -> i + 1)
+                    .map(i -> new InventoryItemSummary("inventory_item_asn343a_" + i, "Product " + i, i))
+                    .toList();
+            when(inventoryItemRepository.findInventoryItemSummaries(any(WarehouseEntity.class), any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 5));
+
+            PagedResult<InventoryItemSummary> pagedResult = inventoryItemService.getInventoryItems(warehouseCode, 2);
+
+            assertThat(pagedResult).isNotNull();
+            List<InventoryItemSummary> data = pagedResult.data();
+            assertThat(data).hasSize(5);
+            assertThat(data.get(0).code()).isEqualTo("inventory_item_asn343a_11");
+            assertThat(data.get(0).productName()).isEqualTo("Product 11");
+            assertThat(data.get(0).quantityAvailable()).isEqualTo(11);
+            assertThat(data.get(1).code()).isEqualTo("inventory_item_asn343a_12");
+            assertThat(data.get(1).productName()).isEqualTo("Product 12");
+            assertThat(data.get(1).quantityAvailable()).isEqualTo(12);
+            assertThat(data.get(2).code()).isEqualTo("inventory_item_asn343a_13");
+            assertThat(data.get(2).productName()).isEqualTo("Product 13");
+            assertThat(data.get(2).quantityAvailable()).isEqualTo(13);
+            assertThat(data.get(3).code()).isEqualTo("inventory_item_asn343a_14");
+            assertThat(data.get(3).productName()).isEqualTo("Product 14");
+            assertThat(data.get(3).quantityAvailable()).isEqualTo(14);
+            assertThat(data.get(4).code()).isEqualTo("inventory_item_asn343a_15");
+            assertThat(data.get(4).productName()).isEqualTo("Product 15");
+            assertThat(data.get(4).quantityAvailable()).isEqualTo(15);
+            assertThat(pagedResult.totalElements()).isEqualTo(15);
+            assertThat(pagedResult.pageNumber()).isEqualTo(2);
+            assertThat(pagedResult.totalPages()).isEqualTo(2);
+            assertThat(pagedResult.isFirst()).isEqualTo(false);
+            assertThat(pagedResult.isLast()).isEqualTo(true);
+            assertThat(pagedResult.hasNext()).isEqualTo(false);
+            assertThat(pagedResult.hasPrevious()).isEqualTo(true);
         }
     }
 }

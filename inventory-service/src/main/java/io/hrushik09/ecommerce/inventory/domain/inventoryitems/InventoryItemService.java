@@ -9,6 +9,9 @@ import io.hrushik09.ecommerce.inventory.domain.products.ProductEntity;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntity;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +51,20 @@ public class InventoryItemService {
     }
 
     public PagedResult<InventoryItemSummary> getInventoryItems(String warehouseCode, int pageNo) {
-        return null;
+        WarehouseEntity warehouseEntity = warehouseService.getWarehouseEntityByCode(warehouseCode);
+        Sort sort = Sort.by("id").ascending();
+        int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
+        PageRequest pageRequest = PageRequest.of(pageNumber, 10, sort);
+        Page<InventoryItemSummary> inventoryItemPage = inventoryItemRepository.findInventoryItemSummaries(warehouseEntity, pageRequest);
+        return new PagedResult<>(
+                inventoryItemPage.getContent(),
+                inventoryItemPage.getTotalElements(),
+                inventoryItemPage.getNumber() + 1,
+                inventoryItemPage.getTotalPages(),
+                inventoryItemPage.isFirst(),
+                inventoryItemPage.isLast(),
+                inventoryItemPage.hasNext(),
+                inventoryItemPage.hasPrevious()
+        );
     }
 }
