@@ -6,6 +6,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
@@ -78,5 +79,27 @@ class CreateInventoryItemRequestTest {
         CreateInventoryItemRequest request = aCreateInventoryItem().withReorderPoint(-1).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
         commonAssertions.hasSingleMessage(violations, "reorderPoint should be positive");
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1,10,5,1",
+            "1,10,10,1",
+            "1,15,1,3",
+            "1,15,1,15",
+            "1,1,6,23",
+            "1,1,23,23",
+            "10,24,1,1",
+            "24,24,1,1",
+            "19,1,1,10",
+            "19,1,1,19",
+            "15,1,12,1",
+            "15,1,15,1",
+    })
+    void quantitiesShouldBeValid(int quantityAvailable, int minimumStockLevel, int maximumStockLevel, int reorderPoint) {
+        CreateInventoryItemRequest request = aCreateInventoryItem().withQuantityAvailable(quantityAvailable).withMinimumStockLevel(minimumStockLevel)
+                .withMaximumStockLevel(maximumStockLevel).withReorderPoint(reorderPoint).build();
+        Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
+        commonAssertions.hasSingleMessage(violations, "quantities should be valid");
     }
 }
