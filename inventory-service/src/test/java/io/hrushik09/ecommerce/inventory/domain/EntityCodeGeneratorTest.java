@@ -21,7 +21,8 @@ class EntityCodeGeneratorTest {
     @CsvSource({
             "location,8",
             "warehouse,9",
-            "product,7"
+            "product,7",
+            "inventory_item,14"
     })
     void shouldGenerateValidCodeFor(String entityType, int prefixLength) {
         String code = entityCodeGenerator.forEntityType(entityType);

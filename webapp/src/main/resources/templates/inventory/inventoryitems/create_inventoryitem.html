@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${warehouseCode}')|">
+        <form @submit.prevent="createInventoryItem" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="productCode">Product Code</label>
+                <input class="form-control" id="productCode" type="text" x-model="inventoryItem.productCode">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="quantityAvailable">Quantity Available</label>
+                <input class="form-control" id="quantityAvailable" type="number"
+                       x-model="inventoryItem.quantityAvailable">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="minimumStockLevel">Minimum Stock Level</label>
+                <input class="form-control" id="minimumStockLevel" type="number"
+                       x-model="inventoryItem.minimumStockLevel">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="maximumStockLevel">Maximum Stock Level</label>
+                <input class="form-control" id="maximumStockLevel" type="number"
+                       x-model="inventoryItem.maximumStockLevel">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="reorderPoint">Reorder Point</label>
+                <input class="form-control" id="reorderPoint" type="number" x-model="inventoryItem.reorderPoint">
+            </div>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+        <template x-if="createInventoryItemErrorDetail">
+            <div class="mt-3 alert alert-warning" role="alert" x-text="createInventoryItemErrorDetail"></div>
+        </template>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/inventory/inventoryitems/create_inventoryitem.js"></script>
+</div>
+</body>
+</html>

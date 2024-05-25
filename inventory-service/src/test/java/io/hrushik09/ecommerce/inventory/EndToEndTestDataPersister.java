@@ -1,5 +1,8 @@
 package io.hrushik09.ecommerce.inventory;
 
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemService;
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemCommand;
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.model.CreateInventoryItemResponse;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationResponse;
@@ -21,6 +24,8 @@ public class EndToEndTestDataPersister {
     private WarehouseService warehouseService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private InventoryItemService inventoryItemService;
 
     public CreateLocationResponse location(String name, String address) {
         CreateLocationCommand cmd = new CreateLocationCommand(name, address);
@@ -50,5 +55,10 @@ public class EndToEndTestDataPersister {
                         new CreatePackedWidthCommand(new BigDecimal(packedWidthValue), packedWidthUnit),
                         new CreatePackedHeightCommand(new BigDecimal(packedHeightValue), packedHeightUnit)));
         return productService.create(cmd);
+    }
+
+    public CreateInventoryItemResponse inventoryItem(String warehouseCode, String productCode, int i) {
+        CreateInventoryItemCommand cmd = new CreateInventoryItemCommand(warehouseCode, productCode, i, i, i, i);
+        return inventoryItemService.create(cmd);
     }
 }

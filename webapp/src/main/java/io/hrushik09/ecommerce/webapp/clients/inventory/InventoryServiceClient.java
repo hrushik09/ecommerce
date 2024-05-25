@@ -1,5 +1,8 @@
 package io.hrushik09.ecommerce.webapp.clients.inventory;
 
+import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemRequest;
+import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemResponse;
+import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.InventoryItemSummary;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.Location;
@@ -47,4 +50,10 @@ public interface InventoryServiceClient {
 
     @GetExchange("/products/{code}")
     Product getProductByCode(@PathVariable String code);
+
+    @PostExchange("/warehouses/{warehouseCode}/items")
+    CreateInventoryItemResponse createInventoryItem(@PathVariable String warehouseCode, @RequestBody CreateInventoryItemRequest request);
+
+    @GetExchange("/warehouses/{warehouseCode}/items")
+    PagedResult<InventoryItemSummary> getInventoryItems(@PathVariable String warehouseCode, @RequestParam(name = "page") int pageNo);
 }

@@ -6,10 +6,10 @@ import java.time.Instant;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 
-class WarehouseEntityBuilder {
+public class WarehouseEntityBuilder {
     private Long id = 35L;
     private LocationEntityBuilder locationEntityBuilder = aLocationEntity();
-    private String code = "location_random_23anjfak";
+    private String code = "warehouse_random_23anjfak";
     private String name = "random warehouse";
     private boolean isRefrigerated = false;
     private Instant createdAt = Instant.parse("2020-01-02T03:10:00Z");

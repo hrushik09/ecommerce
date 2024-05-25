@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "products", uniqueConstraints = {@UniqueConstraint(name = "UK_products_code", columnNames = "code")})
-class ProductEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,6 +43,9 @@ class ProductEntity {
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
+
+    protected ProductEntity() {
+    }
 
     public Long getId() {
         return id;

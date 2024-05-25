@@ -6,11 +6,39 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div layout:fragment="content">
-    <div th:x-data="|initData('${code}')|">
-        <h1 x-text="warehouse.name"></h1>
-        <p>Is Refrigerated: <span x-text="warehouse.isRefrigerated"></span></p>
-        <p>Created At: <span x-text="warehouse.createdAt"></span></p>
-        <p>Updated At: <span x-text="warehouse.updatedAt"></span></p>
+    <div th:x-data="|initData('${code}', '${pageNo}')|">
+        <div class="row">
+            <div class="col">
+                <h1 x-text="warehouse.name"></h1>
+                <p>Is Refrigerated: <span x-text="warehouse.isRefrigerated"></span></p>
+                <p>Created At: <span x-text="warehouse.createdAt"></span></p>
+                <p>Updated At: <span x-text="warehouse.updatedAt"></span></p>
+            </div>
+            <div class="col">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a :href="childBaseUrl + '/items/create'"
+                           class="nav-link text-bg-secondary p-3">Add New Inventory Item</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div th:replace="~{fragments/pagination :: child-pagination}"></div>
+        <div class="row row-cols-1 row-cols-md-5">
+            <template x-for="inventoryItem in pagedResult.data">
+                <div class="col mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" data-placement="top" data-toggle="tooltip"
+                                x-text="inventoryItem.productName"></h5>
+                            <p class="card-text" data-placement="top" data-toggle="tooltip"
+                               x-text="inventoryItem.quantityAvailable"></p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
     </div>
 </div>
 <div layout:fragment="pageScripts">

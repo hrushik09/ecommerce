@@ -10,7 +10,7 @@ import java.time.Instant;
         uniqueConstraints = {@UniqueConstraint(name = "UK_warehouses_code", columnNames = "code"),
                 @UniqueConstraint(name = "UK_warehouses_name_location_id", columnNames = "name, location_id")}
 )
-class WarehouseEntity {
+public class WarehouseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +27,9 @@ class WarehouseEntity {
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
+
+    protected WarehouseEntity() {
+    }
 
     public Long getId() {
         return id;

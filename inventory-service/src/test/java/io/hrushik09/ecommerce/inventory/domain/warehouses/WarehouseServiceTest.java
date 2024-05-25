@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.inventory.domain.warehouses;
 import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntity;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationService;
@@ -34,8 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class WarehouseServiceTest {
@@ -56,6 +56,16 @@ class WarehouseServiceTest {
     @Nested
     class CreateWarehouse {
         @Test
+        void shouldThrowWhenLocationDoesNotExist() {
+            String locationCode = "location_does_not_exist_qrlakn";
+            when(locationService.getLocationEntityByCode(locationCode)).thenThrow(new LocationDoesNotExist(locationCode));
+
+            assertThatThrownBy(() -> warehouseService.create(new CreateWarehouseCommand(locationCode, "Some name", false)))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + locationCode + " does not exist");
+        }
+
+        @Test
         void shouldSaveUsingRepositoryWhenCreatingWarehouse() {
             String locationCode = "location_mock_a3iuriah";
             String code = "warehouse_mock_akqq34";
@@ -64,6 +74,7 @@ class WarehouseServiceTest {
             LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode);
             when(locationService.getLocationEntityByCode(locationCode))
                     .thenReturn(locationEntityBuilder.build());
+            when(warehouseRepository.existsByNameAndLocationEntity(eq(name), any(LocationEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("warehouse")).thenReturn(code);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().with(locationEntityBuilder)
                     .withCode(code)
@@ -92,6 +103,7 @@ class WarehouseServiceTest {
             LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode);
             when(locationService.getLocationEntityByCode(locationCode))
                     .thenReturn(locationEntityBuilder.build());
+            when(warehouseRepository.existsByNameAndLocationEntity(eq(name), any(LocationEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("warehouse")).thenReturn(code);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().with(locationEntityBuilder)
                     .withCode(code)
@@ -116,6 +128,7 @@ class WarehouseServiceTest {
             boolean isRefrigerated11 = false;
             when(locationService.getLocationEntityByCode(locationCode11))
                     .thenReturn(aLocationEntity().withCode(locationCode11).build());
+            when(warehouseRepository.existsByNameAndLocationEntity(eq(name11), any(LocationEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("warehouse")).thenReturn(code11);
             WarehouseEntityBuilder warehouseEntityBuilder1 = aWarehouseEntity().with(aLocationEntity().withCode(locationCode11))
                     .withCode(code11)
@@ -133,6 +146,7 @@ class WarehouseServiceTest {
             LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode12);
             when(locationService.getLocationEntityByCode(locationCode12))
                     .thenReturn(locationEntityBuilder.build());
+            when(warehouseRepository.existsByNameAndLocationEntity(eq(name12), any(LocationEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("warehouse")).thenReturn(code12);
             WarehouseEntityBuilder warehouseEntityBuilder2 = aWarehouseEntity().with(locationEntityBuilder)
                     .withCode(code12)
@@ -156,6 +170,7 @@ class WarehouseServiceTest {
             LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode);
             when(locationService.getLocationEntityByCode(locationCode))
                     .thenReturn(locationEntityBuilder.build());
+            when(warehouseRepository.existsByNameAndLocationEntity(eq(name), any(LocationEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("warehouse")).thenReturn(code);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().with(locationEntityBuilder)
                     .withCode(code)
@@ -169,13 +184,13 @@ class WarehouseServiceTest {
 
             when(warehouseRepository.existsByNameAndLocationEntity(eq(name), any(LocationEntity.class))).thenReturn(true);
 
-            ArgumentCaptor<LocationEntity> locationEntityArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
-            verify(warehouseRepository).existsByNameAndLocationEntity(eq(name), locationEntityArgumentCaptor.capture());
-            LocationEntity captorValue = locationEntityArgumentCaptor.getValue();
-            assertThat(captorValue.getCode()).isEqualTo(locationCode);
             assertThatThrownBy(() -> warehouseService.create(new CreateWarehouseCommand(locationCode, name, true)))
                     .isInstanceOf(WarehouseAlreadyExists.class)
                     .hasMessage("Warehouse with name " + name + " already exists in this Location");
+            ArgumentCaptor<LocationEntity> locationEntityArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
+            verify(warehouseRepository, times(2)).existsByNameAndLocationEntity(eq(name), locationEntityArgumentCaptor.capture());
+            LocationEntity captorValue = locationEntityArgumentCaptor.getValue();
+            assertThat(captorValue.getCode()).isEqualTo(locationCode);
         }
     }
 
@@ -264,6 +279,39 @@ class WarehouseServiceTest {
             assertThat(warehouse.isRefrigerated()).isEqualTo(isRefrigerated);
             assertThat(warehouse.createdAt()).isEqualTo("May 17 2009, 16:14:12 (UTC+00:00)");
             assertThat(warehouse.updatedAt()).isEqualTo("May 17 2009, 23:15:30 (UTC+00:00)");
+        }
+    }
+
+    @Nested
+    class GetWarehouseEntityByCode {
+        @Test
+        void shouldThrowWhenWarehouseDoesNotExist() {
+            String warehouseCode = "warehouse_does_not_exist_j3qaj";
+            when(warehouseRepository.findByCode(warehouseCode)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> warehouseService.getWarehouseEntityByCode(warehouseCode))
+                    .isInstanceOf(WarehouseDoesNotExist.class)
+                    .hasMessage("Warehouse with code " + warehouseCode + " does not exist");
+        }
+
+        @Test
+        void shouldGetWarehouseEntityByCode() {
+            String code = "warehouse_aksdask";
+            String name = "Warehouse 3";
+            boolean isRefrigerated = true;
+            WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(code)
+                    .withName(name).withIsRefrigerated(isRefrigerated);
+            when(warehouseRepository.findByCode(code)).thenReturn(Optional.of(warehouseEntityBuilder.build()));
+
+            WarehouseEntity warehouseEntity = warehouseService.getWarehouseEntityByCode(code);
+
+            assertThat(warehouseEntity).isNotNull();
+            assertThat(warehouseEntity.getId()).isNotNull();
+            assertThat(warehouseEntity.getCode()).isEqualTo(code);
+            assertThat(warehouseEntity.getName()).isEqualTo(name);
+            assertThat(warehouseEntity.isRefrigerated()).isEqualTo(isRefrigerated);
+            assertThat(warehouseEntity.getCreatedAt()).isNotNull();
+            assertThat(warehouseEntity.getUpdatedAt()).isNotNull();
         }
     }
 }

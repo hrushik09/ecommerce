@@ -11,6 +11,7 @@ public class EntityCodeGenerator {
             case "location" -> "location_" + UUID.randomUUID();
             case "warehouse" -> "warehouse_" + UUID.randomUUID();
             case "product" -> "product_" + UUID.randomUUID();
+            case "inventory_item" -> "inventory_item_" + UUID.randomUUID();
             default -> throw new IllegalStateException("Unexpected value: " + entityType);
         };
     }
