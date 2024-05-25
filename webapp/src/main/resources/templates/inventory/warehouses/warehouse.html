@@ -6,7 +6,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div layout:fragment="content">
-    <div th:x-data="|initData('${code}')|">
+    <div th:x-data="|initData('${code}', '${pageNo}')|">
         <div class="row">
             <div class="col">
                 <h1 x-text="warehouse.name"></h1>
@@ -23,6 +23,22 @@
                 </ul>
             </div>
         </div>
+        <div th:replace="~{fragments/pagination :: child-pagination}"></div>
+        <div class="row row-cols-1 row-cols-md-5">
+            <template x-for="inventoryItem in pagedResult.data">
+                <div class="col mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" data-placement="top" data-toggle="tooltip"
+                                x-text="inventoryItem.productName"></h5>
+                            <p class="card-text" data-placement="top" data-toggle="tooltip"
+                               x-text="inventoryItem.quantityAvailable"></p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
     </div>
 </div>
 <div layout:fragment="pageScripts">

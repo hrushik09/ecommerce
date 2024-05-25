@@ -1,14 +1,13 @@
 package io.hrushik09.ecommerce.webapp.web.controllers.inventoryitems;
 
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
+import io.hrushik09.ecommerce.webapp.clients.inventory.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemResponse;
+import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.InventoryItemSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 class InventoryItemRestController {
@@ -25,5 +24,13 @@ class InventoryItemRestController {
         CreateInventoryItemResponse createInventoryItemResponse = inventoryServiceClient.createInventoryItem(warehouseCode, request);
         log.info("response from inventory service to create inventory item {}", createInventoryItemResponse);
         return createInventoryItemResponse;
+    }
+
+    @GetMapping("/api/inventory/warehouses/{warehouseCode}/items")
+    PagedResult<InventoryItemSummary> getInventoryItems(@PathVariable String warehouseCode, @RequestParam(name = "page") int pageNo) {
+        log.info("request to inventory service to get inventory items for {} and pageNo {}", warehouseCode, pageNo);
+        PagedResult<InventoryItemSummary> pagedResult = inventoryServiceClient.getInventoryItems(warehouseCode, pageNo);
+        log.info("response from inventory service to get inventory items {}", pagedResult);
+        return pagedResult;
     }
 }
