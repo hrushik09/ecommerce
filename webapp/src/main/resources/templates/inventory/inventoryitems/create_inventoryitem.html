@@ -10,7 +10,11 @@
         <form @submit.prevent="createInventoryItem" method="post">
             <div class="mb-3">
                 <label class="form-label" for="productCode">Product Code</label>
-                <input class="form-control" id="productCode" type="text" x-model="inventoryItem.productCode">
+                <select class="form-control" id="productCode" x-model="inventoryItem.productCode">
+                    <template x-for="product in products">
+                        <option :value="product.code" x-text="product.name"></option>
+                    </template>
+                </select>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="quantityAvailable">Quantity Available</label>
