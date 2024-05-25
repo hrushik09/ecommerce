@@ -57,8 +57,10 @@ public class EndToEndTestDataPersister {
         return productService.create(cmd);
     }
 
-    public CreateInventoryItemResponse inventoryItem(String warehouseCode, String productCode, int i) {
-        CreateInventoryItemCommand cmd = new CreateInventoryItemCommand(warehouseCode, productCode, i, i, i, i);
+    public CreateInventoryItemResponse inventoryItem(String warehouseCode, String productCode, int quantityAvailable,
+                                                     int minimumStockLevel, int maximumStockLevel, int reorderPoint) {
+        CreateInventoryItemCommand cmd = new CreateInventoryItemCommand(warehouseCode, productCode, quantityAvailable,
+                minimumStockLevel, maximumStockLevel, reorderPoint);
         return inventoryItemService.create(cmd);
     }
 }
