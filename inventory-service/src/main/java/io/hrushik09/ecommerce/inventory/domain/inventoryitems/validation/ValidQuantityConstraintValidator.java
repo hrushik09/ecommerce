@@ -7,7 +7,11 @@ import jakarta.validation.ConstraintValidatorContext;
 public class ValidQuantityConstraintValidator implements ConstraintValidator<ValidQuantityConstraint, CreateInventoryItemRequest> {
     @Override
     public boolean isValid(CreateInventoryItemRequest request, ConstraintValidatorContext context) {
-        return request.minimumStockLevel() < request.reorderPoint()
+        return request.minimumStockLevel() != null
+                && request.reorderPoint() != null
+                && request.quantityAvailable() != null
+                && request.maximumStockLevel() != null
+                && request.minimumStockLevel() < request.reorderPoint()
                 && request.reorderPoint() < request.quantityAvailable()
                 && request.quantityAvailable() < request.maximumStockLevel();
     }

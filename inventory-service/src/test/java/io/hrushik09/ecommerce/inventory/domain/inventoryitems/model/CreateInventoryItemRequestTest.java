@@ -29,21 +29,21 @@ class CreateInventoryItemRequestTest {
     void quantityAvailableShouldBeNonNull() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withQuantityAvailable(null).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "quantityAvailable should be non-null");
+        commonAssertions.hasCountAndMessage(violations, 2, "quantityAvailable should be non-null");
     }
 
     @Test
     void quantityAvailableShouldBePositive() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withQuantityAvailable(-1).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "quantityAvailable should be positive");
+        commonAssertions.hasCountAndMessage(violations, 2, "quantityAvailable should be positive");
     }
 
     @Test
     void minimumStockLevelShouldBeNonNull() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withMinimumStockLevel(null).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "minimumStockLevel should be non-null");
+        commonAssertions.hasCountAndMessage(violations, 2, "minimumStockLevel should be non-null");
     }
 
     @Test
@@ -57,28 +57,28 @@ class CreateInventoryItemRequestTest {
     void maximumStockLevelShouldBeNonNull() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withMaximumStockLevel(null).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "maximumStockLevel should be non-null");
+        commonAssertions.hasCountAndMessage(violations, 2, "maximumStockLevel should be non-null");
     }
 
     @Test
     void maximumStockLevelShouldBePositive() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withMaximumStockLevel(-1).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "maximumStockLevel should be positive");
+        commonAssertions.hasCountAndMessage(violations, 2, "maximumStockLevel should be positive");
     }
 
     @Test
     void reorderPointShouldBeNonNull() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withReorderPoint(null).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "reorderPoint should be non-null");
+        commonAssertions.hasCountAndMessage(violations, 2, "reorderPoint should be non-null");
     }
 
     @Test
     void reorderPointShouldBePositive() {
         CreateInventoryItemRequest request = aCreateInventoryItem().withReorderPoint(-1).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "reorderPoint should be positive");
+        commonAssertions.hasCountAndMessage(violations, 2, "reorderPoint should be positive");
     }
 
     @ParameterizedTest
