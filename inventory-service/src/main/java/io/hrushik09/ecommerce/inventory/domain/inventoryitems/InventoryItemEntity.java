@@ -33,6 +33,17 @@ class InventoryItemEntity {
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
+    @PrePersist
+    void validateQuantitiesPrePersist() {
+        if (minimumStockLevel < reorderPoint
+                && reorderPoint < quantityAvailable
+                && quantityAvailable < maximumStockLevel) {
+            return;
+        }
+
+        throw new IllegalStateException("quantities are not valid");
+    }
+
     public Long getId() {
         return id;
     }

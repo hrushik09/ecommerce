@@ -61,7 +61,7 @@ class InventoryItemServiceTest {
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenThrow(new WarehouseDoesNotExist(warehouseCode));
 
             assertThatThrownBy(() -> inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, "product_3klnf",
-                    1, 2, 3, 4)))
+                    6, 2, 8, 4)))
                     .isInstanceOf(WarehouseDoesNotExist.class)
                     .hasMessage("Warehouse with code " + warehouseCode + " does not exist");
         }
@@ -72,7 +72,7 @@ class InventoryItemServiceTest {
             when(productService.getProductEntityByCode(productCode)).thenThrow(new ProductDoesNotExist(productCode));
 
             assertThatThrownBy(() -> inventoryItemService.create(new CreateInventoryItemCommand("warehouse_djna", productCode,
-                    1, 4, 5, 6)))
+                    6, 2, 8, 4)))
                     .isInstanceOf(ProductDoesNotExist.class)
                     .hasMessage("Product with code " + productCode + " does not exist");
         }
@@ -89,7 +89,7 @@ class InventoryItemServiceTest {
                     .thenReturn(true);
 
             assertThatThrownBy(() -> inventoryItemService.create(new CreateInventoryItemCommand(warehouseCode, productCode,
-                    3, 2, 9, 2)))
+                    6, 2, 8, 4)))
                     .isInstanceOf(InventoryItemAlreadyExists.class)
                     .hasMessage("Inventory Item with Warehouse " + warehouseCode + " and Product " + productCode + " already exists");
 
@@ -107,9 +107,9 @@ class InventoryItemServiceTest {
             String warehouseCode = "warehouse_k3ifkln";
             String productCode = "product_j3naia";
             String code = "inventory_item_asn3a";
-            int quantityAvailable = 3;
+            int quantityAvailable = 9;
             int minimumStockLevel = 3;
-            int maximumStockLevel = 5;
+            int maximumStockLevel = 12;
             int reorderPoint = 7;
             when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
@@ -142,9 +142,9 @@ class InventoryItemServiceTest {
             String warehouseCode = "warehouse_k3ifkln";
             String productCode = "product_j3naia";
             String code = "inventory_item_asn3a";
-            int quantityAvailable = 3;
+            int quantityAvailable = 9;
             int minimumStockLevel = 3;
-            int maximumStockLevel = 5;
+            int maximumStockLevel = 12;
             int reorderPoint = 7;
             when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
