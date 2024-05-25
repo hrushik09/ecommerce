@@ -8,6 +8,7 @@ document.addEventListener('alpine:init', () => {
             createdAt: null,
             updatedAt: null,
         },
+        childBaseUrl: "/inventory/warehouses/" + code,
         init() {
             this.loadWarehouse(this.code);
         },
