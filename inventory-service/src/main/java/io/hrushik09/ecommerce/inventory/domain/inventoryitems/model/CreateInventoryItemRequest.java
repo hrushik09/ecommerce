@@ -1,9 +1,11 @@
 package io.hrushik09.ecommerce.inventory.domain.inventoryitems.model;
 
+import io.hrushik09.ecommerce.inventory.domain.inventoryitems.validation.ValidQuantityConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+@ValidQuantityConstraint
 public record CreateInventoryItemRequest(
         @NotBlank(message = "productCode should be non-blank")
         String productCode,

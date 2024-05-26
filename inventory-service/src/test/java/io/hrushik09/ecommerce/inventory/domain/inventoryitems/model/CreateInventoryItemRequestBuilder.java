@@ -2,10 +2,10 @@ package io.hrushik09.ecommerce.inventory.domain.inventoryitems.model;
 
 class CreateInventoryItemRequestBuilder {
     private String productCode = "product_dummy_ak3ihajfn";
-    private Integer quantityAvailable = 923;
-    private Integer minimumStockLevel = 32;
-    private Integer maximumStockLevel = 3533;
-    private Integer reorderPoint = 343;
+    private Integer quantityAvailable = 146;
+    private Integer minimumStockLevel = 89;
+    private Integer maximumStockLevel = 189;
+    private Integer reorderPoint = 105;
 
     private CreateInventoryItemRequestBuilder() {
     }

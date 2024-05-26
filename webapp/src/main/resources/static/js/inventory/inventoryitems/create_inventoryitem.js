@@ -8,7 +8,16 @@ document.addEventListener("alpine:init", () => {
             maximumStockLevel: null,
             reorderPoint: null
         },
+        products: [],
         createInventoryItemErrorDetail: null,
+        init() {
+            this.getProducts();
+        },
+        getProducts() {
+            $.getJSON("/api/inventory/products/all", (resp) => {
+                this.products = resp;
+            });
+        },
         createInventoryItem() {
             $.ajax({
                 url: "/api/inventory/warehouses/" + this.warehouseCode + "/items",
