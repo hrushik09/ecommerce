@@ -16,4 +16,6 @@ interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     Page<ProductSummary> findProductSummaries(Pageable pageable);
 
     Optional<ProductEntity> findByCode(String code);
+
+    boolean existsByName(String name);
 }
