@@ -22,5 +22,6 @@
         <module>inventory-service</module>
         <module>api-gateway</module>
         <module>webapp</module>
+        <module>catalog-service</module>
     </modules>
 </project>
