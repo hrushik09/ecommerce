@@ -48,6 +48,17 @@ class ProductServiceTest {
     @Nested
     class CreateProduct {
         @Test
+        void shouldThrowWhenProductWithNameAlreadyExists() {
+            when(productRepository.existsByName("Product 1")).thenReturn(true);
+
+            assertThatThrownBy(() -> productService.create(new CreateProductCommand("Product 1", "Description for Product 1", "Category 2", 43, true,
+                    new CreateMeasurementCommand(new CreatePackedWeightCommand(new BigDecimal("4.25"), "kg"), new CreatePackedLengthCommand(new BigDecimal("9.33"), "cm"),
+                            new CreatePackedWidthCommand(new BigDecimal("93.2"), "cm"), new CreatePackedHeightCommand(new BigDecimal("34.32"), "cm")))))
+                    .isInstanceOf(ProductAlreadyExists.class)
+                    .hasMessage("Product with name Product 1 already exists");
+        }
+
+        @Test
         void shouldSaveUsingRepositoryWhenCreatingProduct() {
             String code = "product_kj23nkjfa";
             String name = "Product 45";

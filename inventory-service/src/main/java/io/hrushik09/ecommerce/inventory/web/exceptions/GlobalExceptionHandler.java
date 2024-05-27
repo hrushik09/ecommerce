@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.inventory.web.exceptions;
 import io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.locations.LocationDoesNotExist;
+import io.hrushik09.ecommerce.inventory.domain.products.ProductAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseDoesNotExist;
@@ -49,7 +50,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(problemDetail);
     }
 
-    @ExceptionHandler({LocationAlreadyExists.class, WarehouseAlreadyExists.class, InventoryItemAlreadyExists.class})
+    @ExceptionHandler({LocationAlreadyExists.class, WarehouseAlreadyExists.class, InventoryItemAlreadyExists.class, ProductAlreadyExists.class})
     ProblemDetail handleAlreadyExists(AlreadyExists e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");

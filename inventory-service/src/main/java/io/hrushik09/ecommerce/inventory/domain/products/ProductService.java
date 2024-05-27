@@ -30,6 +30,10 @@ public class ProductService {
 
     @Transactional
     public CreateProductResponse create(CreateProductCommand cmd) {
+        if (productRepository.existsByName(cmd.name())) {
+            throw new ProductAlreadyExists(cmd.name());
+        }
+
         ProductEntity productEntity = new ProductEntity();
         productEntity.setCode(generateCode.forEntityType("product"));
         productEntity.setName(cmd.name());

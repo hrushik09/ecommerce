@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.inventory.web.products;
 
 import io.hrushik09.ecommerce.inventory.TestProperties;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
+import io.hrushik09.ecommerce.inventory.domain.products.ProductAlreadyExists;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductDoesNotExist;
 import io.hrushik09.ecommerce.inventory.domain.products.ProductService;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
@@ -21,6 +22,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,6 +35,46 @@ class ProductControllerTest {
 
     @Nested
     class CreateProduct {
+        @Test
+        void shouldNotCreateWhenProductWithNameAlreadyExists() throws Exception {
+            when(productService.create(new CreateProductCommand("Product 1", "Description for Product 1", "Category 2", 43, true,
+                    new CreateMeasurementCommand(new CreatePackedWeightCommand(new BigDecimal("4.25"), "kg"), new CreatePackedLengthCommand(new BigDecimal("9.33"), "cm"),
+                            new CreatePackedWidthCommand(new BigDecimal("93.2"), "cm"), new CreatePackedHeightCommand(new BigDecimal("34.32"), "cm")))))
+                    .thenThrow(new ProductAlreadyExists("Product 1"));
+
+            mockMvc.perform(post("/api/products")
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Product 1",
+                                    "description": "Description for Product 1",
+                                    "category": "Category 2",
+                                    "reorderQuantity": 43,
+                                    "needsRefrigeration": true,
+                                    "measurement": {
+                                    "packedWeight": {
+                                    "value": "4.25",
+                                    "unit": "kg"
+                                    },
+                                    "packedLength": {
+                                    "value": "9.33",
+                                    "unit": "cm"
+                                    },
+                                    "packedWidth": {
+                                    "value": "93.2",
+                                    "unit": "cm"
+                                    },
+                                    "packedHeight": {
+                                    "value": "34.32",
+                                    "unit": "cm"
+                                    }
+                                    }
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Product with name Product 1 already exists")));
+        }
+
         @Test
         void shouldCreateProductSuccessfully() throws Exception {
             when(productService.create(new CreateProductCommand("Product 1", "Description for Product 1", "Category 2", 43, true,
