@@ -13,8 +13,7 @@ import java.util.stream.Stream;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 class ProductEndToEndTest extends AbstractEndToEndTest {
     @Autowired
@@ -76,6 +75,76 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
                     .body("measurement.packedHeight", notNullValue())
                     .body("measurement.packedHeight.value", equalTo("10.3"))
                     .body("measurement.packedHeight.unit", equalTo("cm"));
+        }
+
+        @Test
+        void shouldNotCreateWhenProductWithNameAlreadyExists() {
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Product 12",
+                            "description": "Description for Product 12",
+                            "category": "Category 3",
+                            "reorderQuantity": 12,
+                            "needsRefrigeration": true,
+                            "measurement": {
+                            "packedWeight": {
+                            "value": "1.22",
+                            "unit": "kg"
+                            },
+                            "packedLength": {
+                            "value": "7.21",
+                            "unit": "cm"
+                            },
+                            "packedWidth": {
+                            "value": "9.32",
+                            "unit": "cm"
+                            },
+                            "packedHeight": {
+                            "value": "10.3",
+                            "unit": "cm"
+                            }
+                            }
+                            }
+                            """)
+                    .when()
+                    .post("/api/products")
+                    .then()
+                    .statusCode(CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Product 12",
+                            "description": "Description for Product 12",
+                            "category": "Category 3",
+                            "reorderQuantity": 12,
+                            "needsRefrigeration": true,
+                            "measurement": {
+                            "packedWeight": {
+                            "value": "1.22",
+                            "unit": "kg"
+                            },
+                            "packedLength": {
+                            "value": "7.21",
+                            "unit": "cm"
+                            },
+                            "packedWidth": {
+                            "value": "9.32",
+                            "unit": "cm"
+                            },
+                            "packedHeight": {
+                            "value": "10.3",
+                            "unit": "cm"
+                            }
+                            }
+                            }
+                            """)
+                    .when()
+                    .post("/api/products")
+                    .then()
+                    .statusCode(BAD_REQUEST.value())
+                    .body("detail", equalTo("Product with name Product 12 already exists"));
         }
     }
 
