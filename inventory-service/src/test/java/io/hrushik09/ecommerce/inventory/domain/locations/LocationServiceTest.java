@@ -63,6 +63,7 @@ class LocationServiceTest {
             String code = "location_mock_code_aakjfake";
             String name = "Location 1";
             String address = "Address 1";
+            when(locationRepository.existsByName(name)).thenReturn(false);
             when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
                     .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
@@ -82,6 +83,7 @@ class LocationServiceTest {
             String code = "location_mock_code_asdnskf";
             String name = "Location 1";
             String address = "Address 1";
+            when(locationRepository.existsByName(name)).thenReturn(false);
             when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
                     .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());

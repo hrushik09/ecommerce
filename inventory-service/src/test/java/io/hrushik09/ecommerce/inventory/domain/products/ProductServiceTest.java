@@ -74,6 +74,7 @@ class ProductServiceTest {
             String packedWidthUnit = "m";
             BigDecimal packedHeightValue = new BigDecimal("2.23");
             String packedHeightUnit = "m";
+            when(productRepository.existsByName(any())).thenReturn(false);
             when(generateCode.forEntityType("product")).thenReturn(code);
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(code).withName(name).withDescription(description).withCategory(category)
                     .withReorderQuantity(reorderQuantity).withNeedsRefrigeration(needsRefrigeration)
@@ -123,6 +124,7 @@ class ProductServiceTest {
             String packedWidthUnit = "m";
             BigDecimal packedHeightValue = new BigDecimal("2.23");
             String packedHeightUnit = "m";
+            when(productRepository.existsByName(any())).thenReturn(false);
             when(generateCode.forEntityType("product")).thenReturn(code);
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(code).withName(name).withDescription(description).withCategory(category)
                     .withReorderQuantity(reorderQuantity).withNeedsRefrigeration(needsRefrigeration)
