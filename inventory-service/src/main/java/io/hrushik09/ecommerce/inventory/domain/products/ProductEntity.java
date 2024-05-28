@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name = "products", uniqueConstraints = {@UniqueConstraint(name = "UK_products_code", columnNames = "code")})
+@Table(name = "products",
+        uniqueConstraints = {@UniqueConstraint(name = "UK_products_code", columnNames = "code"),
+                @UniqueConstraint(name = "UK_products_name", columnNames = "name")})
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

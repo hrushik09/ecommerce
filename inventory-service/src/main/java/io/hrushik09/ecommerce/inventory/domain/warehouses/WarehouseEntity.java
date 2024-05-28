@@ -8,7 +8,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "warehouses",
         uniqueConstraints = {@UniqueConstraint(name = "UK_warehouses_code", columnNames = "code"),
-                @UniqueConstraint(name = "UK_warehouses_name_location_id", columnNames = "name, location_id")}
+                @UniqueConstraint(name = "UK_warehouses_name_location_id", columnNames = {"name", "location_id"})}
 )
 public class WarehouseEntity {
     @Id
