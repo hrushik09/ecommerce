@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.catalog.country;
+package io.hrushik09.ecommerce.catalog.web.country;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import org.junit.jupiter.api.Nested;
