@@ -1,11 +1,7 @@
 package io.hrushik09.ecommerce.catalog.domain.country;
 
-class CountryRepository {
-    public boolean existsByName(String name) {
-        return false;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public CountryEntity save(CountryEntity countryEntity) {
-        return null;
-    }
+interface CountryRepository extends JpaRepository<CountryEntity, Long> {
+    boolean existsByName(String name);
 }
