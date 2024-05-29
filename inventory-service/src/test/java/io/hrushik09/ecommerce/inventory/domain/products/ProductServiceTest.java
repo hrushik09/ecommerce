@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
-import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
+import io.hrushik09.ecommerce.inventory.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;

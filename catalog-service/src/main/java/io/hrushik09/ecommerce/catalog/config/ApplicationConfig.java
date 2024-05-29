@@ -1,6 +1,5 @@
-package io.hrushik09.ecommerce.catalog.domain.config;
+package io.hrushik09.ecommerce.catalog.config;
 
-import io.hrushik09.ecommerce.catalog.domain.DefaultApplicationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
