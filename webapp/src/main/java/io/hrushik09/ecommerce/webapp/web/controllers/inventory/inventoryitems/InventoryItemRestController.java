@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.web.controllers.inventoryitems;
+package io.hrushik09.ecommerce.webapp.web.controllers.inventory.inventoryitems;
 
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
 import io.hrushik09.ecommerce.webapp.clients.inventory.PagedResult;

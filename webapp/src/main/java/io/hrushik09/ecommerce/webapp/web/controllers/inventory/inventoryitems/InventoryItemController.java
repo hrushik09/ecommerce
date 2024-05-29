@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.web.controllers.inventoryitems;
+package io.hrushik09.ecommerce.webapp.web.controllers.inventory.inventoryitems;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
