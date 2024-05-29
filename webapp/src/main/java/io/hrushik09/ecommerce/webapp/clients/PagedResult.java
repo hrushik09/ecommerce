@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.clients.inventory;
+package io.hrushik09.ecommerce.webapp.clients;
 
 import java.util.List;
 

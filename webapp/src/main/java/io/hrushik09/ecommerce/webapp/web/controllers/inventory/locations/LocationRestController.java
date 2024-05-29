@@ -1,7 +1,7 @@
 package io.hrushik09.ecommerce.webapp.web.controllers.inventory.locations;
 
+import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
-import io.hrushik09.ecommerce.webapp.clients.inventory.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.CreateLocationResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.locations.Location;

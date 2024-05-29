@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 class IndexController {
     @GetMapping
     String index() {
-        return "redirect:/inventory/locations";
+        return "redirect:/catalog/countries";
     }
 }

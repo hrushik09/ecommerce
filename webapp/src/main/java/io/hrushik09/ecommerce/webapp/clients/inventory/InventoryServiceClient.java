@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.webapp.clients.inventory;
 
+import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.CreateInventoryItemResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.inventoryitems.InventoryItemSummary;

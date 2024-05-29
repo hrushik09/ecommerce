@@ -1,7 +1,7 @@
 package io.hrushik09.ecommerce.webapp.web.controllers.inventory.products;
 
+import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.InventoryServiceClient;
-import io.hrushik09.ecommerce.webapp.clients.inventory.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductRequest;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.CreateProductResponse;
 import io.hrushik09.ecommerce.webapp.clients.inventory.products.Product;
