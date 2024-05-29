@@ -32,7 +32,7 @@ class ProductRestController {
     }
 
     @GetMapping
-    PagedResult<ProductSummary> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    PagedResult<ProductSummary> getProducts(@RequestParam(name = "page") int pageNo) {
         log.info("request to inventory service to get products for pageNo {}", pageNo);
         PagedResult<ProductSummary> pagedResult = inventoryServiceClient.getProducts(pageNo);
         log.info("response from inventory service to get products {}", pagedResult);
