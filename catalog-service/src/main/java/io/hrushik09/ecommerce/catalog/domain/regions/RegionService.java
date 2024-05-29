@@ -5,7 +5,11 @@ import io.hrushik09.ecommerce.catalog.domain.country.CountryEntity;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class RegionService {
     private final RegionRepository regionRepository;
     private final EntityCodeGenerator generateCode;
@@ -17,6 +21,7 @@ public class RegionService {
         this.countryService = countryService;
     }
 
+    @Transactional
     public CreateRegionResponse createRegion(CreateRegionCommand cmd) {
         CountryEntity countryEntity = countryService.getCountryEntityByCode(cmd.countryCode());
         if (regionRepository.existsByNameAndCountryEntity(cmd.name(), countryEntity)) {
