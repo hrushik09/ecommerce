@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.webapp.web.controllers.catalog;
+package io.hrushik09.ecommerce.webapp.web.controllers.catalog.countries;
 
 import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.catalog.CatalogServiceClient;
