@@ -13,15 +13,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class CountryService {
     private final CountryRepository countryRepository;
     private final EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter;
 
-    CountryService(CountryRepository countryRepository, EntityCodeGenerator generateCode) {
+    CountryService(CountryRepository countryRepository, EntityCodeGenerator generateCode, DateTimeFormatter defaultTimestampFormatter) {
         this.countryRepository = countryRepository;
         this.generateCode = generateCode;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
     }
 
     @Transactional
@@ -55,6 +59,8 @@ public class CountryService {
     }
 
     public Country getCountryByCode(String code) {
-        return null;
+        return countryRepository.findByCode(code)
+                .map(countryEntity -> CountryMapper.convertToCountry(countryEntity, defaultTimestampFormatter))
+                .orElseThrow(() -> new CountryDoesNotExist(code));
     }
 }

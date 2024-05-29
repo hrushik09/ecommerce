@@ -1,7 +1,9 @@
 package io.hrushik09.ecommerce.catalog.domain.country;
 
+import io.hrushik09.ecommerce.catalog.domain.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
+import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
@@ -16,7 +18,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder.aCountryEntity;
@@ -36,7 +42,9 @@ class CountryServiceTest {
 
     @BeforeEach
     void setUp() {
-        countryService = new CountryService(countryRepository, generateCode);
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern)
+                .withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
+        countryService = new CountryService(countryRepository, generateCode, defaultTimestampFormatter);
     }
 
     @Nested
@@ -129,6 +137,39 @@ class CountryServiceTest {
             assertThat(pagedResult.isLast()).isFalse();
             assertThat(pagedResult.hasNext()).isTrue();
             assertThat(pagedResult.hasPrevious()).isTrue();
+        }
+    }
+
+    @Nested
+    class GetCountryByCode {
+        @Test
+        void shouldThrowWhenCountryDoesNotExist() {
+            String code = "country_does_not_exist_jkahkas";
+            when(countryRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> countryService.getCountryByCode(code))
+                    .isInstanceOf(CountryDoesNotExist.class)
+                    .hasMessage("Country with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetCountryByCodeSuccessfully() {
+            String code = "country_jkkajls";
+            String name = "Country 44";
+            CountryEntityBuilder countryEntityBuilder = aCountryEntity()
+                    .withCode(code)
+                    .withName(name)
+                    .withCreatedAt(Instant.parse("2009-01-12T23:09:30.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-01-13T07:09:20.00Z"));
+            when(countryRepository.findByCode(code)).thenReturn(Optional.of(countryEntityBuilder.build()));
+
+            Country country = countryService.getCountryByCode(code);
+
+            assertThat(country).isNotNull();
+            assertThat(country.code()).isEqualTo(code);
+            assertThat(country.name()).isEqualTo(name);
+            assertThat(country.createdAt()).isEqualTo("January 12 2009, 23:09:30 (UTC+00:00)");
+            assertThat(country.updatedAt()).isEqualTo("January 13 2009, 07:09:20 (UTC+00:00)");
         }
     }
 }
