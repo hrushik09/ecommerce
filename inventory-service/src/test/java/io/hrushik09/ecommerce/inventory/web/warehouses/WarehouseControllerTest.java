@@ -184,7 +184,7 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.data[9].name", equalTo("Warehouse 30")))
                     .andExpect(jsonPath("$.data[9].isRefrigerated", is(true)))
                     .andExpect(jsonPath("$.totalElements", equalTo(34)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(3)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(4)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))

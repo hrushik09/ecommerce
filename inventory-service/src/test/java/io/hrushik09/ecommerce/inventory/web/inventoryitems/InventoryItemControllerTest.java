@@ -139,7 +139,7 @@ class InventoryItemControllerTest {
                     .map(i -> new InventoryItemSummary("inventory_item_kaf983_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemService.getInventoryItems(warehouseCode, pageNo))
-                    .thenReturn(new PagedResult<>(data, 24, 2, 3, false, false, true, true));
+                    .thenReturn(new PagedResult<>(data, 24, pageNo, 3, false, false, true, true));
 
             mockMvc.perform(get("/api/warehouses/{warehouseCode}/items?page={pageNo}", warehouseCode, pageNo))
                     .andExpect(status().isOk())
@@ -175,7 +175,7 @@ class InventoryItemControllerTest {
                     .andExpect(jsonPath("$.data[9].productName", equalTo("Product 20")))
                     .andExpect(jsonPath("$.data[9].quantityAvailable", equalTo(20)))
                     .andExpect(jsonPath("$.totalElements", equalTo(24)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(2)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(3)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))

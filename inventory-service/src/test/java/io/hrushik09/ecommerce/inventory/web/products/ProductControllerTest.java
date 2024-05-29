@@ -145,7 +145,7 @@ class ProductControllerTest {
                     .map(i -> new ProductSummary("product_dn3ja_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
             when(productService.getProducts(pageNo))
-                    .thenReturn(new PagedResult<>(data, 47, 3, 5, false, false, true, true));
+                    .thenReturn(new PagedResult<>(data, 47, pageNo, 5, false, false, true, true));
 
             mockMvc.perform(get("/api/products?page={pageNo}", pageNo))
                     .andExpect(status().isOk())
@@ -191,7 +191,7 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.data[9].description", equalTo("Description for Product 30")))
                     .andExpect(jsonPath("$.data[9].category", equalTo("Category 30")))
                     .andExpect(jsonPath("$.totalElements", equalTo(47)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(3)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(5)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))

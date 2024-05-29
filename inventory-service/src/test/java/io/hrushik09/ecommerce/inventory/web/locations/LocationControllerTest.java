@@ -82,7 +82,7 @@ class LocationControllerTest {
                     .map(i -> new LocationSummary("location_dummy_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationService.getLocations(pageNo))
-                    .thenReturn(new PagedResult<>(list, 25, 2, 3, false, false, true, true));
+                    .thenReturn(new PagedResult<>(list, 25, pageNo, 3, false, false, true, true));
 
             mockMvc.perform(get("/api/locations?page={pageNo}", pageNo))
                     .andExpect(status().isOk())
@@ -118,7 +118,7 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.data[9].name", equalTo("Location 20")))
                     .andExpect(jsonPath("$.data[9].address", equalTo("Address 20")))
                     .andExpect(jsonPath("$.totalElements", equalTo(25)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(2)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(3)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))
