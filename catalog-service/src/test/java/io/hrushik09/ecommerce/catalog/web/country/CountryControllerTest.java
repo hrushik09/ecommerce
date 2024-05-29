@@ -1,8 +1,11 @@
 package io.hrushik09.ecommerce.catalog.web.country;
 
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
@@ -148,6 +151,35 @@ class CountryControllerTest {
                     .andExpect(jsonPath("$.isLast", is(false)))
                     .andExpect(jsonPath("$.hasNext", is(true)))
                     .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+    }
+
+    @Nested
+    class GetCountryByCode {
+        @Test
+        void shouldReturnErrorForNonExistentCountry() throws Exception {
+            String code = "country_non_existing_kajld";
+            when(countryService.getCountryByCode(code))
+                    .thenThrow(new CountryDoesNotExist(code));
+
+            mockMvc.perform(get("/api/countries/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Country with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldGetCountrySuccessfully() throws Exception {
+            String code = "country_3lnakjfn";
+            String name = "Country 6";
+            when(countryService.getCountryByCode(code))
+                    .thenReturn(new Country(code, name, "January 02 1998, 23:23:45 (UTC+00:00)", "January 03 1998, 05:45:45 (UTC+00:00)"));
+
+            mockMvc.perform(get("/api/countries/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.name", equalTo(name)))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.catalog.domain.country;
 
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
+import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
@@ -51,5 +52,9 @@ public class CountryService {
                 countriesPage.hasNext(),
                 countriesPage.hasPrevious()
         );
+    }
+
+    public Country getCountryByCode(String code) {
+        return null;
     }
 }

@@ -2,10 +2,7 @@ package io.hrushik09.ecommerce.catalog.web.country;
 
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryRequest;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.country.model.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,5 +35,11 @@ class CountryController {
     PagedResult<CountrySummary> getCountries(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         log.info("requesting to get countries with page: {}", pageNo);
         return countryService.getCountries(pageNo);
+    }
+
+    @GetMapping("/{code}")
+    Country getCountryByCode(@PathVariable String code) {
+        log.info("requesting to get country by code: {}", code);
+        return countryService.getCountryByCode(code);
     }
 }
