@@ -1,6 +1,8 @@
 package io.hrushik09.ecommerce.catalog.domain.country;
 
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
+import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,9 @@ public class CountryService {
         countryEntity.setName(cmd.name());
         CountryEntity saved = countryRepository.save(countryEntity);
         return CountryMapper.convertToCreateCountryResponse(saved);
+    }
+
+    public PagedResult<CountrySummary> getCountries(int pageNo) {
+        return null;
     }
 }

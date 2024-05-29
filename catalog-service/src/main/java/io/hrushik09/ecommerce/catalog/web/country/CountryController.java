@@ -1,6 +1,8 @@
 package io.hrushik09.ecommerce.catalog.web.country;
 
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryRequest;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
@@ -30,5 +32,11 @@ class CountryController {
         CreateCountryResponse createCountryResponse = countryService.createCountry(cmd);
         log.info("created country: {}", createCountryResponse);
         return createCountryResponse;
+    }
+
+    @GetMapping
+    PagedResult<CountrySummary> getCountries(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("requesting to get countries with page: {}", pageNo);
+        return countryService.getCountries(pageNo);
     }
 }

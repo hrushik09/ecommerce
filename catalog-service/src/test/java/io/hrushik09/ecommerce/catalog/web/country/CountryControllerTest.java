@@ -1,7 +1,9 @@
 package io.hrushik09.ecommerce.catalog.web.country;
 
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
 import org.junit.jupiter.api.Nested;
@@ -11,9 +13,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.equalTo;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,6 +64,90 @@ class CountryControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.code", equalTo("country_9u343h")))
                     .andExpect(jsonPath("$.name", equalTo("Country 9")));
+        }
+    }
+
+    @Nested
+    class GetCountries {
+        @Test
+        void shouldGetCountriesSuccessfullyWhenPageNumberIsSpecified() throws Exception {
+            int pageNo = 2;
+            List<CountrySummary> data = Stream.iterate(11, i -> i < 21, i -> i + 1)
+                    .map(i -> new CountrySummary("country_3jkjfh_" + i, "Country " + i))
+                    .toList();
+            when(countryService.getCountries(pageNo))
+                    .thenReturn(new PagedResult<>(data, 25, pageNo, 3, false, false, true, true));
+
+            mockMvc.perform(get("/api/countries?page={pageNo}", pageNo))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data", hasSize(10)))
+                    .andExpect(jsonPath("$.data[0].code", equalTo("country_3jkjfh_11")))
+                    .andExpect(jsonPath("$.data[0].name", equalTo("Country 11")))
+                    .andExpect(jsonPath("$.data[1].code", equalTo("country_3jkjfh_12")))
+                    .andExpect(jsonPath("$.data[1].name", equalTo("Country 12")))
+                    .andExpect(jsonPath("$.data[2].code", equalTo("country_3jkjfh_13")))
+                    .andExpect(jsonPath("$.data[2].name", equalTo("Country 13")))
+                    .andExpect(jsonPath("$.data[3].code", equalTo("country_3jkjfh_14")))
+                    .andExpect(jsonPath("$.data[3].name", equalTo("Country 14")))
+                    .andExpect(jsonPath("$.data[4].code", equalTo("country_3jkjfh_15")))
+                    .andExpect(jsonPath("$.data[4].name", equalTo("Country 15")))
+                    .andExpect(jsonPath("$.data[5].code", equalTo("country_3jkjfh_16")))
+                    .andExpect(jsonPath("$.data[5].name", equalTo("Country 16")))
+                    .andExpect(jsonPath("$.data[6].code", equalTo("country_3jkjfh_17")))
+                    .andExpect(jsonPath("$.data[6].name", equalTo("Country 17")))
+                    .andExpect(jsonPath("$.data[7].code", equalTo("country_3jkjfh_18")))
+                    .andExpect(jsonPath("$.data[7].name", equalTo("Country 18")))
+                    .andExpect(jsonPath("$.data[8].code", equalTo("country_3jkjfh_19")))
+                    .andExpect(jsonPath("$.data[8].name", equalTo("Country 19")))
+                    .andExpect(jsonPath("$.data[9].code", equalTo("country_3jkjfh_20")))
+                    .andExpect(jsonPath("$.data[9].name", equalTo("Country 20")))
+                    .andExpect(jsonPath("$.totalElements", equalTo(25)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
+                    .andExpect(jsonPath("$.totalPages", equalTo(3)))
+                    .andExpect(jsonPath("$.isFirst", is(false)))
+                    .andExpect(jsonPath("$.isLast", is(false)))
+                    .andExpect(jsonPath("$.hasNext", is(true)))
+                    .andExpect(jsonPath("$.hasPrevious", is(true)));
+        }
+
+        @Test
+        void shouldGetCountriesSuccessfullyWhenPageNumberIsNotSpecified() throws Exception {
+            List<CountrySummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
+                    .map(i -> new CountrySummary("country_bksfaf_" + i, "Country " + i))
+                    .toList();
+            when(countryService.getCountries(1))
+                    .thenReturn(new PagedResult<>(data, 34, 1, 4, true, false, true, false));
+
+            mockMvc.perform(get("/api/countries"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data", hasSize(10)))
+                    .andExpect(jsonPath("$.data[0].code", equalTo("country_bksfaf_1")))
+                    .andExpect(jsonPath("$.data[0].name", equalTo("Country 1")))
+                    .andExpect(jsonPath("$.data[1].code", equalTo("country_bksfaf_2")))
+                    .andExpect(jsonPath("$.data[1].name", equalTo("Country 2")))
+                    .andExpect(jsonPath("$.data[2].code", equalTo("country_bksfaf_3")))
+                    .andExpect(jsonPath("$.data[2].name", equalTo("Country 3")))
+                    .andExpect(jsonPath("$.data[3].code", equalTo("country_bksfaf_4")))
+                    .andExpect(jsonPath("$.data[3].name", equalTo("Country 4")))
+                    .andExpect(jsonPath("$.data[4].code", equalTo("country_bksfaf_5")))
+                    .andExpect(jsonPath("$.data[4].name", equalTo("Country 5")))
+                    .andExpect(jsonPath("$.data[5].code", equalTo("country_bksfaf_6")))
+                    .andExpect(jsonPath("$.data[5].name", equalTo("Country 6")))
+                    .andExpect(jsonPath("$.data[6].code", equalTo("country_bksfaf_7")))
+                    .andExpect(jsonPath("$.data[6].name", equalTo("Country 7")))
+                    .andExpect(jsonPath("$.data[7].code", equalTo("country_bksfaf_8")))
+                    .andExpect(jsonPath("$.data[7].name", equalTo("Country 8")))
+                    .andExpect(jsonPath("$.data[8].code", equalTo("country_bksfaf_9")))
+                    .andExpect(jsonPath("$.data[8].name", equalTo("Country 9")))
+                    .andExpect(jsonPath("$.data[9].code", equalTo("country_bksfaf_10")))
+                    .andExpect(jsonPath("$.data[9].name", equalTo("Country 10")))
+                    .andExpect(jsonPath("$.totalElements", equalTo(34)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(1)))
+                    .andExpect(jsonPath("$.totalPages", equalTo(4)))
+                    .andExpect(jsonPath("$.isFirst", is(true)))
+                    .andExpect(jsonPath("$.isLast", is(false)))
+                    .andExpect(jsonPath("$.hasNext", is(true)))
+                    .andExpect(jsonPath("$.hasPrevious", is(false)));
         }
     }
 }
