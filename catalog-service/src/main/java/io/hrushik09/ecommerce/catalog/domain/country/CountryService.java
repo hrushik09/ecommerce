@@ -65,6 +65,6 @@ public class CountryService {
     }
 
     public CountryEntity getCountryEntityByCode(String code) {
-        return null;
+        return countryRepository.findByCode(code).orElseThrow(() -> new CountryDoesNotExist(code));
     }
 }

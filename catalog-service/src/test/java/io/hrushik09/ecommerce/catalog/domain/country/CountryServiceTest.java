@@ -172,4 +172,35 @@ class CountryServiceTest {
             assertThat(country.updatedAt()).isEqualTo("January 13 2009, 07:09:20 (UTC+00:00)");
         }
     }
+
+    @Nested
+    class GetCountryEntityByCode {
+        @Test
+        void shouldThrowWhenCountryDoesNotExist() {
+            String code = "country_does_not_exist";
+            when(countryRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> countryService.getCountryEntityByCode(code))
+                    .isInstanceOf(CountryDoesNotExist.class)
+                    .hasMessage("Country with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetCountryEntityByCodeSuccessfully() {
+            String code = "country_s3y9uahfa";
+            String name = "Country 87";
+            CountryEntityBuilder countryEntityBuilder = aCountryEntity()
+                    .withCode(code)
+                    .withName(name);
+            when(countryRepository.findByCode(code)).thenReturn(Optional.of(countryEntityBuilder.build()));
+
+            CountryEntity countryEntity = countryService.getCountryEntityByCode(code);
+
+            assertThat(countryEntity).isNotNull();
+            assertThat(countryEntity.getCode()).isEqualTo(code);
+            assertThat(countryEntity.getName()).isEqualTo(name);
+            assertThat(countryEntity.getCreatedAt()).isNotNull();
+            assertThat(countryEntity.getUpdatedAt()).isNotNull();
+        }
+    }
 }
