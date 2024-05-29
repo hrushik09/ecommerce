@@ -2,6 +2,7 @@ package io.hrushik09.ecommerce.webapp.web.controllers.catalog.countries;
 
 import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.catalog.CatalogServiceClient;
+import io.hrushik09.ecommerce.webapp.clients.catalog.countries.Country;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CountrySummary;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryRequest;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryResponse;
@@ -33,5 +34,13 @@ class CountryRestController {
         PagedResult<CountrySummary> pagedResult = catalogServiceClient.getCountries(pageNo);
         log.info("response from catalog service to get countries {}", pagedResult);
         return pagedResult;
+    }
+
+    @GetMapping("/{code}")
+    Country getCountryByCode(@PathVariable String code) {
+        log.info("request to catalog service to get country by code {}", code);
+        Country country = catalogServiceClient.getCountry(code);
+        log.info("response from catalog service to get country by code {}", country);
+        return country;
     }
 }
