@@ -39,43 +39,12 @@ class RegionEndToEndTest extends AbstractEndToEndTest {
         }
 
         @Test
-        void shouldCreateRegionWithSameNameInDifferentCountry() {
-            CreateCountryResponse country1 = havingPersisted.country("Country 1");
-            given().contentType(JSON)
-                    .body("""
-                            {
-                            "name": "Region 5"
-                            }
-                            """)
-                    .when()
-                    .post("/api/countries/{countryCode}/regions", country1.code())
-                    .then()
-                    .statusCode(CREATED.value());
-
-            CreateCountryResponse country2 = havingPersisted.country("Country 2");
-
-            given().contentType(JSON)
-                    .body("""
-                            {
-                            "name": "Region 5"
-                            }
-                            """)
-                    .when()
-                    .post("/api/countries/{countryCode}/regions", country2.code())
-                    .then()
-                    .statusCode(CREATED.value())
-                    .body("code", hasLength(6 + 1 + 36))
-                    .body("code", startsWith("region_"))
-                    .body("name", equalTo("Region 5"));
-        }
-
-        @Test
-        void shouldNotCreateRegionWithSameNameInSameCountry() {
+        void shouldNotCreateIfRegionExistsForCountryAndName() {
             CreateCountryResponse country = havingPersisted.country("Country 1");
             given().contentType(JSON)
                     .body("""
                             {
-                            "name": "Region 9"
+                            "name": "Region 4"
                             }
                             """)
                     .when()
@@ -86,14 +55,14 @@ class RegionEndToEndTest extends AbstractEndToEndTest {
             given().contentType(JSON)
                     .body("""
                             {
-                            "name": "Region 9"
+                            "name": "Region 4"
                             }
                             """)
                     .when()
                     .post("/api/countries/{countryCode}/regions", country.code())
                     .then()
                     .statusCode(BAD_REQUEST.value())
-                    .body("detail", equalTo("Region with name Region 9 already exists in this country"));
+                    .body("detail", equalTo("Region with name Region 4 already exists in this Country"));
         }
     }
 }

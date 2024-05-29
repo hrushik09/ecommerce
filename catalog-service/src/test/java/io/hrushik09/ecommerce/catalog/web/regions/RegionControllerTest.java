@@ -46,6 +46,23 @@ class RegionControllerTest {
         }
 
         @Test
+        void shouldNotCreateIfRegionExistsForCountryAndName() throws Exception {
+            String countryCode = "country_ahfla3h";
+            when(regionService.createRegion(new CreateRegionCommand(countryCode, "Region 6")))
+                    .thenThrow(new RegionAlreadyExists("Region 6"));
+
+            mockMvc.perform(post("/api/countries/{countryCode}/regions", countryCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Region 6"
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Region with name Region 6 already exists in this Country")));
+        }
+
+        @Test
         void shouldCreateRegionSuccessfully() throws Exception {
             String countryCode = "country_iashl";
             when(regionService.createRegion(new CreateRegionCommand(countryCode, "Region 3")))
@@ -61,63 +78,6 @@ class RegionControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.code", equalTo("region_kelaksnfl")))
                     .andExpect(jsonPath("$.name", equalTo("Region 3")));
-        }
-
-        @Test
-        void shouldCreateRegionWithSameNameInDifferentCountry() throws Exception {
-            String country1Code = "country_akjal";
-            when(regionService.createRegion(new CreateRegionCommand(country1Code, "Region 5")))
-                    .thenReturn(new CreateRegionResponse("region_keehkasnfl", "Region 5"));
-            mockMvc.perform(post("/api/countries/{countryCode}/regions", country1Code)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Region 5"
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            String country2Code = "country_uihhal";
-            when(regionService.createRegion(new CreateRegionCommand(country2Code, "Region 5")))
-                    .thenReturn(new CreateRegionResponse("region_iuoinfl", "Region 5"));
-            mockMvc.perform(post("/api/countries/{countryCode}/regions", country2Code)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Region 5"
-                                    }
-                                    """))
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.code", equalTo("region_iuoinfl")))
-                    .andExpect(jsonPath("$.name", equalTo("Region 5")));
-        }
-
-        @Test
-        void shouldNotCreateRegionWithSameNameInSameCountry() throws Exception {
-            String countryCode = "country_8ohafsl";
-            when(regionService.createRegion(new CreateRegionCommand(countryCode, "Region 9")))
-                    .thenReturn(new CreateRegionResponse("region_keehkasnfl", "Region 9"));
-            mockMvc.perform(post("/api/countries/{countryCode}/regions", countryCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Region 9"
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            when(regionService.createRegion(new CreateRegionCommand(countryCode, "Region 9")))
-                    .thenThrow(new RegionAlreadyExists("Region 9"));
-
-            mockMvc.perform(post("/api/countries/{countryCode}/regions", countryCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Region 9"
-                                    }
-                                    """))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.detail", equalTo("Region with name Region 9 already exists in this Country")));
         }
     }
 }

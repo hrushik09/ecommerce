@@ -63,4 +63,8 @@ public class CountryService {
                 .map(countryEntity -> CountryMapper.convertToCountry(countryEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new CountryDoesNotExist(code));
     }
+
+    public CountryEntity getCountryEntityByCode(String code) {
+        return null;
+    }
 }

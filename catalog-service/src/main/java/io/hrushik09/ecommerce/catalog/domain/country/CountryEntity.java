@@ -8,7 +8,7 @@ import java.time.Instant;
 @Table(name = "countries",
         uniqueConstraints = {@UniqueConstraint(name = "UK_countries_code", columnNames = "code"),
                 @UniqueConstraint(name = "UK_countries_name", columnNames = "name")})
-class CountryEntity {
+public class CountryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +20,9 @@ class CountryEntity {
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
+
+    protected CountryEntity() {
+    }
 
     public Long getId() {
         return id;

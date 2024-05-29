@@ -78,7 +78,7 @@ class InventoryItemServiceTest {
         }
 
         @Test
-        void shouldThrowWhenInventoryItemAlreadyExists() {
+        void shouldNotCreateIfInventoryItemExistsForProductAndWarehouse() {
             String warehouseCode = "warehouse_k3if";
             String productCode = "product_87j3na";
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
@@ -111,11 +111,11 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 12;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
             when(productService.getProductEntityByCode(productCode)).thenReturn(productEntityBuilder.build());
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("inventory_item")).thenReturn(code);
             InventoryItemEntityBuilder inventoryItemEntityBuilder = aInventoryItemEntity().with(warehouseEntityBuilder)
                     .with(productEntityBuilder).withCode(code).withQuantityAvailable(quantityAvailable)
@@ -146,11 +146,11 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 12;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
             when(productService.getProductEntityByCode(productCode)).thenReturn(productEntityBuilder.build());
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("inventory_item")).thenReturn(code);
             InventoryItemEntityBuilder inventoryItemEntityBuilder = aInventoryItemEntity().with(warehouseEntityBuilder)
                     .with(productEntityBuilder).withCode(code).withQuantityAvailable(quantityAvailable)

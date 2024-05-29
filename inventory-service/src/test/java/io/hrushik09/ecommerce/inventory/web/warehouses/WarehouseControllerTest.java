@@ -56,6 +56,24 @@ class WarehouseControllerTest {
         }
 
         @Test
+        void shouldNotCreateIfWarehouseExistsForLocationAndName() throws Exception {
+            String locationCode = "location_kjlakd";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 9", true)))
+                    .thenThrow(new WarehouseAlreadyExists("Warehouse 9"));
+
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 9",
+                                    "isRefrigerated": true
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with name Warehouse 9 already exists in this Location")));
+        }
+
+        @Test
         void shouldCreateWarehouseSuccessfully() throws Exception {
             String locationCode = "location_dummy_fu3jb";
             when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Some warehouse 23", true)))
@@ -73,68 +91,6 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dkf3uajf")))
                     .andExpect(jsonPath("$.name", equalTo("Some warehouse 23")))
                     .andExpect(jsonPath("$.isRefrigerated", is(true)));
-        }
-
-        @Test
-        void shouldCreateWarehouseWithSameNameInDifferentLocation() throws Exception {
-            String locationCode11 = "location_dummy_11_kdnfsdf";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode11, "Warehouse 23", false)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasdaf", "Warehouse 23", false));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode11)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 23",
-                                    "isRefrigerated": false
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            String locationCode12 = "location_dummy_12_akfnaas";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode12, "Warehouse 23", true)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasasadaf", "Warehouse 23", true));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode12)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 23",
-                                    "isRefrigerated": true
-                                    }
-                                    """))
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasasadaf")))
-                    .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
-                    .andExpect(jsonPath("$.isRefrigerated", is(true)));
-        }
-
-        @Test
-        void shouldNotCreateWarehouseWithSameNameInSameLocation() throws Exception {
-            String locationCode = "location_dummy_kdnfsdf";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", false)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_asdasvs", "Warehouse 1", false));
-
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 1",
-                                    "isRefrigerated": false
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", true)))
-                    .thenThrow(new WarehouseAlreadyExists("Warehouse 1"));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 1",
-                                    "isRefrigerated": true
-                                    }
-                                    """))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with name Warehouse 1 already exists in this Location")));
         }
     }
 

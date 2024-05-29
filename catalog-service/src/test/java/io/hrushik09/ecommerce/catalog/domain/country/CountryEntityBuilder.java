@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.catalog.domain.country;
 
 import java.time.Instant;
 
-class CountryEntityBuilder {
+public class CountryEntityBuilder {
     private Long id = 35L;
     private String code = "country_dummy_akjslakd";
     private String name = "Some country";

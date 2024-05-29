@@ -14,8 +14,7 @@ import java.util.stream.Stream;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 class InventoryItemEndToEndTest extends AbstractEndToEndTest {
     @Autowired
@@ -24,7 +23,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
     @Nested
     class CreateInventoryItem {
         @Test
-        void shouldAddInventoryItem() {
+        void shouldCreateInventoryItem() {
             CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
             CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
@@ -49,6 +48,43 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
                     .body("minimumStockLevel", equalTo(13))
                     .body("maximumStockLevel", equalTo(67))
                     .body("reorderPoint", equalTo(20));
+        }
+
+        @Test
+        void shouldNotCreateIfInventoryItemExistsForProductAndWarehouse() {
+            CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
+            CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
+            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "productCode": "%s",
+                            "quantityAvailable": 34,
+                            "minimumStockLevel": 13,
+                            "maximumStockLevel": 67,
+                            "reorderPoint": 20
+                            }
+                            """.formatted(product.code()))
+                    .when()
+                    .post("/api/warehouses/{warehouseCode}/items", warehouse.code())
+                    .then()
+                    .statusCode(CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "productCode": "%s",
+                            "quantityAvailable": 34,
+                            "minimumStockLevel": 13,
+                            "maximumStockLevel": 67,
+                            "reorderPoint": 20
+                            }
+                            """.formatted(product.code()))
+                    .when()
+                    .post("/api/warehouses/{warehouseCode}/items", warehouse.code())
+                    .then()
+                    .statusCode(BAD_REQUEST.value())
+                    .body("detail", equalTo("Inventory Item with Warehouse " + warehouse.code() + " and Product " + product.code() + " already exists"));
         }
     }
 
