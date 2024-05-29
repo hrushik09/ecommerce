@@ -2,6 +2,8 @@ package io.hrushik09.ecommerce.catalog.web.country;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.catalog.TestProperties;
+import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +115,24 @@ class CountryEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", is(false))
                     .body("hasNext", is(true))
                     .body("hasPrevious", is(false));
+        }
+    }
+
+    @Nested
+    class GetCountryByCode {
+        @Test
+        void shouldGetCountrySuccessfully() {
+            CreateCountryResponse country = havingPersisted.country("Country 14");
+
+            given()
+                    .when()
+                    .get("/api/countries/{code}", country.code())
+                    .then()
+                    .statusCode(OK.value())
+                    .body("code", equalTo(country.code()))
+                    .body("name", equalTo(country.name()))
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

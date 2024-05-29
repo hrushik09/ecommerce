@@ -74,7 +74,7 @@ class LocationControllerTest {
     }
 
     @Nested
-    class getLocations {
+    class GetLocations {
         @Test
         void shouldGetLocationsWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 2;
