@@ -1,10 +1,12 @@
 package io.hrushik09.ecommerce.catalog.domain.regions;
 
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryEntity;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +35,9 @@ public class RegionService {
         regionEntity.setName(cmd.name());
         RegionEntity saved = regionRepository.save(regionEntity);
         return RegionMapper.convertToCreateRegionResponse(saved);
+    }
+
+    public PagedResult<RegionSummary> getRegions(String countryCode, int pageNo) {
+        return null;
     }
 }

@@ -1,9 +1,11 @@
 package io.hrushik09.ecommerce.catalog.web.regions;
 
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionRequest;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,5 +29,11 @@ class RegionController {
         log.info("request to create region {} in country {}", request, countryCode);
         CreateRegionCommand cmd = new CreateRegionCommand(countryCode, request.name());
         return regionService.createRegion(cmd);
+    }
+
+    @GetMapping
+    PagedResult<RegionSummary> getRegions(@PathVariable String countryCode, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        log.info("request to get all regions in country {} for page {}", countryCode, pageNo);
+        return regionService.getRegions(countryCode, pageNo);
     }
 }
