@@ -49,7 +49,7 @@ public class RegionService {
         return new PagedResult<>(
                 regionSummaries.getContent(),
                 regionSummaries.getTotalElements(),
-                regionSummaries.getNumber(),
+                regionSummaries.getNumber() + 1,
                 regionSummaries.getTotalPages(),
                 regionSummaries.isFirst(),
                 regionSummaries.isLast(),

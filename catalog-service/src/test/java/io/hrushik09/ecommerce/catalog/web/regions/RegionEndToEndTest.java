@@ -112,7 +112,7 @@ class RegionEndToEndTest extends AbstractEndToEndTest {
                     .body("data[9].code", startsWith("region_"))
                     .body("data[9].name", equalTo("Region 10"))
                     .body("totalElements", equalTo(19))
-                    .body("pageNumber", equalTo(2))
+                    .body("pageNumber", equalTo(1))
                     .body("totalPages", equalTo(2))
                     .body("isFirst", is(true))
                     .body("isLast", is(false))
