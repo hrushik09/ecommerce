@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.catalog.web.regions;
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
 import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,24 @@ class RegionEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", is(false))
                     .body("hasNext", is(true))
                     .body("hasPrevious", is(false));
+        }
+    }
+
+    @Nested
+    class GetRegionByCode {
+        @Test
+        void shouldGetRegionSuccessfully() {
+            CreateCountryResponse country = havingPersisted.country("Country 1");
+            CreateRegionResponse region = havingPersisted.region(country.code(), "Region 2");
+
+            given()
+                    .when()
+                    .get("/api/regions/{code}", region.code())
+                    .then()
+                    .statusCode(OK.value())
+                    .body("code", hasLength(6 + 1 + 36))
+                    .body("code", startsWith("region_"))
+                    .body("name", equalTo("Region 2"));
         }
     }
 }
