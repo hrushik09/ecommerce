@@ -1,11 +1,14 @@
 package io.hrushik09.ecommerce.catalog.web.regions;
 
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.Region;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -180,6 +183,33 @@ class RegionControllerTest {
                     .andExpect(jsonPath("$.isLast", is(false)))
                     .andExpect(jsonPath("$.hasNext", is(true)))
                     .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+    }
+
+    @Nested
+    class GetRegionByCode {
+        @Test
+        void shouldReturnErrorWhenRegionDoesNotExist() throws Exception {
+            String code = "region_does_not_exist_jhkaj";
+            when(regionService.getRegionByCode(code)).thenThrow(new RegionDoesNotExist(code));
+
+            mockMvc.perform(get("/api/regions/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Region with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldGetRegionByCodeSuccessfully() throws Exception {
+            String code = "region_khhhij3bqb";
+            String name = "Region 6";
+            when(regionService.getRegionByCode(code)).thenReturn(new Region(code, name, "February 06 1998, 12:45:56 (UTC+00:00)", "February 07 1998, 09:45:34 (UTC+00:00)"));
+
+            mockMvc.perform(get("/api/regions/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.name", equalTo(name)))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

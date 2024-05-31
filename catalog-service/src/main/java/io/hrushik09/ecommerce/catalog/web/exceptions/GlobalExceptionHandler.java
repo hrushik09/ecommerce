@@ -3,6 +3,7 @@ package io.hrushik09.ecommerce.catalog.web.exceptions;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -55,7 +56,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler({CountryDoesNotExist.class})
+    @ExceptionHandler({CountryDoesNotExist.class, RegionDoesNotExist.class})
     ProblemDetail handleDoesNotExist(DoesNotExist e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");

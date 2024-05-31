@@ -6,6 +6,7 @@ import io.hrushik09.ecommerce.catalog.domain.country.CountryEntity;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.Region;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,5 +57,9 @@ public class RegionService {
                 regionSummaries.hasNext(),
                 regionSummaries.hasPrevious()
         );
+    }
+
+    public Region getRegionByCode(String code) {
+        return null;
     }
 }
