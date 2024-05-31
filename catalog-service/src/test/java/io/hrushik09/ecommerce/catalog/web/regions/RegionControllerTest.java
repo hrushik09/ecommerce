@@ -90,6 +90,16 @@ class RegionControllerTest {
     @Nested
     class GetRegions {
         @Test
+        void shouldReturnErrorWhenCountryDoesNotExist() throws Exception {
+            String countryCode = "country_does_not_exist_ajlkfnan";
+            when(regionService.getRegions(countryCode, 1)).thenThrow(new CountryDoesNotExist(countryCode));
+
+            mockMvc.perform(get("/api/countries/{countryCode}/regions", countryCode))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Country with code " + countryCode + " does not exist")));
+        }
+
+        @Test
         void shouldGetRegionsWhenPageNumberIsSpecified() throws Exception {
             String countryCode = "country_ihakbf";
             int pageNo = 5;

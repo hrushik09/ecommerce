@@ -172,6 +172,16 @@ class InventoryItemServiceTest {
     @Nested
     class GetInventoryItems {
         @Test
+        void shouldThrowWhenWarehouseDoesNotExist() {
+            String warehouseCode = "warehouse_does_not_exist_u3yajs";
+            when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenThrow(new WarehouseDoesNotExist(warehouseCode));
+
+            assertThatThrownBy(() -> inventoryItemService.getInventoryItems(warehouseCode, 1))
+                    .isInstanceOf(WarehouseDoesNotExist.class)
+                    .hasMessage("Warehouse with code " + warehouseCode + " does not exist");
+        }
+
+        @Test
         void shouldGetInventoryItems() {
             String warehouseCode = "warehouse_k3ifkln";
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
@@ -184,6 +194,10 @@ class InventoryItemServiceTest {
 
             PagedResult<InventoryItemSummary> pagedResult = inventoryItemService.getInventoryItems(warehouseCode, 2);
 
+            ArgumentCaptor<WarehouseEntity> warehouseEntityArgumentCaptor = ArgumentCaptor.forClass(WarehouseEntity.class);
+            verify(inventoryItemRepository).findInventoryItemSummaries(warehouseEntityArgumentCaptor.capture(), any(Pageable.class));
+            WarehouseEntity captorValue = warehouseEntityArgumentCaptor.getValue();
+            assertThat(captorValue.getCode()).isEqualTo(warehouseCode);
             assertThat(pagedResult).isNotNull();
             List<InventoryItemSummary> data = pagedResult.data();
             assertThat(data).hasSize(5);

@@ -97,6 +97,17 @@ class WarehouseControllerTest {
     @Nested
     class GetWarehouses {
         @Test
+        void shouldReturnErrorWhenLocationDoesNotExist() throws Exception {
+            String locationCode = "location_does_not_exist_ihhaf";
+            when(warehouseService.getWarehouses(locationCode, 1))
+                    .thenThrow(new LocationDoesNotExist(locationCode));
+
+            mockMvc.perform(get("/api/locations/{locationCode}/warehouses", locationCode))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Location with code " + locationCode + " does not exist")));
+        }
+
+        @Test
         void shouldGetWarehousesWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 3;
             String locationCode = "location_dummy_kdnfsdf";

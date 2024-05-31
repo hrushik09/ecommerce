@@ -143,6 +143,16 @@ class WarehouseServiceTest {
     @Nested
     class GetWarehouses {
         @Test
+        void shouldThrowWhenLocationDoesNotExist() {
+            String locationCode = "location_does_not_exist_hjas";
+            when(locationService.getLocationEntityByCode(locationCode)).thenThrow(new LocationDoesNotExist(locationCode));
+
+            assertThatThrownBy(() -> warehouseService.getWarehouses(locationCode, 1))
+                    .isInstanceOf(LocationDoesNotExist.class)
+                    .hasMessage("Location with code " + locationCode + " does not exist");
+        }
+
+        @Test
         void shouldGetWarehousesSuccessfully() {
             String locationCode = "location_mock_3sasfvsgf";
             LocationEntityBuilder locationEntityBuilder = aLocationEntity().withCode(locationCode);
@@ -157,9 +167,9 @@ class WarehouseServiceTest {
 
             PagedResult<WarehouseSummary> pagedResult = warehouseService.getWarehouses(locationCode, pageNo);
 
-            ArgumentCaptor<LocationEntity> listArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
-            verify(warehouseRepository).getWarehouseSummaries(listArgumentCaptor.capture(), any(Pageable.class));
-            LocationEntity captorValue = listArgumentCaptor.getValue();
+            ArgumentCaptor<LocationEntity> locationEntityArgumentCaptor = ArgumentCaptor.forClass(LocationEntity.class);
+            verify(warehouseRepository).getWarehouseSummaries(locationEntityArgumentCaptor.capture(), any(Pageable.class));
+            LocationEntity captorValue = locationEntityArgumentCaptor.getValue();
             assertThat(captorValue.getCode()).isEqualTo(locationCode);
             assertThat(pagedResult).isNotNull();
             List<WarehouseSummary> data = pagedResult.data();

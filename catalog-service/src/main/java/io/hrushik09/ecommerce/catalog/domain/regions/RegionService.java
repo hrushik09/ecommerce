@@ -7,6 +7,9 @@ import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,20 @@ public class RegionService {
     }
 
     public PagedResult<RegionSummary> getRegions(String countryCode, int pageNo) {
-        return null;
+        CountryEntity countryEntity = countryService.getCountryEntityByCode(countryCode);
+        Sort sort = Sort.by("id").ascending();
+        int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
+        PageRequest pageRequest = PageRequest.of(pageNumber, 10, sort);
+        Page<RegionSummary> regionSummaries = regionRepository.findRegionSummaries(countryEntity, pageRequest);
+        return new PagedResult<>(
+                regionSummaries.getContent(),
+                regionSummaries.getTotalElements(),
+                regionSummaries.getNumber(),
+                regionSummaries.getTotalPages(),
+                regionSummaries.isFirst(),
+                regionSummaries.isLast(),
+                regionSummaries.hasNext(),
+                regionSummaries.hasPrevious()
+        );
     }
 }

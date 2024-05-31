@@ -132,6 +132,16 @@ class InventoryItemControllerTest {
     @Nested
     class GetInventoryItems {
         @Test
+        void shouldReturnErrorWhenWarehouseDoesNotExist() throws Exception {
+            String warehouseCode = "warehouse_does_not_exist_kljfla";
+            when(inventoryItemService.getInventoryItems(warehouseCode, 1)).thenThrow(new WarehouseDoesNotExist(warehouseCode));
+
+            mockMvc.perform(get("/api/warehouses/{warehouseCode}/items", warehouseCode))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with code " + warehouseCode + " does not exist")));
+        }
+
+        @Test
         void shouldGetInventoryItemsWhenPageNumberIsSpecified() throws Exception {
             String warehouseCode = "warehouse_dummy_3uih";
             int pageNo = 2;
