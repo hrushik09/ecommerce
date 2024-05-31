@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 interface RegionRepository extends JpaRepository<RegionEntity, Long> {
     boolean existsByNameAndCountryEntity(String name, CountryEntity countryEntity);
 
@@ -16,4 +18,6 @@ interface RegionRepository extends JpaRepository<RegionEntity, Long> {
             WHERE re.countryEntity = :countryEntity
             """)
     Page<RegionSummary> findRegionSummaries(CountryEntity countryEntity, Pageable pageable);
+
+    Optional<RegionEntity> findByCode(String code);
 }

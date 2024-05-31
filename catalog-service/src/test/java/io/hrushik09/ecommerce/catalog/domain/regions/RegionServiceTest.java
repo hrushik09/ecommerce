@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.catalog.domain.regions;
 
+import io.hrushik09.ecommerce.catalog.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
@@ -8,6 +9,7 @@ import io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder;
 import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
+import io.hrushik09.ecommerce.catalog.domain.regions.model.Region;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.RegionSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +22,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder.aCountryEntity;
@@ -44,7 +50,9 @@ class RegionServiceTest {
 
     @BeforeEach
     void setUp() {
-        regionService = new RegionService(regionRepository, generateCode, countryService);
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern)
+                .withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
+        regionService = new RegionService(regionRepository, generateCode, defaultTimestampFormatter, countryService);
     }
 
     @Nested
@@ -174,6 +182,39 @@ class RegionServiceTest {
             assertThat(pagedResult.isLast()).isTrue();
             assertThat(pagedResult.hasNext()).isFalse();
             assertThat(pagedResult.hasPrevious()).isTrue();
+        }
+    }
+
+    @Nested
+    class GetRegionByCode {
+        @Test
+        void shouldThrowWhenRegionDoesNotExist() {
+            String code = "region_does_not_exist_3hrkah";
+            when(regionRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> regionService.getRegionByCode(code))
+                    .isInstanceOf(RegionDoesNotExist.class)
+                    .hasMessageContaining("Region with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetRegionByCodeSuccessfully() {
+            String code = "region_lknlnlans";
+            String name = "Region 4";
+            RegionEntityBuilder regionEntityBuilder = aRegionEntity()
+                    .withCode(code)
+                    .withName(name)
+                    .withCreatedAt(Instant.parse("2009-02-11T15:09:30.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-02-11T19:56:30.00Z"));
+            when(regionRepository.findByCode(code)).thenReturn(Optional.of(regionEntityBuilder.build()));
+
+            Region region = regionService.getRegionByCode(code);
+
+            assertThat(region).isNotNull();
+            assertThat(region.code()).isEqualTo(code);
+            assertThat(region.name()).isEqualTo(name);
+            assertThat(region.createdAt()).isEqualTo("February 11 2009, 15:09:30 (UTC+00:00)");
+            assertThat(region.updatedAt()).isEqualTo("February 11 2009, 19:56:30 (UTC+00:00)");
         }
     }
 }

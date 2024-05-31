@@ -14,16 +14,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class RegionService {
     private final RegionRepository regionRepository;
     private final EntityCodeGenerator generateCode;
+    private final DateTimeFormatter defaultTimestampFormatter;
     private final CountryService countryService;
 
-    RegionService(RegionRepository regionRepository, EntityCodeGenerator generateCode, CountryService countryService) {
+    RegionService(RegionRepository regionRepository, EntityCodeGenerator generateCode, DateTimeFormatter defaultTimestampFormatter, CountryService countryService) {
         this.regionRepository = regionRepository;
         this.generateCode = generateCode;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
         this.countryService = countryService;
     }
 
@@ -60,6 +64,8 @@ public class RegionService {
     }
 
     public Region getRegionByCode(String code) {
-        return null;
+        return regionRepository.findByCode(code)
+                .map(regionEntity -> RegionMapper.convertToRegion(regionEntity, defaultTimestampFormatter))
+                .orElseThrow(() -> new RegionDoesNotExist(code));
     }
 }
