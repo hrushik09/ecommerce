@@ -148,7 +148,7 @@ class RegionServiceTest {
             when(regionRepository.findRegionSummaries(any(CountryEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 5));
 
-            PagedResult<RegionSummary> pagedResult = regionService.getRegions(countryCode, 2);
+            PagedResult<RegionSummary> pagedResult = regionService.getRegions(countryCode, 3);
 
             ArgumentCaptor<CountryEntity> countryEntityArgumentCaptor = ArgumentCaptor.forClass(CountryEntity.class);
             verify(regionRepository).findRegionSummaries(countryEntityArgumentCaptor.capture(), any(Pageable.class));
@@ -168,7 +168,7 @@ class RegionServiceTest {
             assertThat(data.get(4).code()).isEqualTo("region_jajns_25");
             assertThat(data.get(4).name()).isEqualTo("Region 25");
             assertThat(pagedResult.totalElements()).isEqualTo(25);
-            assertThat(pagedResult.pageNumber()).isEqualTo(2);
+            assertThat(pagedResult.pageNumber()).isEqualTo(3);
             assertThat(pagedResult.totalPages()).isEqualTo(3);
             assertThat(pagedResult.isFirst()).isFalse();
             assertThat(pagedResult.isLast()).isTrue();
