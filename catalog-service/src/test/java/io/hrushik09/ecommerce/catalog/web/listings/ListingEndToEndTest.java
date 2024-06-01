@@ -50,7 +50,7 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
         }
 
         @Test
-        void shouldNotCreateIfListingExistsForProductCodeAndRegion() {
+        void shouldNotCreateIfListingExistsForProductAndRegion() {
             String productCode = "product_8jbasbf";
             CreateCountryResponse country = havingPersisted.country("Country 5");
             CreateRegionResponse region = havingPersisted.region(country.code(), "Region 2");

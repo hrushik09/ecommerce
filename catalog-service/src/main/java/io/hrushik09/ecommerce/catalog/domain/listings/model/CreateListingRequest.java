@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-record CreateListingRequest(
+public record CreateListingRequest(
         @NotBlank(message = "productCode should be non-blank")
         String productCode,
         @NotBlank(message = "regionCode should be non-blank")

@@ -2,6 +2,8 @@ package io.hrushik09.ecommerce.catalog.web.exceptions;
 
 import io.hrushik09.ecommerce.catalog.domain.countries.CountryAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.countries.CountryDoesNotExist;
+import io.hrushik09.ecommerce.catalog.domain.listings.ListingAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.listings.ProductDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -47,7 +49,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(problemDetail);
     }
 
-    @ExceptionHandler({CountryAlreadyExists.class, RegionAlreadyExists.class})
+    @ExceptionHandler({CountryAlreadyExists.class, RegionAlreadyExists.class, ListingAlreadyExists.class})
     ProblemDetail handleAlreadyExists(AlreadyExists e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
@@ -56,7 +58,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler({CountryDoesNotExist.class, RegionDoesNotExist.class})
+    @ExceptionHandler({CountryDoesNotExist.class, RegionDoesNotExist.class, ProductDoesNotExist.class})
     ProblemDetail handleDoesNotExist(DoesNotExist e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
