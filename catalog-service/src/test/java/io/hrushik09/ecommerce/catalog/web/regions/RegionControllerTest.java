@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.catalog.web.regions;
 
 import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;

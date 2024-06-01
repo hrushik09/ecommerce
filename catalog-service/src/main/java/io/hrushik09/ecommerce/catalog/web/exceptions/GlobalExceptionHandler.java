@@ -1,7 +1,7 @@
 package io.hrushik09.ecommerce.catalog.web.exceptions;
 
-import io.hrushik09.ecommerce.catalog.domain.country.CountryAlreadyExists;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

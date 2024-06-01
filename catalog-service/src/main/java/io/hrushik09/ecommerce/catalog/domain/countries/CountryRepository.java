@@ -1,6 +1,6 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
-import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CountrySummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,7 @@ interface CountryRepository extends JpaRepository<CountryEntity, Long> {
     boolean existsByName(String name);
 
     @Query("""
-            SELECT new io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary(ce.code, ce.name)
+            SELECT new io.hrushik09.ecommerce.catalog.domain.countries.model.CountrySummary(ce.code, ce.name)
             FROM CountryEntity ce
             """)
     Page<CountrySummary> getCountrySummaries(Pageable pageable);

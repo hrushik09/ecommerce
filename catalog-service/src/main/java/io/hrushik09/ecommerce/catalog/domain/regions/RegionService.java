@@ -2,8 +2,8 @@ package io.hrushik09.ecommerce.catalog.domain.regions;
 
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryEntity;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryEntity;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.Region;

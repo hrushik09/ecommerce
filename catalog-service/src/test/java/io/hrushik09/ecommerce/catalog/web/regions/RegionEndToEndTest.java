@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.catalog.web.regions;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

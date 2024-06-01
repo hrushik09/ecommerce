@@ -1,14 +1,14 @@
-package io.hrushik09.ecommerce.catalog.web.country;
+package io.hrushik09.ecommerce.catalog.web.countries;
 
 import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryAlreadyExists;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryDoesNotExist;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
-import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryDoesNotExist;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.Country;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CountrySummary;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryCommand;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

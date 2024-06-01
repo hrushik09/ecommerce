@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.domain.regions;
 
-import io.hrushik09.ecommerce.catalog.domain.country.CountryEntity;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryEntity;
 import jakarta.persistence.*;
 
 import java.time.Instant;

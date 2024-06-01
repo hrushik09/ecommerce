@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
 import io.hrushik09.ecommerce.catalog.web.exceptions.DoesNotExist;
 

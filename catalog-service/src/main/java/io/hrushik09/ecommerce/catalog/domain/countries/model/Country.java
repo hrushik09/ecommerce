@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.catalog.domain.country.model;
+package io.hrushik09.ecommerce.catalog.domain.countries.model;
 
 public record Country(
         String code,

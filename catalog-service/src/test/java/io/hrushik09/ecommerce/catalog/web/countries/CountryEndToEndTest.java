@@ -1,9 +1,9 @@
-package io.hrushik09.ecommerce.catalog.web.country;
+package io.hrushik09.ecommerce.catalog.web.countries;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
 import io.hrushik09.ecommerce.catalog.TestProperties;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

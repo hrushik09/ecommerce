@@ -1,12 +1,12 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
 import io.hrushik09.ecommerce.catalog.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.Country;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CountrySummary;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryCommand;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder.aCountryEntity;
+import static io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder.aCountryEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

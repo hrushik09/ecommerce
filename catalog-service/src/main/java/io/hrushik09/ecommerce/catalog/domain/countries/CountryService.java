@@ -1,11 +1,11 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CountrySummary;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.Country;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CountrySummary;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryCommand;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

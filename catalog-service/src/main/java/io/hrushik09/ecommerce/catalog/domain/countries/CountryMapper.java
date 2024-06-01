@@ -1,7 +1,7 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
-import io.hrushik09.ecommerce.catalog.domain.country.model.Country;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.Country;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 
 import java.time.format.DateTimeFormatter;
 

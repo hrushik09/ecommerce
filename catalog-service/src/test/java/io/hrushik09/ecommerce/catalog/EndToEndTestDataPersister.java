@@ -1,8 +1,8 @@
 package io.hrushik09.ecommerce.catalog;
 
-import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryCommand;
-import io.hrushik09.ecommerce.catalog.domain.country.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryCommand;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionCommand;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;

@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.catalog.domain.country;
+package io.hrushik09.ecommerce.catalog.domain.countries;
 
 import jakarta.persistence.*;
 

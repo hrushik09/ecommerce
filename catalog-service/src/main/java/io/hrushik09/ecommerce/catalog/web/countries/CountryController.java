@@ -1,8 +1,8 @@
-package io.hrushik09.ecommerce.catalog.web.country;
+package io.hrushik09.ecommerce.catalog.web.countries;
 
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
-import io.hrushik09.ecommerce.catalog.domain.country.CountryService;
-import io.hrushik09.ecommerce.catalog.domain.country.model.*;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryService;
+import io.hrushik09.ecommerce.catalog.domain.countries.model.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

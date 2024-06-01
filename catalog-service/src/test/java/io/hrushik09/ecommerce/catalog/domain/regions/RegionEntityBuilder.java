@@ -1,10 +1,10 @@
 package io.hrushik09.ecommerce.catalog.domain.regions;
 
-import io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder;
+import io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder;
 
 import java.time.Instant;
 
-import static io.hrushik09.ecommerce.catalog.domain.country.CountryEntityBuilder.aCountryEntity;
+import static io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder.aCountryEntity;
 
 class RegionEntityBuilder {
     private Long id = 6L;
