@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div th:x-data="|initData('${code}')|">
+        <div class="mb-3">
+            <h1 x-text="region.name"></h1>
+            <p>Created At: <span x-text="region.createdAt"></span></p>
+            <p>Updated At: <span x-text="region.updatedAt"></span></p>
+        </div>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/catalog/regions/region.js"></script>
+</div>
+</body>
+</html>

@@ -12,4 +12,10 @@ class RegionController {
         model.addAttribute("countryCode", countryCode);
         return "catalog/regions/create_region";
     }
+
+    @GetMapping("/catalog/regions/{code}")
+    public String regionPage(@PathVariable String code, Model model) {
+        model.addAttribute("code", code);
+        return "catalog/regions/region";
+    }
 }

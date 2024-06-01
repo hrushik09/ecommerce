@@ -4,6 +4,7 @@ import io.hrushik09.ecommerce.webapp.clients.PagedResult;
 import io.hrushik09.ecommerce.webapp.clients.catalog.CatalogServiceClient;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionRequest;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionResponse;
+import io.hrushik09.ecommerce.webapp.clients.catalog.regions.Region;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.RegionSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,5 +33,13 @@ class RegionRestController {
         PagedResult<RegionSummary> pagedResult = catalogServiceClient.getRegions(countryCode, pageNo);
         log.info("response from catalog service to get regions {}", pagedResult);
         return pagedResult;
+    }
+
+    @GetMapping("/api/catalog/regions/{code}")
+    Region getRegionByCode(@PathVariable String code) {
+        log.info("requesting catalog service to get region by code {}", code);
+        Region region = catalogServiceClient.getRegion(code);
+        log.info("response from catalog service to get region {}", region);
+        return region;
     }
 }
