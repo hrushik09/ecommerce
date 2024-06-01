@@ -7,6 +7,7 @@ import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryRequ
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryResponse;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionRequest;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionResponse;
+import io.hrushik09.ecommerce.webapp.clients.catalog.regions.RegionSummary;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +28,7 @@ public interface CatalogServiceClient {
 
     @PostExchange("/countries/{countryCode}/regions")
     CreateRegionResponse createRegion(@PathVariable String countryCode, @RequestBody CreateRegionRequest request);
+
+    @GetExchange("/countries/{countryCode}/regions")
+    PagedResult<RegionSummary> getRegions(@PathVariable String countryCode, @RequestParam(name = "page") int pageNo);
 }

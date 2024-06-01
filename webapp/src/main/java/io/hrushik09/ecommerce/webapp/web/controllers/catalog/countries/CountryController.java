@@ -20,8 +20,9 @@ class CountryController {
     }
 
     @GetMapping("/catalog/countries/{code}")
-    String countryPage(@PathVariable String code, Model model) {
+    String countryPage(@PathVariable String code, @RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("code", code);
+        model.addAttribute("pageNo", pageNo);
         return "catalog/countries/country";
     }
 }
