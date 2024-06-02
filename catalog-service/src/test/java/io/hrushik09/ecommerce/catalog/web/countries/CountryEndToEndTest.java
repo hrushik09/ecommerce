@@ -69,7 +69,7 @@ class CountryEndToEndTest extends AbstractEndToEndTest {
     class GetCountries {
         @Test
         void shouldGetCountriesSuccessfully() {
-            IntStream.rangeClosed(1, 18)
+            IntStream.rangeClosed(1, 17)
                     .forEach(i -> havingPersisted.country("Country " + i));
 
             given()
