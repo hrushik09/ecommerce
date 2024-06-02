@@ -2,8 +2,10 @@ package io.hrushik09.ecommerce.catalog.domain.listings;
 
 import io.hrushik09.ecommerce.catalog.clients.inventory.InventoryServiceProductClient;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
 import org.springframework.stereotype.Service;
@@ -44,5 +46,9 @@ public class ListingService {
         listingEntity.setCurrency(cmd.currency());
         ListingEntity saved = listingRepository.save(listingEntity);
         return ListingMapper.convertToCreateListingResponse(saved);
+    }
+
+    public PagedResult<ListingSummary> getListings(String regionCode, int pageNo) {
+        return null;
     }
 }
