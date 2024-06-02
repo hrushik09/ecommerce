@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -145,8 +145,8 @@ class InventoryItemControllerTest {
         void shouldGetInventoryItemsWhenPageNumberIsSpecified() throws Exception {
             String warehouseCode = "warehouse_dummy_3uih";
             int pageNo = 2;
-            List<InventoryItemSummary> data = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_kaf983_" + i, "Product " + i, i))
+            List<InventoryItemSummary> data = IntStream.rangeClosed(11, 20)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_kaf983_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemService.getInventoryItems(warehouseCode, pageNo))
                     .thenReturn(new PagedResult<>(data, 24, pageNo, 3, false, false, true, true));
@@ -196,8 +196,8 @@ class InventoryItemControllerTest {
         @Test
         void shouldGetInventoryItemsWhenPageNumberIsNotSpecified() throws Exception {
             String warehouseCode = "warehouse_dummy_3uih";
-            List<InventoryItemSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_ki7d4ab_" + i, "Product " + i, i))
+            List<InventoryItemSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_ki7d4ab_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemService.getInventoryItems(warehouseCode, 1))
                     .thenReturn(new PagedResult<>(data, 13, 1, 2, true, false, true, false));

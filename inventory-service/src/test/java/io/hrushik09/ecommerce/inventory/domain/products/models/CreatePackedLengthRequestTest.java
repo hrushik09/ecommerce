@@ -14,7 +14,7 @@ import java.util.Set;
 import static io.hrushik09.ecommerce.inventory.domain.products.models.CreatePackedLengthRequestBuilder.aPackedLengthRequest;
 
 class CreatePackedLengthRequestTest {
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CommonAssertions<CreatePackedLengthRequest> commonAssertions = new CommonAssertions<>();
 
     @Test

@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -106,8 +106,8 @@ class RegionControllerTest {
         void shouldGetRegionsWhenPageNumberIsSpecified() throws Exception {
             String countryCode = "country_ihakbf";
             int pageNo = 5;
-            List<RegionSummary> data = Stream.iterate(41, i -> i < 51, i -> i + 1)
-                    .map(i -> new RegionSummary("region_i7asbas_" + i, "Region " + i))
+            List<RegionSummary> data = IntStream.rangeClosed(41, 50)
+                    .mapToObj(i -> new RegionSummary("region_i7asbas_" + i, "Region " + i))
                     .toList();
             when(regionService.getRegions(countryCode, pageNo))
                     .thenReturn(new PagedResult<>(data, 55, pageNo, 6, false, false, true, true));
@@ -147,8 +147,8 @@ class RegionControllerTest {
         @Test
         void shouldGetRegionsWhenPageNumberIsNotSpecified() throws Exception {
             String countryCode = "country_inkjanf";
-            List<RegionSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new RegionSummary("region_jhafopq_" + i, "Region " + i))
+            List<RegionSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new RegionSummary("region_jhafopq_" + i, "Region " + i))
                     .toList();
             when(regionService.getRegions(countryCode, 1))
                     .thenReturn(new PagedResult<>(data, 12, 1, 2, true, false, true, false));

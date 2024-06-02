@@ -37,11 +37,6 @@ public class AbstractEndToEndTest {
         registry.add("catalog.inventory-service-url", wireMockContainer::getBaseUrl);
     }
 
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
-
     protected static void mockGetProductByCode(String code, String name) {
         stubFor(get(urlMatching("/api/products/" + code))
                 .willReturn(aResponse()
@@ -53,5 +48,10 @@ public class AbstractEndToEndTest {
                                 "name": "%s"
                                 }
                                 """.formatted(code, name))));
+    }
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.port = port;
     }
 }

@@ -25,7 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemEntityBuilder.aInventoryItemEntity;
 import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder.aProductEntity;
@@ -186,8 +186,8 @@ class InventoryItemServiceTest {
             String warehouseCode = "warehouse_k3ifkln";
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
-            List<InventoryItemSummary> list = Stream.iterate(11, i -> i < 16, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_asn343a_" + i, "Product " + i, i))
+            List<InventoryItemSummary> list = IntStream.rangeClosed(11, 15)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_asn343a_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemRepository.findInventoryItemSummaries(any(WarehouseEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 5));

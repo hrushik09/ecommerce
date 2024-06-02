@@ -17,7 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -75,8 +75,8 @@ class CountryControllerTest {
         @Test
         void shouldGetCountriesSuccessfullyWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 2;
-            List<CountrySummary> data = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new CountrySummary("country_3jkjfh_" + i, "Country " + i))
+            List<CountrySummary> data = IntStream.rangeClosed(11, 20)
+                    .mapToObj(i -> new CountrySummary("country_3jkjfh_" + i, "Country " + i))
                     .toList();
             when(countryService.getCountries(pageNo))
                     .thenReturn(new PagedResult<>(data, 25, pageNo, 3, false, false, true, true));
@@ -115,8 +115,8 @@ class CountryControllerTest {
 
         @Test
         void shouldGetCountriesSuccessfullyWhenPageNumberIsNotSpecified() throws Exception {
-            List<CountrySummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new CountrySummary("country_bksfaf_" + i, "Country " + i))
+            List<CountrySummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new CountrySummary("country_bksfaf_" + i, "Country " + i))
                     .toList();
             when(countryService.getCountries(1))
                     .thenReturn(new PagedResult<>(data, 34, 1, 4, true, false, true, false));

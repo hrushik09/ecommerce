@@ -27,7 +27,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static io.hrushik09.ecommerce.inventory.domain.warehouses.WarehouseEntityBuilder.aWarehouseEntity;
@@ -159,8 +159,8 @@ class WarehouseServiceTest {
             when(locationService.getLocationEntityByCode(locationCode))
                     .thenReturn(locationEntityBuilder.build());
             int pageNo = 4;
-            List<WarehouseSummary> list = Stream.iterate(31, i -> i < 37, i -> i + 1)
-                    .map(i -> new WarehouseSummary("warehouse_mock_jhhsdfss-" + i, "Warehouse " + i, i % 2 == 0))
+            List<WarehouseSummary> list = IntStream.rangeClosed(31, 36)
+                    .mapToObj(i -> new WarehouseSummary("warehouse_mock_jhhsdfss-" + i, "Warehouse " + i, i % 2 == 0))
                     .toList();
             when(warehouseRepository.getWarehouseSummaries(any(LocationEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(3, 10), 6));

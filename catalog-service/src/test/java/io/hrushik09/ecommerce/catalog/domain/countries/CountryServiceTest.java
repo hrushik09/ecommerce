@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder.aCountryEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,8 +99,8 @@ class CountryServiceTest {
     class GetCountries {
         @Test
         void shouldGetCountriesSuccessfully() {
-            List<CountrySummary> list = Stream.iterate(21, i -> i < 31, i -> i + 1)
-                    .map(i -> new CountrySummary("country_oi3faiuh_" + i, "Country " + i))
+            List<CountrySummary> list = IntStream.rangeClosed(21, 30)
+                    .mapToObj(i -> new CountrySummary("country_oi3faiuh_" + i, "Country " + i))
                     .toList();
             when(countryRepository.getCountrySummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 37));

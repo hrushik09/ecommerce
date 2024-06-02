@@ -27,7 +27,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder.aCountryEntity;
 import static io.hrushik09.ecommerce.catalog.domain.regions.RegionEntityBuilder.aRegionEntity;
@@ -150,8 +150,8 @@ class RegionServiceTest {
             String countryCode = "country_j3kjanfda";
             CountryEntityBuilder countryEntityBuilder = aCountryEntity().withCode(countryCode);
             when(countryService.getCountryEntityByCode(countryCode)).thenReturn(countryEntityBuilder.build());
-            List<RegionSummary> list = Stream.iterate(21, i -> i < 26, i -> i + 1)
-                    .map(i -> new RegionSummary("region_jajns_" + i, "Region " + i))
+            List<RegionSummary> list = IntStream.rangeClosed(21, 25)
+                    .mapToObj(i -> new RegionSummary("region_jajns_" + i, "Region " + i))
                     .toList();
             when(regionRepository.findRegionSummaries(any(CountryEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 5));

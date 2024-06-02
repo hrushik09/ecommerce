@@ -23,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.CAD;
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.INR;
@@ -187,8 +187,8 @@ class ListingServiceTest {
             int pageNo = 3;
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
-            List<ListingSummary> list = Stream.iterate(21, i -> i < 27, i -> i + 1)
-                    .map(i -> new ListingSummary("product_jknagwv_" + i, "listing_jnkajs_" + i, "Title for Listing " + i))
+            List<ListingSummary> list = IntStream.rangeClosed(21, 26)
+                    .mapToObj(i -> new ListingSummary("product_jknagwv_" + i, "listing_jnkajs_" + i, "Title for Listing " + i))
                     .toList();
             when(listingRepository.getListingSummaries(any(RegionEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 26));

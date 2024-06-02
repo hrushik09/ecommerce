@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.*;
 import static org.hamcrest.Matchers.*;
@@ -150,8 +150,8 @@ class ListingControllerTest {
         void shouldGetListingsWhenPageNumberIsSpecified() throws Exception {
             String regionCode = "region_jadfjhr";
             int pageNo = 2;
-            List<ListingSummary> data = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new ListingSummary("product_j8ajaj_" + i, "listing_kjbsksfa_" + i, "Title for Listing " + i))
+            List<ListingSummary> data = IntStream.rangeClosed(11, 20)
+                    .mapToObj(i -> new ListingSummary("product_j8ajaj_" + i, "listing_kjbsksfa_" + i, "Title for Listing " + i))
                     .toList();
             when(listingService.getListings(regionCode, pageNo)).thenReturn(new PagedResult<>(data, 24, pageNo, 3, false, false, true, true));
 
@@ -200,8 +200,8 @@ class ListingControllerTest {
         @Test
         void shouldGetListingsWhenPageNumberIsNotSpecified() throws Exception {
             String regionCode = "region_j4iuodfr";
-            List<ListingSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new ListingSummary("product_j9u4sbfj_" + i, "listing_kj2asdga_" + i, "Title for Listing " + i))
+            List<ListingSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new ListingSummary("product_j9u4sbfj_" + i, "listing_kj2asdga_" + i, "Title for Listing " + i))
                     .toList();
             when(listingService.getListings(regionCode, 1)).thenReturn(new PagedResult<>(data, 12, 1, 2, true, false, true, false));
 

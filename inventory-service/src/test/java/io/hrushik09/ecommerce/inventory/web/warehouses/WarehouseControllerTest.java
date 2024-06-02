@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -111,8 +111,8 @@ class WarehouseControllerTest {
         void shouldGetWarehousesWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 3;
             String locationCode = "location_dummy_kdnfsdf";
-            List<WarehouseSummary> list = Stream.iterate(21, i -> i < 31, i -> i + 1)
-                    .map(i -> new WarehouseSummary("warehouse_dummy_ksns-" + i, "Warehouse " + i, i % 2 == 0))
+            List<WarehouseSummary> list = IntStream.rangeClosed(21, 30)
+                    .mapToObj(i -> new WarehouseSummary("warehouse_dummy_ksns-" + i, "Warehouse " + i, i % 2 == 0))
                     .toList();
             when(warehouseService.getWarehouses(locationCode, pageNo))
                     .thenReturn(new PagedResult<>(list, 34, pageNo, 4, false, false, true, true));
@@ -162,8 +162,8 @@ class WarehouseControllerTest {
         @Test
         void shouldGetWarehousesWhenPageNumberIsNotSpecified() throws Exception {
             String locationCode = "location_dummy_afasnf";
-            List<WarehouseSummary> list = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new WarehouseSummary("warehouse_dummy_amaow-" + i, "Warehouse " + i, i % 2 == 0))
+            List<WarehouseSummary> list = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new WarehouseSummary("warehouse_dummy_amaow-" + i, "Warehouse " + i, i % 2 == 0))
                     .toList();
             when(warehouseService.getWarehouses(locationCode, 1))
                     .thenReturn(new PagedResult<>(list, 21, 1, 3, true, false, true, false));

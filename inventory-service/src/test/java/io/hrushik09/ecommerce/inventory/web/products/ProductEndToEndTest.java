@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -152,7 +152,7 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
     class GetProducts {
         @Test
         void shouldGetProducts() {
-            Stream.iterate(1, i -> i < 13, i -> i + 1)
+            IntStream.rangeClosed(1, 12)
                     .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i));
 
             given()

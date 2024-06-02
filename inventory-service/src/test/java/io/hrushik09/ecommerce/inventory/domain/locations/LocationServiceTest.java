@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,8 +101,8 @@ class LocationServiceTest {
     class GetLocations {
         @Test
         void shouldGetLocationsSuccessfully() {
-            List<LocationSummary> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
-                    .map(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
+            List<LocationSummary> list = IntStream.rangeClosed(11, 17)
+                    .mapToObj(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationRepository.getLocationSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));

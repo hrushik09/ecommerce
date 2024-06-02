@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -78,7 +78,7 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
         @Test
         void shouldGetLocationsSuccessfully() {
             CreateLocationResponse location = havingPersisted.location("Location 1", "Address 1");
-            Stream.iterate(1, i -> i < 19, i -> i + 1)
+            IntStream.rangeClosed(1, 18)
                     .forEach(i -> havingPersisted.warehouse(location.code(), "Warehouse " + i, i % 2 == 0));
 
             given()

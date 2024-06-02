@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.INR;
 import static io.restassured.RestAssured.given;
@@ -101,7 +101,7 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
         void shouldGetListingsSuccessfully() {
             CreateCountryResponse country = havingPersisted.country("Country 4");
             CreateRegionResponse region = havingPersisted.region(country.code(), "Region 8");
-            Stream.iterate(1, i -> i < 15, i -> i + 1)
+            IntStream.rangeClosed(1, 14)
                     .forEach(i -> {
                         String productCode = "product_3jakbcak_" + i;
                         mockGetProductByCode(productCode, "Product " + i);

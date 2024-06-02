@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -69,7 +69,7 @@ class CountryEndToEndTest extends AbstractEndToEndTest {
     class GetCountries {
         @Test
         void shouldGetCountriesSuccessfully() {
-            Stream.iterate(1, i -> i < 18, i -> i + 1)
+            IntStream.rangeClosed(1, 18)
                     .forEach(i -> havingPersisted.country("Country " + i));
 
             given()
