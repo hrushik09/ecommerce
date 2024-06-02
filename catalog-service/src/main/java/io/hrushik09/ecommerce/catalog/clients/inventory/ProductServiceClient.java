@@ -21,6 +21,7 @@ public class ProductServiceClient {
                 .uri("/api/products/{code}", code)
                 .retrieve()
                 .body(Product.class);
+        log.info("received product: {}", product);
         return product != null && product.code().equals(code);
     }
 }
