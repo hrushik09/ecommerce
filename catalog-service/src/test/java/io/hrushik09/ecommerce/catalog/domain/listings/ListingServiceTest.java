@@ -188,7 +188,7 @@ class ListingServiceTest {
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
             List<ListingSummary> list = Stream.iterate(21, i -> i < 27, i -> i + 1)
-                    .map(i -> new ListingSummary("product_jknagwv_" + i, "listing_jnkajs_" + i, "Title for Listing " + i, i + ".98", "USD"))
+                    .map(i -> new ListingSummary("product_jknagwv_" + i, "listing_jnkajs_" + i, "Title for Listing " + i))
                     .toList();
             when(listingRepository.getListingSummaries(any(RegionEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 26));
@@ -201,33 +201,21 @@ class ListingServiceTest {
             assertThat(data.get(0).productCode()).isEqualTo("product_jknagwv_21");
             assertThat(data.get(0).code()).isEqualTo("listing_jnkajs_21");
             assertThat(data.get(0).title()).isEqualTo("Title for Listing 21");
-            assertThat(data.get(0).price()).isEqualTo("21.98");
-            assertThat(data.get(0).currency()).isEqualTo("USD");
             assertThat(data.get(1).productCode()).isEqualTo("product_jknagwv_22");
             assertThat(data.get(1).code()).isEqualTo("listing_jnkajs_22");
             assertThat(data.get(1).title()).isEqualTo("Title for Listing 22");
-            assertThat(data.get(1).price()).isEqualTo("22.98");
-            assertThat(data.get(1).currency()).isEqualTo("USD");
             assertThat(data.get(2).productCode()).isEqualTo("product_jknagwv_23");
             assertThat(data.get(2).code()).isEqualTo("listing_jnkajs_23");
             assertThat(data.get(2).title()).isEqualTo("Title for Listing 23");
-            assertThat(data.get(2).price()).isEqualTo("23.98");
-            assertThat(data.get(2).currency()).isEqualTo("USD");
             assertThat(data.get(3).productCode()).isEqualTo("product_jknagwv_24");
             assertThat(data.get(3).code()).isEqualTo("listing_jnkajs_24");
             assertThat(data.get(3).title()).isEqualTo("Title for Listing 24");
-            assertThat(data.get(3).price()).isEqualTo("24.98");
-            assertThat(data.get(3).currency()).isEqualTo("USD");
             assertThat(data.get(4).productCode()).isEqualTo("product_jknagwv_25");
             assertThat(data.get(4).code()).isEqualTo("listing_jnkajs_25");
             assertThat(data.get(4).title()).isEqualTo("Title for Listing 25");
-            assertThat(data.get(4).price()).isEqualTo("25.98");
-            assertThat(data.get(4).currency()).isEqualTo("USD");
             assertThat(data.get(5).productCode()).isEqualTo("product_jknagwv_26");
             assertThat(data.get(5).code()).isEqualTo("listing_jnkajs_26");
             assertThat(data.get(5).title()).isEqualTo("Title for Listing 26");
-            assertThat(data.get(5).price()).isEqualTo("26.98");
-            assertThat(data.get(5).currency()).isEqualTo("USD");
             assertThat(pagedResult.totalElements()).isEqualTo(26);
             assertThat(pagedResult.pageNumber()).isEqualTo(pageNo);
             assertThat(pagedResult.totalPages()).isEqualTo(3);
