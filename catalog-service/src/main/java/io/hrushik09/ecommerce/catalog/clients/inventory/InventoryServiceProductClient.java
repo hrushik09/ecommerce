@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.catalog.clients.inventory;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ public class InventoryServiceProductClient {
         this.restClient = restClient;
     }
 
+    @Retry(name = "inventory-service", fallbackMethod = "existsByCodeFallback")
     public boolean existsByCode(String code) {
         log.info("Checking with inventory service if product exists with code {}", code);
         Product product = restClient.get()
@@ -23,5 +25,10 @@ public class InventoryServiceProductClient {
                 .body(Product.class);
         log.info("received product: {}", product);
         return product != null && product.code().equals(code);
+    }
+
+    boolean existsByCodeFallback(String code, Throwable t) {
+        log.info("using existsByCodeFallback for code {}", code);
+        return false;
     }
 }
