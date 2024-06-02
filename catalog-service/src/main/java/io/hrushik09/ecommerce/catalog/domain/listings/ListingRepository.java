@@ -1,13 +1,8 @@
 package io.hrushik09.ecommerce.catalog.domain.listings;
 
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-class ListingRepository {
-    public boolean existsByProductCodeAndRegion(String productCode, RegionEntity regionEntity) {
-        return false;
-    }
-
-    public ListingEntity save(ListingEntity listingEntity) {
-        return null;
-    }
+interface ListingRepository extends JpaRepository<ListingEntity, Long> {
+    boolean existsByProductCodeAndRegionEntity(String productCode, RegionEntity regionEntity);
 }

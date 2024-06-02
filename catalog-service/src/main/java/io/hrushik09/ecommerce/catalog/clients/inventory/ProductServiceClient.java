@@ -2,8 +2,10 @@ package io.hrushik09.ecommerce.catalog.clients.inventory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+@Component
 public class ProductServiceClient {
     private static final Logger log = LoggerFactory.getLogger(ProductServiceClient.class);
 

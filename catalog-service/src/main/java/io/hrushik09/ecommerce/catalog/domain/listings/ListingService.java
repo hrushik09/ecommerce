@@ -6,7 +6,11 @@ import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class ListingService {
     private final ListingRepository listingRepository;
     private final EntityCodeGenerator generateCode;
@@ -20,12 +24,13 @@ public class ListingService {
         this.regionService = regionService;
     }
 
+    @Transactional
     public CreateListingResponse createListing(CreateListingCommand cmd) {
         if (!productServiceClient.existsByCode(cmd.productCode())) {
             throw new ProductDoesNotExist(cmd.productCode());
         }
         RegionEntity regionEntity = regionService.getRegionEntityByCode(cmd.regionCode());
-        if (listingRepository.existsByProductCodeAndRegion(cmd.productCode(), regionEntity)) {
+        if (listingRepository.existsByProductCodeAndRegionEntity(cmd.productCode(), regionEntity)) {
             throw new ListingAlreadyExists(cmd.productCode(), regionEntity.getCode());
         }
 

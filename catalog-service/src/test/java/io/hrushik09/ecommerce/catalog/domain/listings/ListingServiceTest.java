@@ -77,14 +77,14 @@ class ListingServiceTest {
             when(productServiceClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
-            when(listingRepository.existsByProductCodeAndRegion(eq(productCode), any(RegionEntity.class))).thenReturn(true);
+            when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(true);
 
             assertThatThrownBy(() -> listingService.createListing(new CreateListingCommand(productCode, regionCode, "Listing 5 for Product 9", "Description for Listing 5", new BigDecimal("9234.34"), CAD)))
                     .isInstanceOf(ListingAlreadyExists.class)
                     .hasMessage("Listing with Product " + productCode + " and Region " + regionCode + " already exists");
 
             ArgumentCaptor<RegionEntity> regionEntityArgumentCaptor = ArgumentCaptor.forClass(RegionEntity.class);
-            verify(listingRepository).existsByProductCodeAndRegion(eq(productCode), regionEntityArgumentCaptor.capture());
+            verify(listingRepository).existsByProductCodeAndRegionEntity(eq(productCode), regionEntityArgumentCaptor.capture());
             RegionEntity captorValue = regionEntityArgumentCaptor.getValue();
             assertThat(captorValue.getCode()).isEqualTo(regionCode);
         }
@@ -101,7 +101,7 @@ class ListingServiceTest {
             when(productServiceClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
-            when(listingRepository.existsByProductCodeAndRegion(eq(productCode), any(RegionEntity.class))).thenReturn(false);
+            when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("listing")).thenReturn(code);
 
             listingService.createListing(new CreateListingCommand(productCode, regionCode, title, description, price, currency));
@@ -130,7 +130,7 @@ class ListingServiceTest {
             when(productServiceClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
-            when(listingRepository.existsByProductCodeAndRegion(eq(productCode), any(RegionEntity.class))).thenReturn(false);
+            when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("listing")).thenReturn(code);
             ListingEntityBuilder listingEntityBuilder = aListingEntity()
                     .withProductCode(productCode)
