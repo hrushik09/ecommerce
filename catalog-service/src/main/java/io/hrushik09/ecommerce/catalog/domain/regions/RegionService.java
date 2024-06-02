@@ -68,4 +68,8 @@ public class RegionService {
                 .map(regionEntity -> RegionMapper.convertToRegion(regionEntity, defaultTimestampFormatter))
                 .orElseThrow(() -> new RegionDoesNotExist(code));
     }
+
+    public RegionEntity getRegionEntityByCode(String code) {
+        return null;
+    }
 }

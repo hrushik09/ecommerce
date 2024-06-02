@@ -6,7 +6,7 @@ import java.time.Instant;
 
 import static io.hrushik09.ecommerce.catalog.domain.countries.CountryEntityBuilder.aCountryEntity;
 
-class RegionEntityBuilder {
+public class RegionEntityBuilder {
     private Long id = 6L;
     private CountryEntityBuilder countryEntityBuilder = aCountryEntity();
     private String code = "country_dummy_aji3oihf";
