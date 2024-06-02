@@ -217,4 +217,36 @@ class RegionServiceTest {
             assertThat(region.updatedAt()).isEqualTo("February 11 2009, 19:56:30 (UTC+00:00)");
         }
     }
+
+    @Nested
+    class GetRegionEntityByCode {
+        @Test
+        void shouldThrowWhenRegionDoesNotExist() {
+            String code = "region_does_not_exist_2uahfjab";
+            when(regionRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> regionService.getRegionEntityByCode(code))
+                    .isInstanceOf(RegionDoesNotExist.class)
+                    .hasMessageContaining("Region with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetRegionByCodeSuccessfully() {
+            String code = "region_4oilasn";
+            String name = "Region 5";
+            RegionEntityBuilder regionEntityBuilder = aRegionEntity()
+                    .withCode(code)
+                    .withName(name);
+            when(regionRepository.findByCode(code)).thenReturn(Optional.of(regionEntityBuilder.build()));
+
+            RegionEntity regionEntity = regionService.getRegionEntityByCode(code);
+
+            assertThat(regionEntity).isNotNull();
+            assertThat(regionEntity.getId()).isNotNull();
+            assertThat(regionEntity.getCode()).isEqualTo(code);
+            assertThat(regionEntity.getName()).isEqualTo(name);
+            assertThat(regionEntity.getCreatedAt()).isNotNull();
+            assertThat(regionEntity.getUpdatedAt()).isNotNull();
+        }
+    }
 }

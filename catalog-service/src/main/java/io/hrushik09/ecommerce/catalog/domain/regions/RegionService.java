@@ -70,6 +70,6 @@ public class RegionService {
     }
 
     public RegionEntity getRegionEntityByCode(String code) {
-        return null;
+        return regionRepository.findByCode(code).orElseThrow(() -> new RegionDoesNotExist(code));
     }
 }
