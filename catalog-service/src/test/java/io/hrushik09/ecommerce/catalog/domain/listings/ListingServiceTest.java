@@ -103,6 +103,15 @@ class ListingServiceTest {
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
             when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("listing")).thenReturn(code);
+            ListingEntityBuilder listingEntityBuilder = aListingEntity()
+                    .withProductCode(productCode)
+                    .with(regionEntityBuilder)
+                    .withCode(code)
+                    .withTitle(title)
+                    .withDescription(description)
+                    .withPrice(price)
+                    .withCurrency(currency);
+            when(listingRepository.save(any(ListingEntity.class))).thenReturn(listingEntityBuilder.build());
 
             listingService.createListing(new CreateListingCommand(productCode, regionCode, title, description, price, currency));
 
