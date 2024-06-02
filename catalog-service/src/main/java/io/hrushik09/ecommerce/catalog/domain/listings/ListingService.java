@@ -8,6 +8,9 @@ import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingRespons
 import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +52,20 @@ public class ListingService {
     }
 
     public PagedResult<ListingSummary> getListings(String regionCode, int pageNo) {
-        return null;
+        RegionEntity regionEntity = regionService.getRegionEntityByCode(regionCode);
+        Sort sort = Sort.by("id").ascending();
+        int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
+        PageRequest pageRequest = PageRequest.of(pageNumber, 10, sort);
+        Page<ListingSummary> listingPage = listingRepository.getListingSummaries(regionEntity, pageRequest);
+        return new PagedResult<>(
+                listingPage.getContent(),
+                listingPage.getTotalElements(),
+                listingPage.getNumber() + 1,
+                listingPage.getTotalPages(),
+                listingPage.isFirst(),
+                listingPage.isLast(),
+                listingPage.hasNext(),
+                listingPage.hasPrevious()
+        );
     }
 }

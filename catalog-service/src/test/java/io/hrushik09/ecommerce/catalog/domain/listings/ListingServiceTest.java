@@ -2,8 +2,10 @@ package io.hrushik09.ecommerce.catalog.domain.listings;
 
 import io.hrushik09.ecommerce.catalog.clients.inventory.InventoryServiceProductClient;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
+import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntityBuilder;
@@ -15,8 +17,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.CAD;
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.INR;
@@ -159,6 +166,75 @@ class ListingServiceTest {
             assertThat(created.description()).isEqualTo(description);
             assertThat(created.price()).isEqualTo("9233.34");
             assertThat(created.currency()).isEqualTo("CAD");
+        }
+    }
+
+    @Nested
+    class GetListings {
+        @Test
+        void shouldThrowWhenRegionDoesNotExist() {
+            String regionCode = "region_does_not_exist_jjasf";
+            when(regionService.getRegionEntityByCode(regionCode)).thenThrow(new RegionDoesNotExist(regionCode));
+
+            assertThatThrownBy(() -> listingService.getListings(regionCode, 1))
+                    .isInstanceOf(RegionDoesNotExist.class)
+                    .hasMessageContaining("Region with code " + regionCode + " does not exist");
+        }
+
+        @Test
+        void shouldGetListingsSuccessfully() {
+            String regionCode = "region_j3ajs";
+            int pageNo = 3;
+            RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
+            when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
+            List<ListingSummary> list = Stream.iterate(21, i -> i < 27, i -> i + 1)
+                    .map(i -> new ListingSummary("product_jknagwv_" + i, "listing_jnkajs_" + i, "Title for Listing " + i, i + ".98", "USD"))
+                    .toList();
+            when(listingRepository.getListingSummaries(any(RegionEntity.class), any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 26));
+
+            PagedResult<ListingSummary> pagedResult = listingService.getListings(regionCode, pageNo);
+
+            assertThat(pagedResult).isNotNull();
+            List<ListingSummary> data = pagedResult.data();
+            assertThat(data).hasSize(6);
+            assertThat(data.get(0).productCode()).isEqualTo("product_jknagwv_21");
+            assertThat(data.get(0).code()).isEqualTo("listing_jnkajs_21");
+            assertThat(data.get(0).title()).isEqualTo("Title for Listing 21");
+            assertThat(data.get(0).price()).isEqualTo("21.98");
+            assertThat(data.get(0).currency()).isEqualTo("USD");
+            assertThat(data.get(1).productCode()).isEqualTo("product_jknagwv_22");
+            assertThat(data.get(1).code()).isEqualTo("listing_jnkajs_22");
+            assertThat(data.get(1).title()).isEqualTo("Title for Listing 22");
+            assertThat(data.get(1).price()).isEqualTo("22.98");
+            assertThat(data.get(1).currency()).isEqualTo("USD");
+            assertThat(data.get(2).productCode()).isEqualTo("product_jknagwv_23");
+            assertThat(data.get(2).code()).isEqualTo("listing_jnkajs_23");
+            assertThat(data.get(2).title()).isEqualTo("Title for Listing 23");
+            assertThat(data.get(2).price()).isEqualTo("23.98");
+            assertThat(data.get(2).currency()).isEqualTo("USD");
+            assertThat(data.get(3).productCode()).isEqualTo("product_jknagwv_24");
+            assertThat(data.get(3).code()).isEqualTo("listing_jnkajs_24");
+            assertThat(data.get(3).title()).isEqualTo("Title for Listing 24");
+            assertThat(data.get(3).price()).isEqualTo("24.98");
+            assertThat(data.get(3).currency()).isEqualTo("USD");
+            assertThat(data.get(4).productCode()).isEqualTo("product_jknagwv_25");
+            assertThat(data.get(4).code()).isEqualTo("listing_jnkajs_25");
+            assertThat(data.get(4).title()).isEqualTo("Title for Listing 25");
+            assertThat(data.get(4).price()).isEqualTo("25.98");
+            assertThat(data.get(4).currency()).isEqualTo("USD");
+            assertThat(data.get(5).productCode()).isEqualTo("product_jknagwv_26");
+            assertThat(data.get(5).code()).isEqualTo("listing_jnkajs_26");
+            assertThat(data.get(5).title()).isEqualTo("Title for Listing 26");
+            assertThat(data.get(5).price()).isEqualTo("26.98");
+            assertThat(data.get(5).currency()).isEqualTo("USD");
+            assertThat(pagedResult.totalElements()).isEqualTo(26);
+            assertThat(pagedResult.pageNumber()).isEqualTo(pageNo);
+            assertThat(pagedResult.totalPages()).isEqualTo(3);
+            assertThat(pagedResult.isFirst()).isEqualTo(false);
+            assertThat(pagedResult.isLast()).isEqualTo(true);
+            assertThat(pagedResult.hasNext()).isEqualTo(false);
+            assertThat(pagedResult.hasPrevious()).isEqualTo(true);
         }
     }
 }
