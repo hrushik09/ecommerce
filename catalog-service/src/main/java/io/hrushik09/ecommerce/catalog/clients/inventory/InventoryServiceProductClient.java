@@ -1,5 +1,6 @@
 package io.hrushik09.ecommerce.catalog.clients.inventory;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class InventoryServiceProductClient {
         this.restClient = restClient;
     }
 
+    @CircuitBreaker(name = "inventory-service")
     @Retry(name = "inventory-service", fallbackMethod = "existsByCodeFallback")
     public boolean existsByCode(String code) {
         log.info("Checking with inventory service if product exists with code {}", code);
