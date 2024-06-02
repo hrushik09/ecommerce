@@ -23,6 +23,7 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
         @Test
         void shouldCreateListingSuccessfully() {
             String productCode = "product_h9j4jbd";
+            mockGetProductByCode(productCode, "Product 1");
             CreateCountryResponse country = havingPersisted.country("Country 1");
             CreateRegionResponse region = havingPersisted.region(country.code(), "Region 1");
 
@@ -52,6 +53,7 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
         @Test
         void shouldNotCreateIfListingExistsForProductAndRegion() {
             String productCode = "product_8jbasbf";
+            mockGetProductByCode(productCode, "Product 55");
             CreateCountryResponse country = havingPersisted.country("Country 5");
             CreateRegionResponse region = havingPersisted.region(country.code(), "Region 2");
 
