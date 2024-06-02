@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 @Component
-public class ProductServiceClient {
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceClient.class);
+public class InventoryServiceProductClient {
+    private static final Logger log = LoggerFactory.getLogger(InventoryServiceProductClient.class);
 
     private final RestClient restClient;
 
-    ProductServiceClient(RestClient restClient) {
+    InventoryServiceProductClient(RestClient restClient) {
         this.restClient = restClient;
     }
 

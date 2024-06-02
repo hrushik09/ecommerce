@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.domain.listings;
 
-import io.hrushik09.ecommerce.catalog.clients.inventory.ProductServiceClient;
+import io.hrushik09.ecommerce.catalog.clients.inventory.InventoryServiceProductClient;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
@@ -14,19 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class ListingService {
     private final ListingRepository listingRepository;
     private final EntityCodeGenerator generateCode;
-    private final ProductServiceClient productServiceClient;
+    private final InventoryServiceProductClient inventoryServiceProductClient;
     private final RegionService regionService;
 
-    ListingService(ListingRepository listingRepository, EntityCodeGenerator generateCode, ProductServiceClient productServiceClient, RegionService regionService) {
+    ListingService(ListingRepository listingRepository, EntityCodeGenerator generateCode, InventoryServiceProductClient inventoryServiceProductClient, RegionService regionService) {
         this.listingRepository = listingRepository;
         this.generateCode = generateCode;
-        this.productServiceClient = productServiceClient;
+        this.inventoryServiceProductClient = inventoryServiceProductClient;
         this.regionService = regionService;
     }
 
     @Transactional
     public CreateListingResponse createListing(CreateListingCommand cmd) {
-        if (!productServiceClient.existsByCode(cmd.productCode())) {
+        if (!inventoryServiceProductClient.existsByCode(cmd.productCode())) {
             throw new ProductDoesNotExist(cmd.productCode());
         }
         RegionEntity regionEntity = regionService.getRegionEntityByCode(cmd.regionCode());

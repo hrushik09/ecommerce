@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.domain.listings;
 
-import io.hrushik09.ecommerce.catalog.clients.inventory.ProductServiceClient;
+import io.hrushik09.ecommerce.catalog.clients.inventory.InventoryServiceProductClient;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 class ListingServiceTest {
     private ListingService listingService;
     @Mock
-    private ProductServiceClient productServiceClient;
+    private InventoryServiceProductClient inventoryServiceProductClient;
     @Mock
     private RegionService regionService;
     @Mock
@@ -43,7 +43,7 @@ class ListingServiceTest {
 
     @BeforeEach
     void setUp() {
-        listingService = new ListingService(listingRepository, generateCode, productServiceClient, regionService);
+        listingService = new ListingService(listingRepository, generateCode, inventoryServiceProductClient, regionService);
     }
 
     @Nested
@@ -51,7 +51,7 @@ class ListingServiceTest {
         @Test
         void shouldThrowWhenProductDoesNotExist() {
             String productCode = "product_does_not_exist_kjlqn";
-            when(productServiceClient.existsByCode(productCode)).thenReturn(false);
+            when(inventoryServiceProductClient.existsByCode(productCode)).thenReturn(false);
 
             assertThatThrownBy(() -> listingService.createListing(new CreateListingCommand(productCode, "region_hkjskaj", "Listing 5 for Product 4", "Description for Listing 5", new BigDecimal("871.34"), INR)))
                     .isInstanceOf(ProductDoesNotExist.class)
@@ -62,7 +62,7 @@ class ListingServiceTest {
         void shouldThrowWhenRegionDoesNotExist() {
             String productCode = "product_jkajbsk";
             String regionCode = "region_does_not_exist_jkjb";
-            when(productServiceClient.existsByCode(productCode)).thenReturn(true);
+            when(inventoryServiceProductClient.existsByCode(productCode)).thenReturn(true);
             when(regionService.getRegionEntityByCode(regionCode)).thenThrow(new RegionDoesNotExist(regionCode));
 
             assertThatThrownBy(() -> listingService.createListing(new CreateListingCommand(productCode, regionCode, "Listing 1 for Product 3", "Description for Listing 1", new BigDecimal("804.34"), INR)))
@@ -74,7 +74,7 @@ class ListingServiceTest {
         void shouldNotCreateIfListingExistsForProductAndRegion() {
             String productCode = "product_jk87ts";
             String regionCode = "region_52hakf";
-            when(productServiceClient.existsByCode(productCode)).thenReturn(true);
+            when(inventoryServiceProductClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
             when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(true);
@@ -98,7 +98,7 @@ class ListingServiceTest {
             String description = "Description for Listing 9";
             BigDecimal price = new BigDecimal("9233.34");
             Currency currency = CAD;
-            when(productServiceClient.existsByCode(productCode)).thenReturn(true);
+            when(inventoryServiceProductClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
             when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(false);
@@ -127,7 +127,7 @@ class ListingServiceTest {
             String description = "Description for Listing 9";
             BigDecimal price = new BigDecimal("9233.34");
             Currency currency = CAD;
-            when(productServiceClient.existsByCode(productCode)).thenReturn(true);
+            when(inventoryServiceProductClient.existsByCode(productCode)).thenReturn(true);
             RegionEntityBuilder regionEntityBuilder = aRegionEntity().withCode(regionCode);
             when(regionService.getRegionEntityByCode(regionCode)).thenReturn(regionEntityBuilder.build());
             when(listingRepository.existsByProductCodeAndRegionEntity(eq(productCode), any(RegionEntity.class))).thenReturn(false);
