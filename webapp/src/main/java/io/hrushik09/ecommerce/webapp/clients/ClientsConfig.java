@@ -22,16 +22,9 @@ import java.time.Duration;
 @Configuration
 class ClientsConfig {
     private static final Logger log = LoggerFactory.getLogger(ClientsConfig.class);
-    private final ApplicationProperties applicationProperties;
-    private final ObjectMapper objectMapper;
-
-    ClientsConfig(ApplicationProperties applicationProperties, ObjectMapper objectMapper) {
-        this.applicationProperties = applicationProperties;
-        this.objectMapper = objectMapper;
-    }
 
     @Bean
-    InventoryServiceClient inventoryServiceClient(RestClient.Builder builder) {
+    InventoryServiceClient inventoryServiceClient(RestClient.Builder builder, ApplicationProperties applicationProperties, ObjectMapper objectMapper) {
         RestClient restClient = builder
                 .baseUrl(applicationProperties.apiGatewayUrl())
                 .requestFactory(ClientHttpRequestFactories.get(ClientHttpRequestFactorySettings.DEFAULTS
@@ -53,7 +46,7 @@ class ClientsConfig {
     }
 
     @Bean
-    CatalogServiceClient catalogServiceClient(RestClient.Builder builder) {
+    CatalogServiceClient catalogServiceClient(RestClient.Builder builder, ApplicationProperties applicationProperties, ObjectMapper objectMapper) {
         RestClient restClient = builder
                 .baseUrl(applicationProperties.apiGatewayUrl())
                 .requestFactory(ClientHttpRequestFactories.get(ClientHttpRequestFactorySettings.DEFAULTS
