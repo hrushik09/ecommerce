@@ -20,7 +20,8 @@ class EntityCodeGeneratorTest {
     @ParameterizedTest
     @CsvSource({
             "country,7",
-            "region,6"
+            "region,6",
+            "listing,7"
     })
     void shouldGenerateValidCodeFor(String entityType, int prefixLength) {
         String code = entityCodeGenerator.forEntityType(entityType);

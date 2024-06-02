@@ -10,6 +10,7 @@ public class EntityCodeGenerator {
         return switch (entityType) {
             case "country" -> "country_" + UUID.randomUUID();
             case "region" -> "region_" + UUID.randomUUID();
+            case "listing" -> "listing_" + UUID.randomUUID();
             default -> throw new IllegalStateException("Unexpected value: " + entityType);
         };
     }
