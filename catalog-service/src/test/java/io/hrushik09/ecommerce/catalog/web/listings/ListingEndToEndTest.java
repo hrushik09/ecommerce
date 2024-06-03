@@ -175,18 +175,18 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
             CreateRegionResponse region = havingPersisted.region(country.code(), "Region 5");
             String productCode = "product_2ajsba";
             mockGetProductByCode(productCode, "Product 11");
-            CreateListingResponse listing = havingPersisted.listing(productCode, region.code(), "Listing for Product 11", "Description for Listing 11", new BigDecimal("9124.56"), USD);
+            CreateListingResponse listing = havingPersisted.listing(productCode, region.code(), "Listing for Product 11", "Description for Listing 11", new BigDecimal("9124"), USD);
 
             given()
                     .when()
-                    .get("/api/listings/{code}", region.code())
+                    .get("/api/listings/{code}", listing.code())
                     .then()
                     .statusCode(OK.value())
                     .body("productCode", equalTo(productCode))
                     .body("code", equalTo(listing.code()))
                     .body("title", equalTo("Listing for Product 11"))
                     .body("description", equalTo("Description for Listing 11"))
-                    .body("price", equalTo("9124.56"))
+                    .body("price", equalTo("9124.00"))
                     .body("currency", equalTo("USD"))
                     .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
                     .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
