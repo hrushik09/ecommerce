@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 interface ListingRepository extends JpaRepository<ListingEntity, Long> {
     boolean existsByProductCodeAndRegionEntity(String productCode, RegionEntity regionEntity);
 
@@ -16,4 +18,6 @@ interface ListingRepository extends JpaRepository<ListingEntity, Long> {
             WHERE le.regionEntity = :regionEntity
             """)
     Page<ListingSummary> getListingSummaries(RegionEntity regionEntity, Pageable pageable);
+
+    Optional<ListingEntity> findByCode(String code);
 }

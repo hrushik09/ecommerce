@@ -1,10 +1,12 @@
 package io.hrushik09.ecommerce.catalog.domain.listings;
 
 import io.hrushik09.ecommerce.catalog.clients.inventory.InventoryServiceProductClient;
+import io.hrushik09.ecommerce.catalog.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.Listing;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
@@ -22,11 +24,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.CAD;
-import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.INR;
+import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.*;
 import static io.hrushik09.ecommerce.catalog.domain.listings.ListingEntityBuilder.aListingEntity;
 import static io.hrushik09.ecommerce.catalog.domain.regions.RegionEntityBuilder.aRegionEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +55,8 @@ class ListingServiceTest {
 
     @BeforeEach
     void setUp() {
-        listingService = new ListingService(listingRepository, generateCode, inventoryServiceProductClient, regionService);
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of("UTC"));
+        listingService = new ListingService(listingRepository, generateCode, inventoryServiceProductClient, regionService, defaultTimestampFormatter);
     }
 
     @Nested
@@ -223,6 +229,49 @@ class ListingServiceTest {
             assertThat(pagedResult.isLast()).isEqualTo(true);
             assertThat(pagedResult.hasNext()).isEqualTo(false);
             assertThat(pagedResult.hasPrevious()).isEqualTo(true);
+        }
+    }
+
+    @Nested
+    class GetListingByCode {
+        @Test
+        void shouldThrowWhenListingDoesNotExist() {
+            String code = "listing_does_not_exist_ja3ks";
+            when(listingRepository.findByCode(code)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> listingService.getListingByCode(code))
+                    .isInstanceOf(ListingDoesNotExist.class)
+                    .hasMessageContaining("Listing with code " + code + " does not exist");
+        }
+
+        @Test
+        void shouldGetListingByCodeSuccessfully() {
+            String code = "listing_i3hasnfla";
+            String productCode = "product_3uhakjsd";
+            String title = "Title for Listing 62";
+            String description = "Description for Listing 62";
+            ListingEntityBuilder listingEntityBuilder = aListingEntity()
+                    .withProductCode(productCode)
+                    .withCode(code)
+                    .withTitle(title)
+                    .withDescription(description)
+                    .withPrice(new BigDecimal("9834.34"))
+                    .withCurrency(EUR)
+                    .withCreatedAt(Instant.parse("2009-05-19T23:14:12.00Z"))
+                    .withUpdatedAt(Instant.parse("2009-05-20T12:15:30.00Z"));
+            when(listingRepository.findByCode(code)).thenReturn(Optional.of(listingEntityBuilder.build()));
+
+            Listing listing = listingService.getListingByCode(code);
+
+            assertThat(listing).isNotNull();
+            assertThat(listing.productCode()).isEqualTo(productCode);
+            assertThat(listing.code()).isEqualTo(code);
+            assertThat(listing.title()).isEqualTo(title);
+            assertThat(listing.description()).isEqualTo(description);
+            assertThat(listing.price()).isEqualTo("9834.34");
+            assertThat(listing.currency()).isEqualTo("EUR");
+            assertThat(listing.createdAt()).isEqualTo("May 19 2009, 23:14:12 (UTC+00:00)");
+            assertThat(listing.updatedAt()).isEqualTo("May 20 2009, 12:15:30 (UTC+00:00)");
         }
     }
 }

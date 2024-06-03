@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 @Transactional(readOnly = true)
 public class ListingService {
@@ -22,12 +24,14 @@ public class ListingService {
     private final EntityCodeGenerator generateCode;
     private final InventoryServiceProductClient inventoryServiceProductClient;
     private final RegionService regionService;
+    private final DateTimeFormatter defaultTimestampFormatter;
 
-    ListingService(ListingRepository listingRepository, EntityCodeGenerator generateCode, InventoryServiceProductClient inventoryServiceProductClient, RegionService regionService) {
+    ListingService(ListingRepository listingRepository, EntityCodeGenerator generateCode, InventoryServiceProductClient inventoryServiceProductClient, RegionService regionService, DateTimeFormatter defaultTimestampFormatter) {
         this.listingRepository = listingRepository;
         this.generateCode = generateCode;
         this.inventoryServiceProductClient = inventoryServiceProductClient;
         this.regionService = regionService;
+        this.defaultTimestampFormatter = defaultTimestampFormatter;
     }
 
     @Transactional
@@ -71,6 +75,8 @@ public class ListingService {
     }
 
     public Listing getListingByCode(String code) {
-        return null;
+        return listingRepository.findByCode(code)
+                .map(listingEntity -> ListingMapper.convertToListing(listingEntity, defaultTimestampFormatter))
+                .orElseThrow(() -> new ListingDoesNotExist(code));
     }
 }
