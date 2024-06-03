@@ -1,11 +1,14 @@
 package io.hrushik09.ecommerce.catalog.web.listings;
 
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.ListingAlreadyExists;
+import io.hrushik09.ecommerce.catalog.domain.listings.ListingDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.listings.ListingService;
 import io.hrushik09.ecommerce.catalog.domain.listings.ProductDoesNotExist;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.Listing;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionDoesNotExist;
 import org.junit.jupiter.api.Nested;
@@ -245,6 +248,37 @@ class ListingControllerTest {
                     .andExpect(jsonPath("$.isLast", is(false)))
                     .andExpect(jsonPath("$.hasNext", is(true)))
                     .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+    }
+
+    @Nested
+    class GetListingByCode {
+        @Test
+        void shouldReturnErrorWhenListingDoesNotExist() throws Exception {
+            String code = "listing_does_not_exist_3alskn";
+            when(listingService.getListingByCode(code)).thenThrow(new ListingDoesNotExist(code));
+
+            mockMvc.perform(get("/api/listings/{code}", code))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Listing with code " + code + " does not exist")));
+        }
+
+        @Test
+        void shouldReturnListingByCodeSuccessfully() throws Exception {
+            String code = "listing_38roh";
+            when(listingService.getListingByCode(code)).thenReturn(new Listing("product_83qiihf", code, "Title for Listing 8", "Description for Listing 8",
+                    "362.23", "INR", "May 12 1999, 23:54:12 (UTC+00:00)", "May 13 1999, 16:45:12 (UTC+00:00)"));
+
+            mockMvc.perform(get("/api/listings/{code}", code))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.productCode", equalTo("product_83qiihf")))
+                    .andExpect(jsonPath("$.code", equalTo(code)))
+                    .andExpect(jsonPath("$.title", equalTo("Title for Listing 8")))
+                    .andExpect(jsonPath("$.description", equalTo("Description for Listing 8")))
+                    .andExpect(jsonPath("$.price", equalTo("362.23")))
+                    .andExpect(jsonPath("$.currency", equalTo("INR")))
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

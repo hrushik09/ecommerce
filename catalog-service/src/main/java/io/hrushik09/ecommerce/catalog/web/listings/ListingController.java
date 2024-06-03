@@ -3,10 +3,7 @@ package io.hrushik09.ecommerce.catalog.web.listings;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.Currency;
 import io.hrushik09.ecommerce.catalog.domain.listings.ListingService;
-import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
-import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingRequest;
-import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
-import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,5 +34,11 @@ class ListingController {
     PagedResult<ListingSummary> getListings(@RequestParam String regionCode, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
         log.info("requesting to get listings for region {} and pageNo {}", regionCode, pageNo);
         return listingService.getListings(regionCode, pageNo);
+    }
+
+    @GetMapping("/{code}")
+    Listing getListingByCode(@PathVariable String code) {
+        log.info("requesting to get listing by code {}", code);
+        return listingService.getListingByCode(code);
     }
 }

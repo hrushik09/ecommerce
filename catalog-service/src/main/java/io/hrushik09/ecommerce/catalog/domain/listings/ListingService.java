@@ -5,6 +5,7 @@ import io.hrushik09.ecommerce.catalog.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingCommand;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.Listing;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.ListingSummary;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionEntity;
 import io.hrushik09.ecommerce.catalog.domain.regions.RegionService;
@@ -67,5 +68,9 @@ public class ListingService {
                 listingPage.hasNext(),
                 listingPage.hasPrevious()
         );
+    }
+
+    public Listing getListingByCode(String code) {
+        return null;
     }
 }
