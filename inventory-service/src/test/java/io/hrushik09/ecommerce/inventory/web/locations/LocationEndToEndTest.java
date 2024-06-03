@@ -7,13 +7,13 @@ import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRes
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.http.HttpStatus.*;
 
 class LocationEndToEndTest extends AbstractEndToEndTest {
     @Autowired
@@ -33,7 +33,7 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .post("/api/locations")
                     .then()
-                    .statusCode(HttpStatus.CREATED.value())
+                    .statusCode(CREATED.value())
                     .body("code", startsWith("location_"))
                     .body("code", hasLength(8 + 1 + 36))
                     .body("name", equalTo("Location 1"))
@@ -52,7 +52,7 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .post("/api/locations")
                     .then()
-                    .statusCode(HttpStatus.CREATED.value());
+                    .statusCode(CREATED.value());
 
             given().contentType(JSON)
                     .body("""
@@ -64,7 +64,7 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .post("/api/locations")
                     .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .statusCode(BAD_REQUEST.value())
                     .body("detail", equalTo("Location with name Location 1 already exists"));
         }
     }
@@ -73,14 +73,14 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
     class GetLocations {
         @Test
         void shouldGetLocationsSuccessfully() {
-            Stream.iterate(1, i -> i < 16, i -> i + 1)
+            IntStream.rangeClosed(1, 15)
                     .forEach(i -> havingPersisted.location("Location " + i, "Address " + i));
 
             given()
                     .when()
                     .get("/api/locations")
                     .then()
-                    .statusCode(HttpStatus.OK.value())
+                    .statusCode(OK.value())
                     .body("data", hasSize(10))
                     .body("data[0].code", startsWith("location_"))
                     .body("data[0].code", hasLength(8 + 1 + 36))
@@ -142,7 +142,7 @@ class LocationEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .get("/api/locations/{code}", created.code())
                     .then()
-                    .statusCode(HttpStatus.OK.value())
+                    .statusCode(OK.value())
                     .body("code", equalTo(created.code()))
                     .body("name", equalTo("location 1"))
                     .body("address", equalTo("address 1"))

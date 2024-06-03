@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -56,6 +56,24 @@ class WarehouseControllerTest {
         }
 
         @Test
+        void shouldNotCreateIfWarehouseExistsForLocationAndName() throws Exception {
+            String locationCode = "location_kjlakd";
+            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 9", true)))
+                    .thenThrow(new WarehouseAlreadyExists("Warehouse 9"));
+
+            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {
+                                    "name": "Warehouse 9",
+                                    "isRefrigerated": true
+                                    }
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with name Warehouse 9 already exists in this Location")));
+        }
+
+        @Test
         void shouldCreateWarehouseSuccessfully() throws Exception {
             String locationCode = "location_dummy_fu3jb";
             when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Some warehouse 23", true)))
@@ -74,78 +92,27 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.name", equalTo("Some warehouse 23")))
                     .andExpect(jsonPath("$.isRefrigerated", is(true)));
         }
-
-        @Test
-        void shouldCreateWarehouseWithSameNameInDifferentLocation() throws Exception {
-            String locationCode11 = "location_dummy_11_kdnfsdf";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode11, "Warehouse 23", false)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasdaf", "Warehouse 23", false));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode11)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 23",
-                                    "isRefrigerated": false
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            String locationCode12 = "location_dummy_12_akfnaas";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode12, "Warehouse 23", true)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_dasasadaf", "Warehouse 23", true));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode12)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 23",
-                                    "isRefrigerated": true
-                                    }
-                                    """))
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.code", equalTo("warehouse_dummy_dasasadaf")))
-                    .andExpect(jsonPath("$.name", equalTo("Warehouse 23")))
-                    .andExpect(jsonPath("$.isRefrigerated", is(true)));
-        }
-
-        @Test
-        void shouldNotCreateWarehouseWithSameNameInSameLocation() throws Exception {
-            String locationCode = "location_dummy_kdnfsdf";
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", false)))
-                    .thenReturn(new CreateWarehouseResponse("warehouse_dummy_asdasvs", "Warehouse 1", false));
-
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 1",
-                                    "isRefrigerated": false
-                                    }
-                                    """))
-                    .andExpect(status().isCreated());
-
-            when(warehouseService.create(new CreateWarehouseCommand(locationCode, "Warehouse 1", true)))
-                    .thenThrow(new WarehouseAlreadyExists("Warehouse 1"));
-            mockMvc.perform(post("/api/locations/{locationCode}/warehouses", locationCode)
-                            .contentType(APPLICATION_JSON)
-                            .content("""
-                                    {
-                                    "name": "Warehouse 1",
-                                    "isRefrigerated": true
-                                    }
-                                    """))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with name Warehouse 1 already exists in this Location")));
-        }
     }
 
     @Nested
     class GetWarehouses {
         @Test
+        void shouldReturnErrorWhenLocationDoesNotExist() throws Exception {
+            String locationCode = "location_does_not_exist_ihhaf";
+            when(warehouseService.getWarehouses(locationCode, 1))
+                    .thenThrow(new LocationDoesNotExist(locationCode));
+
+            mockMvc.perform(get("/api/locations/{locationCode}/warehouses", locationCode))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Location with code " + locationCode + " does not exist")));
+        }
+
+        @Test
         void shouldGetWarehousesWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 3;
             String locationCode = "location_dummy_kdnfsdf";
-            List<WarehouseSummary> list = Stream.iterate(21, i -> i < 31, i -> i + 1)
-                    .map(i -> new WarehouseSummary("warehouse_dummy_ksns-" + i, "Warehouse " + i, i % 2 == 0))
+            List<WarehouseSummary> list = IntStream.rangeClosed(21, 30)
+                    .mapToObj(i -> new WarehouseSummary("warehouse_dummy_ksns-" + i, "Warehouse " + i, i % 2 == 0))
                     .toList();
             when(warehouseService.getWarehouses(locationCode, pageNo))
                     .thenReturn(new PagedResult<>(list, 34, pageNo, 4, false, false, true, true));
@@ -184,7 +151,7 @@ class WarehouseControllerTest {
                     .andExpect(jsonPath("$.data[9].name", equalTo("Warehouse 30")))
                     .andExpect(jsonPath("$.data[9].isRefrigerated", is(true)))
                     .andExpect(jsonPath("$.totalElements", equalTo(34)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(3)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(4)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))
@@ -195,8 +162,8 @@ class WarehouseControllerTest {
         @Test
         void shouldGetWarehousesWhenPageNumberIsNotSpecified() throws Exception {
             String locationCode = "location_dummy_afasnf";
-            List<WarehouseSummary> list = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new WarehouseSummary("warehouse_dummy_amaow-" + i, "Warehouse " + i, i % 2 == 0))
+            List<WarehouseSummary> list = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new WarehouseSummary("warehouse_dummy_amaow-" + i, "Warehouse " + i, i % 2 == 0))
                     .toList();
             when(warehouseService.getWarehouses(locationCode, 1))
                     .thenReturn(new PagedResult<>(list, 21, 1, 3, true, false, true, false));

@@ -17,7 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -74,15 +74,15 @@ class LocationControllerTest {
     }
 
     @Nested
-    class getLocations {
+    class GetLocations {
         @Test
         void shouldGetLocationsWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 2;
-            List<LocationSummary> list = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new LocationSummary("location_dummy_ernsdj-" + i, "Location " + i, "Address " + i))
+            List<LocationSummary> list = IntStream.rangeClosed(11, 20)
+                    .mapToObj(i -> new LocationSummary("location_dummy_ernsdj-" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationService.getLocations(pageNo))
-                    .thenReturn(new PagedResult<>(list, 25, 2, 3, false, false, true, true));
+                    .thenReturn(new PagedResult<>(list, 25, pageNo, 3, false, false, true, true));
 
             mockMvc.perform(get("/api/locations?page={pageNo}", pageNo))
                     .andExpect(status().isOk())
@@ -118,7 +118,7 @@ class LocationControllerTest {
                     .andExpect(jsonPath("$.data[9].name", equalTo("Location 20")))
                     .andExpect(jsonPath("$.data[9].address", equalTo("Address 20")))
                     .andExpect(jsonPath("$.totalElements", equalTo(25)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(2)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(3)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))
@@ -128,8 +128,8 @@ class LocationControllerTest {
 
         @Test
         void shouldGetLocationsWhenPageNumberIsNotSpecified() throws Exception {
-            List<LocationSummary> list = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new LocationSummary("location_dummy_4nskfs-" + i, "Location " + i, "Address " + i))
+            List<LocationSummary> list = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new LocationSummary("location_dummy_4nskfs-" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationService.getLocations(1))
                     .thenReturn(new PagedResult<>(list, 15, 1, 2, true, false, true, false));

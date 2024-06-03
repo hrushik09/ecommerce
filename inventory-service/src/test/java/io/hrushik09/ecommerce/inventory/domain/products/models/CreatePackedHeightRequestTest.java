@@ -14,8 +14,8 @@ import java.util.Set;
 import static io.hrushik09.ecommerce.inventory.domain.products.models.CreatePackedHeightRequestBuilder.aPackedHeightRequest;
 
 class CreatePackedHeightRequestTest {
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CommonAssertions<CreatePackedHeightRequest> commonAssertions = new CommonAssertions<>();
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
     void valueShouldBeNonNull() {

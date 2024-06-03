@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -132,14 +132,24 @@ class InventoryItemControllerTest {
     @Nested
     class GetInventoryItems {
         @Test
+        void shouldReturnErrorWhenWarehouseDoesNotExist() throws Exception {
+            String warehouseCode = "warehouse_does_not_exist_kljfla";
+            when(inventoryItemService.getInventoryItems(warehouseCode, 1)).thenThrow(new WarehouseDoesNotExist(warehouseCode));
+
+            mockMvc.perform(get("/api/warehouses/{warehouseCode}/items", warehouseCode))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.detail", equalTo("Warehouse with code " + warehouseCode + " does not exist")));
+        }
+
+        @Test
         void shouldGetInventoryItemsWhenPageNumberIsSpecified() throws Exception {
             String warehouseCode = "warehouse_dummy_3uih";
             int pageNo = 2;
-            List<InventoryItemSummary> data = Stream.iterate(11, i -> i < 21, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_kaf983_" + i, "Product " + i, i))
+            List<InventoryItemSummary> data = IntStream.rangeClosed(11, 20)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_kaf983_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemService.getInventoryItems(warehouseCode, pageNo))
-                    .thenReturn(new PagedResult<>(data, 24, 2, 3, false, false, true, true));
+                    .thenReturn(new PagedResult<>(data, 24, pageNo, 3, false, false, true, true));
 
             mockMvc.perform(get("/api/warehouses/{warehouseCode}/items?page={pageNo}", warehouseCode, pageNo))
                     .andExpect(status().isOk())
@@ -175,7 +185,7 @@ class InventoryItemControllerTest {
                     .andExpect(jsonPath("$.data[9].productName", equalTo("Product 20")))
                     .andExpect(jsonPath("$.data[9].quantityAvailable", equalTo(20)))
                     .andExpect(jsonPath("$.totalElements", equalTo(24)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(2)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(3)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))
@@ -186,8 +196,8 @@ class InventoryItemControllerTest {
         @Test
         void shouldGetInventoryItemsWhenPageNumberIsNotSpecified() throws Exception {
             String warehouseCode = "warehouse_dummy_3uih";
-            List<InventoryItemSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_ki7d4ab_" + i, "Product " + i, i))
+            List<InventoryItemSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_ki7d4ab_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemService.getInventoryItems(warehouseCode, 1))
                     .thenReturn(new PagedResult<>(data, 13, 1, 2, true, false, true, false));

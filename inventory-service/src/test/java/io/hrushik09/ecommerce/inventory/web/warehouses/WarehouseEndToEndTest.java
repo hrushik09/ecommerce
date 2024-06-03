@@ -8,13 +8,13 @@ import io.hrushik09.ecommerce.inventory.domain.warehouses.model.CreateWarehouseR
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.http.HttpStatus.*;
 
 class WarehouseEndToEndTest extends AbstractEndToEndTest {
     @Autowired
@@ -36,7 +36,7 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .post("/api/locations/{locationCode}/warehouses", location.code())
                     .then()
-                    .statusCode(HttpStatus.CREATED.value())
+                    .statusCode(CREATED.value())
                     .body("code", startsWith("warehouse_"))
                     .body("code", hasLength(9 + 1 + 36))
                     .body("name", equalTo("Warehouse 1"))
@@ -44,66 +44,32 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
         }
 
         @Test
-        void shouldCreateWarehouseWithSameNameInDifferentLocation() {
-            CreateLocationResponse location11 = havingPersisted.location("Location 11", "Address 11");
+        void shouldNotCreateIfWarehouseExistsForLocationAndName() {
+            CreateLocationResponse location = havingPersisted.location("custom location name", "some address");
             given().contentType(JSON)
                     .body("""
                             {
-                            "name": "Warehouse 1",
-                            "isRefrigerated": true
-                            }
-                            """)
-                    .when()
-                    .post("/api/locations/{locationCode}/warehouses", location11.code())
-                    .then()
-                    .statusCode(HttpStatus.CREATED.value());
-
-            CreateLocationResponse location12 = havingPersisted.location("Location 12", "Address 12");
-            given().contentType(JSON)
-                    .body("""
-                            {
-                            "name": "Warehouse 1",
-                            "isRefrigerated": false
-                            }
-                            """)
-                    .when()
-                    .post("/api/locations/{locationCode}/warehouses", location12.code())
-                    .then()
-                    .statusCode(HttpStatus.CREATED.value())
-                    .body("code", startsWith("warehouse_"))
-                    .body("code", hasLength(9 + 1 + 36))
-                    .body("name", equalTo("Warehouse 1"))
-                    .body("isRefrigerated", is(false));
-        }
-
-        @Test
-        void shouldNotCreateWarehouseWithSameNameInSameLocation() {
-            CreateLocationResponse location = havingPersisted.location("Location 1", "Address 1");
-
-            given().contentType(JSON)
-                    .body("""
-                            {
-                            "name": "Warehouse 12",
-                            "isRefrigerated": true
-                            }
-                            """)
-                    .when()
-                    .post("/api/locations/{locationCode}/warehouses", location.code())
-                    .then()
-                    .statusCode(HttpStatus.CREATED.value());
-
-            given().contentType(JSON)
-                    .body("""
-                            {
-                            "name": "Warehouse 12",
+                            "name": "Warehouse 4",
                             "isRefrigerated": false
                             }
                             """)
                     .when()
                     .post("/api/locations/{locationCode}/warehouses", location.code())
                     .then()
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .body("detail", equalTo("Warehouse with name Warehouse 12 already exists in this Location"));
+                    .statusCode(CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "name": "Warehouse 4",
+                            "isRefrigerated": true
+                            }
+                            """)
+                    .when()
+                    .post("/api/locations/{locationCode}/warehouses", location.code())
+                    .then()
+                    .statusCode(BAD_REQUEST.value())
+                    .body("detail", equalTo("Warehouse with name Warehouse 4 already exists in this Location"));
         }
     }
 
@@ -112,14 +78,14 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
         @Test
         void shouldGetLocationsSuccessfully() {
             CreateLocationResponse location = havingPersisted.location("Location 1", "Address 1");
-            Stream.iterate(1, i -> i < 19, i -> i + 1)
+            IntStream.rangeClosed(1, 18)
                     .forEach(i -> havingPersisted.warehouse(location.code(), "Warehouse " + i, i % 2 == 0));
 
             given()
                     .when()
                     .get("/api/locations/{locationCode}/warehouses", location.code())
                     .then()
-                    .statusCode(HttpStatus.OK.value())
+                    .statusCode(OK.value())
                     .body("data", hasSize(10))
                     .body("data[0].code", startsWith("warehouse_"))
                     .body("data[0].code", hasLength(9 + 1 + 36))
@@ -182,7 +148,7 @@ class WarehouseEndToEndTest extends AbstractEndToEndTest {
                     .when()
                     .get("/api/warehouses/{code}", created.code())
                     .then()
-                    .statusCode(HttpStatus.OK.value())
+                    .statusCode(OK.value())
                     .body("code", equalTo(created.code()))
                     .body("name", equalTo("Warehouse 34"))
                     .body("isRefrigerated", is(true))

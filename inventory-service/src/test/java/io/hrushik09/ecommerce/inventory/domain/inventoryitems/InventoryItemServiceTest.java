@@ -25,7 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.inventoryitems.InventoryItemEntityBuilder.aInventoryItemEntity;
 import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder.aProductEntity;
@@ -78,7 +78,7 @@ class InventoryItemServiceTest {
         }
 
         @Test
-        void shouldThrowWhenInventoryItemAlreadyExists() {
+        void shouldNotCreateIfInventoryItemExistsForProductAndWarehouse() {
             String warehouseCode = "warehouse_k3if";
             String productCode = "product_87j3na";
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
@@ -111,11 +111,11 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 12;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
             when(productService.getProductEntityByCode(productCode)).thenReturn(productEntityBuilder.build());
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("inventory_item")).thenReturn(code);
             InventoryItemEntityBuilder inventoryItemEntityBuilder = aInventoryItemEntity().with(warehouseEntityBuilder)
                     .with(productEntityBuilder).withCode(code).withQuantityAvailable(quantityAvailable)
@@ -146,11 +146,11 @@ class InventoryItemServiceTest {
             int minimumStockLevel = 3;
             int maximumStockLevel = 12;
             int reorderPoint = 7;
-            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(productCode);
             when(productService.getProductEntityByCode(productCode)).thenReturn(productEntityBuilder.build());
+            when(inventoryItemRepository.existsByWarehouseEntityAndProductEntity(any(WarehouseEntity.class), any(ProductEntity.class))).thenReturn(false);
             when(generateCode.forEntityType("inventory_item")).thenReturn(code);
             InventoryItemEntityBuilder inventoryItemEntityBuilder = aInventoryItemEntity().with(warehouseEntityBuilder)
                     .with(productEntityBuilder).withCode(code).withQuantityAvailable(quantityAvailable)
@@ -172,18 +172,32 @@ class InventoryItemServiceTest {
     @Nested
     class GetInventoryItems {
         @Test
+        void shouldThrowWhenWarehouseDoesNotExist() {
+            String warehouseCode = "warehouse_does_not_exist_u3yajs";
+            when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenThrow(new WarehouseDoesNotExist(warehouseCode));
+
+            assertThatThrownBy(() -> inventoryItemService.getInventoryItems(warehouseCode, 1))
+                    .isInstanceOf(WarehouseDoesNotExist.class)
+                    .hasMessage("Warehouse with code " + warehouseCode + " does not exist");
+        }
+
+        @Test
         void shouldGetInventoryItems() {
             String warehouseCode = "warehouse_k3ifkln";
             WarehouseEntityBuilder warehouseEntityBuilder = aWarehouseEntity().withCode(warehouseCode);
             when(warehouseService.getWarehouseEntityByCode(warehouseCode)).thenReturn(warehouseEntityBuilder.build());
-            List<InventoryItemSummary> list = Stream.iterate(11, i -> i < 16, i -> i + 1)
-                    .map(i -> new InventoryItemSummary("inventory_item_asn343a_" + i, "Product " + i, i))
+            List<InventoryItemSummary> list = IntStream.rangeClosed(11, 15)
+                    .mapToObj(i -> new InventoryItemSummary("inventory_item_asn343a_" + i, "Product " + i, i))
                     .toList();
             when(inventoryItemRepository.findInventoryItemSummaries(any(WarehouseEntity.class), any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 5));
 
             PagedResult<InventoryItemSummary> pagedResult = inventoryItemService.getInventoryItems(warehouseCode, 2);
 
+            ArgumentCaptor<WarehouseEntity> warehouseEntityArgumentCaptor = ArgumentCaptor.forClass(WarehouseEntity.class);
+            verify(inventoryItemRepository).findInventoryItemSummaries(warehouseEntityArgumentCaptor.capture(), any(Pageable.class));
+            WarehouseEntity captorValue = warehouseEntityArgumentCaptor.getValue();
+            assertThat(captorValue.getCode()).isEqualTo(warehouseCode);
             assertThat(pagedResult).isNotNull();
             List<InventoryItemSummary> data = pagedResult.data();
             assertThat(data).hasSize(5);

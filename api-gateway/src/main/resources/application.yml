@@ -39,6 +39,12 @@ spring:
             - Path=/inventory/**
           filters:
             - RewritePath=/inventory/?(?<segment>.*), /${segment}
+        - id: catalog-service
+          uri: ${CATALOG_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/catalog/**
+          filters:
+            - RewritePath=/catalog/?(?<segment>.*), /${segment}
   mvc:
     problemdetails:
       enabled: true

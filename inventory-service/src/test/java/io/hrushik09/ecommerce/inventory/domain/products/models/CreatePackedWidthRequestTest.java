@@ -14,7 +14,7 @@ import java.util.Set;
 import static io.hrushik09.ecommerce.inventory.domain.products.models.CreatePackedWidthRequestBuilder.aPackedWidthRequest;
 
 class CreatePackedWidthRequestTest {
-    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CommonAssertions<CreatePackedWidthRequest> commonAssertions = new CommonAssertions<>();
 
     @Test

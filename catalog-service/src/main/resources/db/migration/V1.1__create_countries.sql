@@ -1,0 +1,11 @@
+CREATE TABLE countries
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
+    code       VARCHAR(100) NOT NULL,
+    name       VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_countries PRIMARY KEY (id),
+    CONSTRAINT UK_countries_code UNIQUE (code),
+    CONSTRAINT UK_countries_name UNIQUE (name)
+);

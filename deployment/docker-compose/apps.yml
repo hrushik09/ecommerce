@@ -29,6 +29,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - INVENTORY_SERVICE_URL=http://inventory-service:8081
+      - CATALOG_SERVICE_URL=http://catalog-service:8082
       - MANAGEMENT_TRACING_ENABLED=true
       - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tempo:9411
     ports:
@@ -64,6 +65,7 @@ services:
     container_name: catalog-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - CATALOG_INVENTORY_SERVICE_URL=http://api-gateway:8989/inventory
       - DB_URL=jdbc:mysql://catalog-db:3306/catalog-db
       - DB_USERNAME=root
       - DB_PASSWORD=rootroot

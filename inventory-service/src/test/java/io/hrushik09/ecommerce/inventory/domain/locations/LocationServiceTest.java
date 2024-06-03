@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.locations;
 
-import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
+import io.hrushik09.ecommerce.inventory.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationCommand;
@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.locations.LocationEntityBuilder.aLocationEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,6 +63,7 @@ class LocationServiceTest {
             String code = "location_mock_code_aakjfake";
             String name = "Location 1";
             String address = "Address 1";
+            when(locationRepository.existsByName(name)).thenReturn(false);
             when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
                     .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
@@ -82,6 +83,7 @@ class LocationServiceTest {
             String code = "location_mock_code_asdnskf";
             String name = "Location 1";
             String address = "Address 1";
+            when(locationRepository.existsByName(name)).thenReturn(false);
             when(generateCode.forEntityType("location")).thenReturn(code);
             when(locationRepository.save(any(LocationEntity.class)))
                     .thenReturn(aLocationEntity().withCode(code).withName(name).withAddress(address).build());
@@ -99,8 +101,8 @@ class LocationServiceTest {
     class GetLocations {
         @Test
         void shouldGetLocationsSuccessfully() {
-            List<LocationSummary> list = Stream.iterate(11, i -> i < 18, i -> i + 1)
-                    .map(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
+            List<LocationSummary> list = IntStream.rangeClosed(11, 17)
+                    .mapToObj(i -> new LocationSummary("location_kfasd_" + i, "Location " + i, "Address " + i))
                     .toList();
             when(locationRepository.getLocationSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 7));

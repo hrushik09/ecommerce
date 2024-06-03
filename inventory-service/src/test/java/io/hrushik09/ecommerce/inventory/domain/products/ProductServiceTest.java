@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.products;
 
-import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
+import io.hrushik09.ecommerce.inventory.config.DefaultApplicationProperties;
 import io.hrushik09.ecommerce.inventory.domain.EntityCodeGenerator;
 import io.hrushik09.ecommerce.inventory.domain.PagedResult;
 import io.hrushik09.ecommerce.inventory.domain.products.models.*;
@@ -21,7 +21,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuilder.aProductEntity;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,6 +74,7 @@ class ProductServiceTest {
             String packedWidthUnit = "m";
             BigDecimal packedHeightValue = new BigDecimal("2.23");
             String packedHeightUnit = "m";
+            when(productRepository.existsByName(any())).thenReturn(false);
             when(generateCode.forEntityType("product")).thenReturn(code);
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(code).withName(name).withDescription(description).withCategory(category)
                     .withReorderQuantity(reorderQuantity).withNeedsRefrigeration(needsRefrigeration)
@@ -123,6 +124,7 @@ class ProductServiceTest {
             String packedWidthUnit = "m";
             BigDecimal packedHeightValue = new BigDecimal("2.23");
             String packedHeightUnit = "m";
+            when(productRepository.existsByName(any())).thenReturn(false);
             when(generateCode.forEntityType("product")).thenReturn(code);
             ProductEntityBuilder productEntityBuilder = aProductEntity().withCode(code).withName(name).withDescription(description).withCategory(category)
                     .withReorderQuantity(reorderQuantity).withNeedsRefrigeration(needsRefrigeration)
@@ -158,8 +160,8 @@ class ProductServiceTest {
     class GetProducts {
         @Test
         void shouldGetProducts() {
-            List<ProductSummary> list = Stream.iterate(21, i -> i < 29, i -> i + 1)
-                    .map(i -> new ProductSummary("product_kj23n45dfa_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+            List<ProductSummary> list = IntStream.rangeClosed(21, 28)
+                    .mapToObj(i -> new ProductSummary("product_kj23n45dfa_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
             when(productRepository.findProductSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 8));

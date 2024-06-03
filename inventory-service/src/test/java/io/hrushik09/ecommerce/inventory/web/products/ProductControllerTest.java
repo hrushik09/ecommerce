@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -141,11 +141,11 @@ class ProductControllerTest {
         @Test
         void shouldGetProductsWhenPageNumberIsSpecified() throws Exception {
             int pageNo = 3;
-            List<ProductSummary> data = Stream.iterate(21, i -> i < 31, i -> i + 1)
-                    .map(i -> new ProductSummary("product_dn3ja_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+            List<ProductSummary> data = IntStream.rangeClosed(21, 30)
+                    .mapToObj(i -> new ProductSummary("product_dn3ja_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
             when(productService.getProducts(pageNo))
-                    .thenReturn(new PagedResult<>(data, 47, 3, 5, false, false, true, true));
+                    .thenReturn(new PagedResult<>(data, 47, pageNo, 5, false, false, true, true));
 
             mockMvc.perform(get("/api/products?page={pageNo}", pageNo))
                     .andExpect(status().isOk())
@@ -191,7 +191,7 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.data[9].description", equalTo("Description for Product 30")))
                     .andExpect(jsonPath("$.data[9].category", equalTo("Category 30")))
                     .andExpect(jsonPath("$.totalElements", equalTo(47)))
-                    .andExpect(jsonPath("$.pageNumber", equalTo(3)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(pageNo)))
                     .andExpect(jsonPath("$.totalPages", equalTo(5)))
                     .andExpect(jsonPath("$.isFirst", is(false)))
                     .andExpect(jsonPath("$.isLast", is(false)))
@@ -201,8 +201,8 @@ class ProductControllerTest {
 
         @Test
         void shouldGetProductsWhenPageNumberIsNotSpecified() throws Exception {
-            List<ProductSummary> data = Stream.iterate(1, i -> i < 11, i -> i + 1)
-                    .map(i -> new ProductSummary("product_j73jbasd_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+            List<ProductSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new ProductSummary("product_j73jbasd_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
             when(productService.getProducts(1))
                     .thenReturn(new PagedResult<>(data, 23, 1, 3, true, false, true, false));

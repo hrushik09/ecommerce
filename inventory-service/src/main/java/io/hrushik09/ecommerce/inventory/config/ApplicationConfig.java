@@ -1,6 +1,5 @@
 package io.hrushik09.ecommerce.inventory.config;
 
-import io.hrushik09.ecommerce.inventory.domain.DefaultApplicationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

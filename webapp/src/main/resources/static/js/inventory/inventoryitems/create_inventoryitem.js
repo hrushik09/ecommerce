@@ -27,7 +27,7 @@ document.addEventListener("alpine:init", () => {
                 data: JSON.stringify(this.inventoryItem),
                 success: (response) => {
                     this.createInventoryItemErrorDetail = null;
-                    console.log(response);
+                    window.location = "/inventory/warehouses/" + this.warehouseCode;
                 },
                 error: (err) => {
                     let responseText = JSON.parse(err.responseText);

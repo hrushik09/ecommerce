@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 class InventoryItemEndToEndTest extends AbstractEndToEndTest {
     @Autowired
@@ -24,7 +23,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
     @Nested
     class CreateInventoryItem {
         @Test
-        void shouldAddInventoryItem() {
+        void shouldCreateInventoryItem() {
             CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
             CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
@@ -50,6 +49,43 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
                     .body("maximumStockLevel", equalTo(67))
                     .body("reorderPoint", equalTo(20));
         }
+
+        @Test
+        void shouldNotCreateIfInventoryItemExistsForProductAndWarehouse() {
+            CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
+            CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
+            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "productCode": "%s",
+                            "quantityAvailable": 34,
+                            "minimumStockLevel": 13,
+                            "maximumStockLevel": 67,
+                            "reorderPoint": 20
+                            }
+                            """.formatted(product.code()))
+                    .when()
+                    .post("/api/warehouses/{warehouseCode}/items", warehouse.code())
+                    .then()
+                    .statusCode(CREATED.value());
+
+            given().contentType(JSON)
+                    .body("""
+                            {
+                            "productCode": "%s",
+                            "quantityAvailable": 34,
+                            "minimumStockLevel": 13,
+                            "maximumStockLevel": 67,
+                            "reorderPoint": 20
+                            }
+                            """.formatted(product.code()))
+                    .when()
+                    .post("/api/warehouses/{warehouseCode}/items", warehouse.code())
+                    .then()
+                    .statusCode(BAD_REQUEST.value())
+                    .body("detail", equalTo("Inventory Item with Warehouse " + warehouse.code() + " and Product " + product.code() + " already exists"));
+        }
     }
 
     @Nested
@@ -58,7 +94,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
         void shouldGetInventoryItems() {
             CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
-            Stream.iterate(1, i -> i < 16, i -> i + 1)
+            IntStream.rangeClosed(1, 15)
                     .forEach(i -> {
                         CreateProductResponse product = havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i);
                         havingPersisted.inventoryItem(warehouse.code(), product.code(), i + 34, i + 12, i + 49, i + 29);
