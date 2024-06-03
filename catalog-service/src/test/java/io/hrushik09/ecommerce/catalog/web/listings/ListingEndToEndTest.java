@@ -2,7 +2,9 @@ package io.hrushik09.ecommerce.catalog.web.listings;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
+import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.stream.IntStream;
 
 import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.INR;
+import static io.hrushik09.ecommerce.catalog.domain.listings.Currency.USD;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
@@ -161,6 +164,32 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
                     .body("isLast", is(false))
                     .body("hasNext", is(true))
                     .body("hasPrevious", is(false));
+        }
+    }
+
+    @Nested
+    class GetListingByCode {
+        @Test
+        void shouldGetListingByCodeSuccessfully() {
+            CreateCountryResponse country = havingPersisted.country("Country 2");
+            CreateRegionResponse region = havingPersisted.region(country.code(), "Region 5");
+            String productCode = "product_2ajsba";
+            mockGetProductByCode(productCode, "Product 11");
+            CreateListingResponse listing = havingPersisted.listing(productCode, region.code(), "Listing for Product 11", "Description for Listing 11", new BigDecimal("9124.56"), USD);
+
+            given()
+                    .when()
+                    .get("/api/listings/{code}", region.code())
+                    .then()
+                    .statusCode(OK.value())
+                    .body("productCode", equalTo(productCode))
+                    .body("code", equalTo(listing.code()))
+                    .body("title", equalTo("Listing for Product 11"))
+                    .body("description", equalTo("Description for Listing 11"))
+                    .body("price", equalTo("9124.56"))
+                    .body("currency", equalTo("USD"))
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }
