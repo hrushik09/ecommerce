@@ -5,6 +5,10 @@ import io.hrushik09.ecommerce.webapp.clients.catalog.countries.Country;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CountrySummary;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryRequest;
 import io.hrushik09.ecommerce.webapp.clients.catalog.countries.CreateCountryResponse;
+import io.hrushik09.ecommerce.webapp.clients.catalog.listings.CreateListingRequest;
+import io.hrushik09.ecommerce.webapp.clients.catalog.listings.CreateListingResponse;
+import io.hrushik09.ecommerce.webapp.clients.catalog.listings.Listing;
+import io.hrushik09.ecommerce.webapp.clients.catalog.listings.ListingSummary;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionRequest;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.CreateRegionResponse;
 import io.hrushik09.ecommerce.webapp.clients.catalog.regions.Region;
@@ -35,4 +39,13 @@ public interface CatalogServiceClient {
 
     @GetExchange("/regions/{code}")
     Region getRegion(@PathVariable String code);
+
+    @PostExchange("/listings")
+    CreateListingResponse createListing(@RequestBody CreateListingRequest request);
+
+    @GetExchange("/listings")
+    PagedResult<ListingSummary> getListings(@RequestParam String regionCode, @RequestParam(name = "page") int pageNo);
+
+    @GetExchange("/listings/{code}")
+    Listing getListing(@PathVariable String code);
 }

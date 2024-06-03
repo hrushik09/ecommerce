@@ -6,11 +6,36 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div layout:fragment="content">
-    <div th:x-data="|initData('${code}')|">
-        <div class="mb-3">
-            <h1 x-text="region.name"></h1>
-            <p>Created At: <span x-text="region.createdAt"></span></p>
-            <p>Updated At: <span x-text="region.updatedAt"></span></p>
+    <div th:x-data="|initData('${code}', '${pageNo}')|">
+        <div class="row">
+            <div class="col">
+                <h1 x-text="region.name"></h1>
+                <p>Created At: <span x-text="region.createdAt"></span></p>
+                <p>Updated At: <span x-text="region.updatedAt"></span></p>
+            </div>
+            <div class="col">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a :href="childBaseUrl + '/listings/create'"
+                           class="nav-link text-bg-secondary p-3">Add New Listing</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div th:replace="~{fragments/pagination :: child-pagination}"></div>
+        <div class="row row-cols-1 row-cols-md-5">
+            <template x-for="listing in pagedResult.data">
+                <div class="col mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <a :href="listingBaseUrl + '/' + listing.code">
+                                <h5 class="card-title" data-placement="top" data-toggle="tooltip"
+                                    x-text="listing.title"></h5>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </div>

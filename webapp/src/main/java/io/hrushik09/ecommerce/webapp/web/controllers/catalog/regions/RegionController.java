@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 class RegionController {
@@ -14,8 +15,9 @@ class RegionController {
     }
 
     @GetMapping("/catalog/regions/{code}")
-    public String regionPage(@PathVariable String code, Model model) {
+    public String regionPage(@PathVariable String code, @RequestParam(name = "page", defaultValue = "1") int pageNo, Model model) {
         model.addAttribute("code", code);
+        model.addAttribute("pageNo", pageNo);
         return "catalog/regions/region";
     }
 }
