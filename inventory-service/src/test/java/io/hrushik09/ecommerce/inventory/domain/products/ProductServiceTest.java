@@ -27,6 +27,7 @@ import static io.hrushik09.ecommerce.inventory.domain.products.ProductEntityBuil
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -159,14 +160,14 @@ class ProductServiceTest {
     @Nested
     class GetProducts {
         @Test
-        void shouldGetProducts() {
+        void shouldGetProductsWhenNeedsRefrigerationIsNull() {
             List<ProductSummary> list = IntStream.rangeClosed(21, 28)
                     .mapToObj(i -> new ProductSummary("product_kj23n45dfa_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
             when(productRepository.findProductSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 8));
 
-            PagedResult<ProductSummary> pagedResult = productService.getProducts(3);
+            PagedResult<ProductSummary> pagedResult = productService.getProducts(3, null);
 
             assertThat(pagedResult).isNotNull();
             List<ProductSummary> data = pagedResult.data();
@@ -211,6 +212,49 @@ class ProductServiceTest {
             assertThat(pagedResult.hasNext()).isFalse();
             assertThat(pagedResult.hasPrevious()).isTrue();
         }
+
+        @Test
+        void shouldGetProductsWhenNeedsRefrigerationIsSpecified() {
+            List<ProductSummary> list = IntStream.rangeClosed(11, 15)
+                    .mapToObj(i -> new ProductSummary("product_u32bk_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+                    .toList();
+            boolean needsRefrigeration = true;
+            when(productRepository.findProductSummariesWithRefrigerationAs(eq(needsRefrigeration), any(Pageable.class)))
+                    .thenReturn(new PageImpl<>(list, PageRequest.of(1, 10), 5));
+
+            PagedResult<ProductSummary> pagedResult = productService.getProducts(2, needsRefrigeration);
+
+            assertThat(pagedResult).isNotNull();
+            List<ProductSummary> data = pagedResult.data();
+            assertThat(data).hasSize(5);
+            assertThat(data.get(0).code()).isEqualTo("product_u32bk_11");
+            assertThat(data.get(0).name()).isEqualTo("Product 11");
+            assertThat(data.get(0).description()).isEqualTo("Description for Product 11");
+            assertThat(data.get(0).category()).isEqualTo("Category 11");
+            assertThat(data.get(1).code()).isEqualTo("product_u32bk_12");
+            assertThat(data.get(1).name()).isEqualTo("Product 12");
+            assertThat(data.get(1).description()).isEqualTo("Description for Product 12");
+            assertThat(data.get(1).category()).isEqualTo("Category 12");
+            assertThat(data.get(2).code()).isEqualTo("product_u32bk_13");
+            assertThat(data.get(2).name()).isEqualTo("Product 13");
+            assertThat(data.get(2).description()).isEqualTo("Description for Product 13");
+            assertThat(data.get(2).category()).isEqualTo("Category 13");
+            assertThat(data.get(3).code()).isEqualTo("product_u32bk_14");
+            assertThat(data.get(3).name()).isEqualTo("Product 14");
+            assertThat(data.get(3).description()).isEqualTo("Description for Product 14");
+            assertThat(data.get(3).category()).isEqualTo("Category 14");
+            assertThat(data.get(4).code()).isEqualTo("product_u32bk_15");
+            assertThat(data.get(4).name()).isEqualTo("Product 15");
+            assertThat(data.get(4).description()).isEqualTo("Description for Product 15");
+            assertThat(data.get(4).category()).isEqualTo("Category 15");
+            assertThat(pagedResult.totalElements()).isEqualTo(15);
+            assertThat(pagedResult.pageNumber()).isEqualTo(2);
+            assertThat(pagedResult.totalPages()).isEqualTo(2);
+            assertThat(pagedResult.isFirst()).isFalse();
+            assertThat(pagedResult.isLast()).isTrue();
+            assertThat(pagedResult.hasNext()).isFalse();
+            assertThat(pagedResult.hasPrevious()).isTrue();
+        }
     }
 
     @Nested
@@ -227,7 +271,7 @@ class ProductServiceTest {
 
         @Test
         void shouldGetProductByCodeSuccessfully() {
-            String code = "product_kj23n45dfa";
+            String code = "product_28ohsfjb";
             String name = "Product 18";
             String description = "Description for Product 18";
             String category = "Category 18";

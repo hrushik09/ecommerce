@@ -46,6 +46,9 @@ public interface InventoryServiceClient {
     @GetExchange("/products")
     PagedResult<ProductSummary> getProducts(@RequestParam(name = "page") int pageNo);
 
+    @GetExchange("/products")
+    PagedResult<ProductSummary> getProductsWithRefrigerationAs(@RequestParam(name = "page") int pageNo, @RequestParam boolean needsRefrigeration);
+
     @PostExchange("/products")
     CreateProductResponse createProduct(@RequestBody CreateProductRequest request);
 

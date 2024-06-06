@@ -53,11 +53,16 @@ public class ProductService {
         return ProductMapper.convertToCreateProductResponse(saved);
     }
 
-    public PagedResult<ProductSummary> getProducts(int pageNo) {
+    public PagedResult<ProductSummary> getProducts(int pageNo, Boolean needsRefrigeration) {
         Sort sort = Sort.by("id").ascending();
         int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
         Pageable pageable = PageRequest.of(pageNumber, 10, sort);
-        Page<ProductSummary> productsPage = productRepository.findProductSummaries(pageable);
+        Page<ProductSummary> productsPage;
+        if (needsRefrigeration == null) {
+            productsPage = productRepository.findProductSummaries(pageable);
+        } else {
+            productsPage = productRepository.findProductSummariesWithRefrigerationAs(needsRefrigeration, pageable);
+        }
         return new PagedResult<>(
                 productsPage.getContent(),
                 productsPage.getTotalElements(),

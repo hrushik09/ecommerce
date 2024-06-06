@@ -48,12 +48,17 @@ class ProductRestController {
     }
 
     @GetMapping("/all")
-    List<ProductSummary> getAllProducts() {
+    List<ProductSummary> getAllProducts(@RequestParam(required = false) Boolean needsRefrigeration) {
         log.info("request to inventory service to get all products");
         int pageNo = 1;
         List<ProductSummary> productSummaries = new ArrayList<>();
         while (true) {
-            PagedResult<ProductSummary> pagedResult = inventoryServiceClient.getProducts(pageNo);
+            PagedResult<ProductSummary> pagedResult;
+            if (needsRefrigeration == null) {
+                pagedResult = inventoryServiceClient.getProducts(pageNo);
+            } else {
+                pagedResult = inventoryServiceClient.getProductsWithRefrigerationAs(pageNo, needsRefrigeration);
+            }
             productSummaries.addAll(pagedResult.data());
             if (!pagedResult.hasNext()) {
                 break;

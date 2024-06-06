@@ -151,9 +151,9 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
     @Nested
     class GetProducts {
         @Test
-        void shouldGetProducts() {
+        void shouldGetProductsWhenNeedsRefrigerationIsNotSpecified() {
             IntStream.rangeClosed(1, 12)
-                    .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i));
+                    .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i, true));
 
             given()
                     .when()
@@ -212,6 +212,76 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
                     .body("data[9].description", equalTo("Description for Product 10"))
                     .body("data[9].category", equalTo("Category 10"))
                     .body("totalElements", equalTo(12))
+                    .body("pageNumber", equalTo(1))
+                    .body("totalPages", equalTo(2))
+                    .body("isFirst", is(true))
+                    .body("isLast", is(false))
+                    .body("hasNext", is(true))
+                    .body("hasPrevious", is(false));
+        }
+
+        @Test
+        void shouldGetProductsWhenNeedsRefrigerationIsSpecified() {
+            IntStream.rangeClosed(1, 23)
+                    .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i, i % 2 == 0));
+
+            given()
+                    .when()
+                    .get("/api/products?needsRefrigeration=true")
+                    .then()
+                    .statusCode(OK.value())
+                    .body("data", hasSize(10))
+                    .body("data[0].code", startsWith("product_"))
+                    .body("data[0].code", hasLength(7 + 1 + 36))
+                    .body("data[0].name", equalTo("Product 2"))
+                    .body("data[0].description", equalTo("Description for Product 2"))
+                    .body("data[0].category", equalTo("Category 2"))
+                    .body("data[1].code", startsWith("product_"))
+                    .body("data[1].code", hasLength(7 + 1 + 36))
+                    .body("data[1].name", equalTo("Product 4"))
+                    .body("data[1].description", equalTo("Description for Product 4"))
+                    .body("data[1].category", equalTo("Category 4"))
+                    .body("data[2].code", startsWith("product_"))
+                    .body("data[2].code", hasLength(7 + 1 + 36))
+                    .body("data[2].name", equalTo("Product 6"))
+                    .body("data[2].description", equalTo("Description for Product 6"))
+                    .body("data[2].category", equalTo("Category 6"))
+                    .body("data[3].code", startsWith("product_"))
+                    .body("data[3].code", hasLength(7 + 1 + 36))
+                    .body("data[3].name", equalTo("Product 8"))
+                    .body("data[3].description", equalTo("Description for Product 8"))
+                    .body("data[3].category", equalTo("Category 8"))
+                    .body("data[4].code", startsWith("product_"))
+                    .body("data[4].code", hasLength(7 + 1 + 36))
+                    .body("data[4].name", equalTo("Product 10"))
+                    .body("data[4].description", equalTo("Description for Product 10"))
+                    .body("data[4].category", equalTo("Category 10"))
+                    .body("data[5].code", startsWith("product_"))
+                    .body("data[5].code", hasLength(7 + 1 + 36))
+                    .body("data[5].name", equalTo("Product 12"))
+                    .body("data[5].description", equalTo("Description for Product 12"))
+                    .body("data[5].category", equalTo("Category 12"))
+                    .body("data[6].code", startsWith("product_"))
+                    .body("data[6].code", hasLength(7 + 1 + 36))
+                    .body("data[6].name", equalTo("Product 14"))
+                    .body("data[6].description", equalTo("Description for Product 14"))
+                    .body("data[6].category", equalTo("Category 14"))
+                    .body("data[7].code", startsWith("product_"))
+                    .body("data[7].code", hasLength(7 + 1 + 36))
+                    .body("data[7].name", equalTo("Product 16"))
+                    .body("data[7].description", equalTo("Description for Product 16"))
+                    .body("data[7].category", equalTo("Category 16"))
+                    .body("data[8].code", startsWith("product_"))
+                    .body("data[8].code", hasLength(7 + 1 + 36))
+                    .body("data[8].name", equalTo("Product 18"))
+                    .body("data[8].description", equalTo("Description for Product 18"))
+                    .body("data[8].category", equalTo("Category 18"))
+                    .body("data[9].code", startsWith("product_"))
+                    .body("data[9].code", hasLength(7 + 1 + 36))
+                    .body("data[9].name", equalTo("Product 20"))
+                    .body("data[9].description", equalTo("Description for Product 20"))
+                    .body("data[9].category", equalTo("Category 20"))
+                    .body("totalElements", equalTo(11))
                     .body("pageNumber", equalTo(1))
                     .body("totalPages", equalTo(2))
                     .body("isFirst", is(true))

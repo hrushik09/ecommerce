@@ -26,7 +26,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
         void shouldCreateInventoryItem() {
             CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
-            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
+            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3", true);
 
             given().contentType(JSON)
                     .body("""
@@ -54,7 +54,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
         void shouldNotCreateIfInventoryItemExistsForProductAndWarehouse() {
             CreateLocationResponse location = havingPersisted.location("Location 134", "Address 32");
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
-            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3");
+            CreateProductResponse product = havingPersisted.product("Product 2", "Description for Product 2", "Category 3", true);
             given().contentType(JSON)
                     .body("""
                             {
@@ -96,7 +96,7 @@ class InventoryItemEndToEndTest extends AbstractEndToEndTest {
             CreateWarehouseResponse warehouse = havingPersisted.warehouse(location.code(), "Warehouse 23", true);
             IntStream.rangeClosed(1, 15)
                     .forEach(i -> {
-                        CreateProductResponse product = havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i);
+                        CreateProductResponse product = havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i, true);
                         havingPersisted.inventoryItem(warehouse.code(), product.code(), i + 34, i + 12, i + 49, i + 29);
                     });
 

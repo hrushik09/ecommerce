@@ -144,7 +144,7 @@ class ProductControllerTest {
             List<ProductSummary> data = IntStream.rangeClosed(21, 30)
                     .mapToObj(i -> new ProductSummary("product_dn3ja_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
-            when(productService.getProducts(pageNo))
+            when(productService.getProducts(pageNo, null))
                     .thenReturn(new PagedResult<>(data, 47, pageNo, 5, false, false, true, true));
 
             mockMvc.perform(get("/api/products?page={pageNo}", pageNo))
@@ -200,11 +200,72 @@ class ProductControllerTest {
         }
 
         @Test
-        void shouldGetProductsWhenPageNumberIsNotSpecified() throws Exception {
+        void shouldGetProductsWhenNeedsRefrigerationIsSpecified() throws Exception {
+            List<ProductSummary> data = IntStream.rangeClosed(1, 10)
+                    .mapToObj(i -> new ProductSummary("product_aou2aj_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
+                    .toList();
+            boolean needsRefrigeration = false;
+            when(productService.getProducts(1, needsRefrigeration))
+                    .thenReturn(new PagedResult<>(data, 34, 1, 4, true, false, true, false));
+
+            mockMvc.perform(get("/api/products?needsRefrigeration={needsRefrigeration}", needsRefrigeration))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data", hasSize(10)))
+                    .andExpect(jsonPath("$.data[0].code", equalTo("product_aou2aj_1")))
+                    .andExpect(jsonPath("$.data[0].name", equalTo("Product 1")))
+                    .andExpect(jsonPath("$.data[0].description", equalTo("Description for Product 1")))
+                    .andExpect(jsonPath("$.data[0].category", equalTo("Category 1")))
+                    .andExpect(jsonPath("$.data[1].code", equalTo("product_aou2aj_2")))
+                    .andExpect(jsonPath("$.data[1].name", equalTo("Product 2")))
+                    .andExpect(jsonPath("$.data[1].description", equalTo("Description for Product 2")))
+                    .andExpect(jsonPath("$.data[1].category", equalTo("Category 2")))
+                    .andExpect(jsonPath("$.data[2].code", equalTo("product_aou2aj_3")))
+                    .andExpect(jsonPath("$.data[2].name", equalTo("Product 3")))
+                    .andExpect(jsonPath("$.data[2].description", equalTo("Description for Product 3")))
+                    .andExpect(jsonPath("$.data[2].category", equalTo("Category 3")))
+                    .andExpect(jsonPath("$.data[3].code", equalTo("product_aou2aj_4")))
+                    .andExpect(jsonPath("$.data[3].name", equalTo("Product 4")))
+                    .andExpect(jsonPath("$.data[3].description", equalTo("Description for Product 4")))
+                    .andExpect(jsonPath("$.data[3].category", equalTo("Category 4")))
+                    .andExpect(jsonPath("$.data[4].code", equalTo("product_aou2aj_5")))
+                    .andExpect(jsonPath("$.data[4].name", equalTo("Product 5")))
+                    .andExpect(jsonPath("$.data[4].description", equalTo("Description for Product 5")))
+                    .andExpect(jsonPath("$.data[4].category", equalTo("Category 5")))
+                    .andExpect(jsonPath("$.data[5].code", equalTo("product_aou2aj_6")))
+                    .andExpect(jsonPath("$.data[5].name", equalTo("Product 6")))
+                    .andExpect(jsonPath("$.data[5].description", equalTo("Description for Product 6")))
+                    .andExpect(jsonPath("$.data[5].category", equalTo("Category 6")))
+                    .andExpect(jsonPath("$.data[6].code", equalTo("product_aou2aj_7")))
+                    .andExpect(jsonPath("$.data[6].name", equalTo("Product 7")))
+                    .andExpect(jsonPath("$.data[6].description", equalTo("Description for Product 7")))
+                    .andExpect(jsonPath("$.data[6].category", equalTo("Category 7")))
+                    .andExpect(jsonPath("$.data[7].code", equalTo("product_aou2aj_8")))
+                    .andExpect(jsonPath("$.data[7].name", equalTo("Product 8")))
+                    .andExpect(jsonPath("$.data[7].description", equalTo("Description for Product 8")))
+                    .andExpect(jsonPath("$.data[7].category", equalTo("Category 8")))
+                    .andExpect(jsonPath("$.data[8].code", equalTo("product_aou2aj_9")))
+                    .andExpect(jsonPath("$.data[8].name", equalTo("Product 9")))
+                    .andExpect(jsonPath("$.data[8].description", equalTo("Description for Product 9")))
+                    .andExpect(jsonPath("$.data[8].category", equalTo("Category 9")))
+                    .andExpect(jsonPath("$.data[9].code", equalTo("product_aou2aj_10")))
+                    .andExpect(jsonPath("$.data[9].name", equalTo("Product 10")))
+                    .andExpect(jsonPath("$.data[9].description", equalTo("Description for Product 10")))
+                    .andExpect(jsonPath("$.data[9].category", equalTo("Category 10")))
+                    .andExpect(jsonPath("$.totalElements", equalTo(34)))
+                    .andExpect(jsonPath("$.pageNumber", equalTo(1)))
+                    .andExpect(jsonPath("$.totalPages", equalTo(4)))
+                    .andExpect(jsonPath("$.isFirst", is(true)))
+                    .andExpect(jsonPath("$.isLast", is(false)))
+                    .andExpect(jsonPath("$.hasNext", is(true)))
+                    .andExpect(jsonPath("$.hasPrevious", is(false)));
+        }
+
+        @Test
+        void shouldGetProducts() throws Exception {
             List<ProductSummary> data = IntStream.rangeClosed(1, 10)
                     .mapToObj(i -> new ProductSummary("product_j73jbasd_" + i, "Product " + i, "Description for Product " + i, "Category " + i))
                     .toList();
-            when(productService.getProducts(1))
+            when(productService.getProducts(1, null))
                     .thenReturn(new PagedResult<>(data, 23, 1, 3, true, false, true, false));
 
             mockMvc.perform(get("/api/products"))
@@ -264,7 +325,7 @@ class ProductControllerTest {
     class GetProductByCode {
         @Test
         void shouldReturnErrorWhenNonExistingProduct() throws Exception {
-            String code = "product_non_existing_j73jbasd";
+            String code = "product_non_existing_iuhaej";
             when(productService.getProductByCode(code))
                     .thenThrow(new ProductDoesNotExist(code));
 
@@ -275,7 +336,7 @@ class ProductControllerTest {
 
         @Test
         void shouldGetProductSuccessfully() throws Exception {
-            String code = "product_dummy_j73jbasd";
+            String code = "product_dummy_j56sfg";
             String name = "Product 4";
             String description = "Description for Product 4";
             String category = "Category 4";

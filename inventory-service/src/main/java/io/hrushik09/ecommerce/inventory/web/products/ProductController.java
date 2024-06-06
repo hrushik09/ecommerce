@@ -31,9 +31,9 @@ class ProductController {
     }
 
     @GetMapping
-    PagedResult<ProductSummary> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    PagedResult<ProductSummary> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo, @RequestParam(required = false) Boolean needsRefrigeration) {
         log.info("requesting getProducts for page {}", pageNo);
-        return productService.getProducts(pageNo);
+        return productService.getProducts(pageNo, needsRefrigeration);
     }
 
     @GetMapping("/{code}")

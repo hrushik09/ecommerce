@@ -1,6 +1,7 @@
 document.addEventListener("alpine:init", () => {
-    Alpine.data("initData", (warehouseCode) => ({
+    Alpine.data("initData", (warehouseCode, needsRefrigeration) => ({
         warehouseCode: warehouseCode,
+        needsRefrigeration: needsRefrigeration,
         inventoryItem: {
             productCode: null,
             quantityAvailable: null,
@@ -11,10 +12,10 @@ document.addEventListener("alpine:init", () => {
         products: [],
         createInventoryItemErrorDetail: null,
         init() {
-            this.getProducts();
+            this.getProducts(this.needsRefrigeration);
         },
-        getProducts() {
-            $.getJSON("/api/inventory/products/all", (resp) => {
+        getProducts(needsRefrigeration) {
+            $.getJSON("/api/inventory/products/all?needsRefrigeration=" + needsRefrigeration, (resp) => {
                 this.products = resp;
             });
         },

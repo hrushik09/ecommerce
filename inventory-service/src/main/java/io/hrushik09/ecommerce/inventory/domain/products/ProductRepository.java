@@ -15,6 +15,13 @@ interface ProductRepository extends JpaRepository<ProductEntity, Long> {
             """)
     Page<ProductSummary> findProductSummaries(Pageable pageable);
 
+    @Query("""
+            SELECT new io.hrushik09.ecommerce.inventory.domain.products.models.ProductSummary(pe.code, pe.name, pe.description, pe.category)
+            FROM ProductEntity pe
+            WHERE pe.needsRefrigeration = :needsRefrigeration
+            """)
+    Page<ProductSummary> findProductSummariesWithRefrigerationAs(boolean needsRefrigeration, Pageable pageable);
+
     Optional<ProductEntity> findByCode(String code);
 
     boolean existsByName(String name);
