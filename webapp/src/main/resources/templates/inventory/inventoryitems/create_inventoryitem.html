@@ -6,7 +6,7 @@
 >
 <body>
 <div layout:fragment="content">
-    <div th:x-data="|initData('${warehouseCode}')|">
+    <div th:x-data="|initData('${warehouseCode}', '${needsRefrigeration}')|">
         <form @submit.prevent="createInventoryItem" method="post">
             <div class="mb-3">
                 <label class="form-label" for="productCode">Product Code</label>

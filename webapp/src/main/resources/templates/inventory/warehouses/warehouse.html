@@ -17,7 +17,7 @@
             <div class="col">
                 <ul class="nav justify-content-end">
                     <li class="nav-item">
-                        <a :href="childBaseUrl + '/items/create'"
+                        <a :href="childBaseUrl + '/items/create?needsRefrigeration=' + warehouse.isRefrigerated"
                            class="nav-link text-bg-secondary p-3">Add New Inventory Item</a>
                     </li>
                 </ul>
