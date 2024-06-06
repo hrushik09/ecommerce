@@ -27,8 +27,7 @@ class LocationRepositoryTest {
     @Test
     void shouldGetLocationSummariesSuccessfully() {
         Sort sort = Sort.by("id").ascending();
-        int pageSize = 10;
-        Pageable pageable = PageRequest.of(2, pageSize, sort);
+        Pageable pageable = PageRequest.of(2, 10, sort);
         IntStream.rangeClosed(1, 34)
                 .forEach(i -> havingPersisted.location(entityManager, "Location " + i, "Address " + i, "location_3iaknf_" + i));
         entityManager.flush();
@@ -38,7 +37,7 @@ class LocationRepositoryTest {
 
         assertThat(locationsPage).isNotNull();
         List<LocationSummary> locationSummaries = locationsPage.getContent();
-        assertThat(locationSummaries).hasSize(pageSize);
+        assertThat(locationSummaries).hasSize(10);
         assertThat(locationSummaries.get(0).code()).isEqualTo("location_3iaknf_21");
         assertThat(locationSummaries.get(0).name()).isEqualTo("Location 21");
         assertThat(locationSummaries.get(0).address()).isEqualTo("Address 21");
