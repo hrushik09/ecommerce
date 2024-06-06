@@ -37,8 +37,8 @@ public class EndToEndTestDataPersister {
         return warehouseService.create(cmd);
     }
 
-    public CreateProductResponse product(String name, String description, String category) {
-        CreateProductCommand cmd = new CreateProductCommand(name, description, category, 15, true,
+    public CreateProductResponse product(String name, String description, String category, boolean needsRefrigeration) {
+        CreateProductCommand cmd = new CreateProductCommand(name, description, category, 15, needsRefrigeration,
                 new CreateMeasurementCommand(new CreatePackedWeightCommand(new BigDecimal("34.54"), "kg"),
                         new CreatePackedLengthCommand(new BigDecimal("4546.34"), "cm"),
                         new CreatePackedWidthCommand(new BigDecimal("554.23"), "cm"),

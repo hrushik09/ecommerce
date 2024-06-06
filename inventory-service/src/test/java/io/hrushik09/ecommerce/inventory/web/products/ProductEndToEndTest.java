@@ -153,7 +153,7 @@ class ProductEndToEndTest extends AbstractEndToEndTest {
         @Test
         void shouldGetProducts() {
             IntStream.rangeClosed(1, 12)
-                    .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i));
+                    .forEach(i -> havingPersisted.product("Product " + i, "Description for Product " + i, "Category " + i, true));
 
             given()
                     .when()
