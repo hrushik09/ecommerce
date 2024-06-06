@@ -18,4 +18,6 @@ interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     Optional<ProductEntity> findByCode(String code);
 
     boolean existsByName(String name);
+
+    Page<ProductSummary> findProductSummariesWithRefrigerationAs(boolean needsRefrigeration, Pageable pageable);
 }
