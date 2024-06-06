@@ -53,7 +53,7 @@ public class ProductService {
         return ProductMapper.convertToCreateProductResponse(saved);
     }
 
-    public PagedResult<ProductSummary> getProducts(int pageNo) {
+    public PagedResult<ProductSummary> getProducts(int pageNo, Boolean needsRefrigeration) {
         Sort sort = Sort.by("id").ascending();
         int pageNumber = pageNo <= 1 ? 0 : pageNo - 1;
         Pageable pageable = PageRequest.of(pageNumber, 10, sort);

@@ -166,7 +166,7 @@ class ProductServiceTest {
             when(productRepository.findProductSummaries(any(Pageable.class)))
                     .thenReturn(new PageImpl<>(list, PageRequest.of(2, 10), 8));
 
-            PagedResult<ProductSummary> pagedResult = productService.getProducts(3);
+            PagedResult<ProductSummary> pagedResult = productService.getProducts(3, null);
 
             assertThat(pagedResult).isNotNull();
             List<ProductSummary> data = pagedResult.data();
