@@ -11,8 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
 
-import static io.hrushik09.ecommerce.inventory.TestParams.stringWithLength100;
-import static io.hrushik09.ecommerce.inventory.TestParams.stringWithLength101;
+import static io.hrushik09.ecommerce.inventory.TestParams.*;
 import static io.hrushik09.ecommerce.inventory.domain.locations.model.CreateLocationRequestBuilder.aRequest;
 
 class CreateLocationRequestTest {
@@ -39,20 +38,41 @@ class CreateLocationRequestTest {
 
         @Test
         void nameShouldContainMax100Characters() {
-            CreateLocationRequest validRequest = aRequest().withName(stringWithLength100).build();
+            CreateLocationRequest validRequest = aRequest().withName(STRING_WITH_LENGTH_100).build();
             commonAssertions.hasNoViolations(validator.validate(validRequest));
 
-            CreateLocationRequest invalidRequest = aRequest().withName(stringWithLength101).build();
+            CreateLocationRequest invalidRequest = aRequest().withName(STRING_WITH_LENGTH_101).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(invalidRequest);
             commonAssertions.hasSingleMessage(violations, "name should contain max 100 characters");
         }
     }
 
-    @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
-    void addressShouldBeNonBlank(String address) {
-        CreateLocationRequest request = aRequest().withAddress(address).build();
-        Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "address should be non-blank");
+    @Nested
+    class AddressValidation {
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+        void addressShouldBeNonBlank(String address) {
+            CreateLocationRequest request = aRequest().withAddress(address).build();
+            Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "address should be non-blank");
+        }
+
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#invalidSimpleStrings")
+        void addressShouldContainValidCharacters(String address) {
+            CreateLocationRequest request = aRequest().withAddress(address).build();
+            Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "address should contain valid characters");
+        }
+
+        @Test
+        void addressShouldContainMax500Characters() {
+            CreateLocationRequest validRequest = aRequest().withAddress(STRING_WITH_LENGTH_500).build();
+            commonAssertions.hasNoViolations(validator.validate(validRequest));
+
+            CreateLocationRequest invalidRequest = aRequest().withAddress(STRING_WITH_LENGTH_501).build();
+            Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(invalidRequest);
+            commonAssertions.hasSingleMessage(violations, "address should contain max 500 characters");
+        }
     }
 }

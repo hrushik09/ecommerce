@@ -12,6 +12,8 @@ public record CreateLocationRequest(
         @Size(max = 100, message = "name {max.characters}")
         String name,
         @NotBlank(message = "address {not.blank}")
+        @Pattern(regexp = simpleTextRegex, message = "address {valid.characters}")
+        @Size(max = 500, message = "address {max.characters}")
         String address
 ) {
 }
