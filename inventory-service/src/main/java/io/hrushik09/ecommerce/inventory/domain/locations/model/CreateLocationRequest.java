@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Size;
 import static io.hrushik09.ecommerce.inventory.config.DefaultApplicationProperties.simpleTextRegex;
 
 public record CreateLocationRequest(
-        @NotBlank(message = "name should be non-blank")
-        @Pattern(regexp = simpleTextRegex, message = "name should contain valid characters")
-        @Size(max = 100, message = "name should contain max 100 characters")
+        @NotBlank(message = "name {not.blank}")
+        @Pattern(regexp = simpleTextRegex, message = "name {valid.characters}")
+        @Size(max = 100, message = "name {max.characters}")
         String name,
-        @NotBlank(message = "address should be non-blank")
+        @NotBlank(message = "address {not.blank}")
         String address
 ) {
 }
