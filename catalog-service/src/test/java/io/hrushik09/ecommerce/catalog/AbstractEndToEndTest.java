@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @ExtendWith(ClearDatabaseExtension.class)
 @ActiveProfiles("test")
 public class AbstractEndToEndTest {

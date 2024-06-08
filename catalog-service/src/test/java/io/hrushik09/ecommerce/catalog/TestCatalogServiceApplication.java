@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 public class TestCatalogServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.from(CatalogServiceApplication::main).with(ContainersConfig.class).run(args);
+        SpringApplication.from(CatalogServiceApplication::main).with(TestcontainersConfiguration.class).run(args);
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @ExtendWith(ClearDatabaseExtension.class)
 @ActiveProfiles("test")
 public abstract class AbstractEndToEndTest {
