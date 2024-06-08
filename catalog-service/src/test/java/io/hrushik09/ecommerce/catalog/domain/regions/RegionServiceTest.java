@@ -62,7 +62,7 @@ class RegionServiceTest {
             String countryCode = "country_does_not_exist_klakfnal";
             when(countryService.getCountryEntityByCode(countryCode)).thenThrow(new CountryDoesNotExist(countryCode));
 
-            assertThatThrownBy(() -> regionService.createRegion(new CreateRegionCommand(countryCode, "doesn't matter")))
+            assertThatThrownBy(() -> regionService.createRegion(new CreateRegionCommand(countryCode, "doesnt matter")))
                     .isInstanceOf(CountryDoesNotExist.class)
                     .hasMessageContaining("Country with code " + countryCode + " does not exist");
         }
