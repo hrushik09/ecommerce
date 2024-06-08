@@ -38,6 +38,26 @@ services:
       resources:
         limits:
           memory: 500m
+  user-db:
+    image: mysql:8.0.34
+    container_name: user-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootroot
+      MYSQL_DATABASE: user-db
+    ports:
+      - "33306:3306"
+    volumes:
+      - user-db-volume:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 20s
+      timeout: 15s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 500m
 volumes:
   inventory-db-volume: { }
   catalog-db-volume: { }
+  user-db-volume: { }
