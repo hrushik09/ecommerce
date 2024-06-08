@@ -24,6 +24,14 @@ class CreateLocationRequestTest {
     }
 
     @ParameterizedTest
+    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#invalidSimpleStrings")
+    void nameShouldContainValidCharacters(String name) {
+        CreateLocationRequest request = aRequest().withName(name).build();
+        Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
+        commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
+    }
+
+    @ParameterizedTest
     @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
     void addressShouldBeNonBlank(String address) {
         CreateLocationRequest request = aRequest().withAddress(address).build();
