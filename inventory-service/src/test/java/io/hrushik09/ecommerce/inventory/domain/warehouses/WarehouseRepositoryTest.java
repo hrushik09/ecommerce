@@ -28,12 +28,17 @@ class WarehouseRepositoryTest {
     @Test
     void shouldGetWarehouseSummariesSuccessfully() {
         Sort sort = Sort.by("id").ascending();
-        Pageable pageable = PageRequest.of(1, 10, sort);
-        LocationEntity locationEntity = havingPersisted.location(entityManager, "Location 3", "Address 4", "location_3ijab");
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        LocationEntity locationEntity1 = havingPersisted.location(entityManager, "Location 3", "Address 4", "location_3ijab");
+        LocationEntity locationEntity2 = havingPersisted.location(entityManager, "Location 4", "Address 4", "location_03nkjnf");
         IntStream.rangeClosed(1, 18)
                 .forEach(i -> {
                     WarehouseEntity warehouseEntity = new WarehouseEntity();
-                    warehouseEntity.setLocationEntity(locationEntity);
+                    if (i % 2 == 0) {
+                        warehouseEntity.setLocationEntity(locationEntity1);
+                    } else {
+                        warehouseEntity.setLocationEntity(locationEntity2);
+                    }
                     warehouseEntity.setCode("warehouse_4jkjb343_" + i);
                     warehouseEntity.setName("Warehouse " + i);
                     warehouseEntity.setRefrigerated(i % 2 == 0);
@@ -42,41 +47,44 @@ class WarehouseRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        Page<WarehouseSummary> warehousePage = warehouseRepository.getWarehouseSummaries(locationEntity, pageable);
+        Page<WarehouseSummary> warehousePage = warehouseRepository.getWarehouseSummaries(locationEntity1, pageable);
 
         assertThat(warehousePage).isNotNull();
         List<WarehouseSummary> warehouseSummaries = warehousePage.getContent();
-        assertThat(warehouseSummaries).hasSize(8);
-        assertThat(warehouseSummaries.get(0).code()).isEqualTo("warehouse_4jkjb343_11");
-        assertThat(warehouseSummaries.get(0).name()).isEqualTo("Warehouse 11");
-        assertThat(warehouseSummaries.get(0).isRefrigerated()).isFalse();
-        assertThat(warehouseSummaries.get(1).code()).isEqualTo("warehouse_4jkjb343_12");
-        assertThat(warehouseSummaries.get(1).name()).isEqualTo("Warehouse 12");
+        assertThat(warehouseSummaries).hasSize(9);
+        assertThat(warehouseSummaries.get(0).code()).isEqualTo("warehouse_4jkjb343_2");
+        assertThat(warehouseSummaries.get(0).name()).isEqualTo("Warehouse 2");
+        assertThat(warehouseSummaries.get(0).isRefrigerated()).isTrue();
+        assertThat(warehouseSummaries.get(1).code()).isEqualTo("warehouse_4jkjb343_4");
+        assertThat(warehouseSummaries.get(1).name()).isEqualTo("Warehouse 4");
         assertThat(warehouseSummaries.get(1).isRefrigerated()).isTrue();
-        assertThat(warehouseSummaries.get(2).code()).isEqualTo("warehouse_4jkjb343_13");
-        assertThat(warehouseSummaries.get(2).name()).isEqualTo("Warehouse 13");
-        assertThat(warehouseSummaries.get(2).isRefrigerated()).isFalse();
-        assertThat(warehouseSummaries.get(3).code()).isEqualTo("warehouse_4jkjb343_14");
-        assertThat(warehouseSummaries.get(3).name()).isEqualTo("Warehouse 14");
+        assertThat(warehouseSummaries.get(2).code()).isEqualTo("warehouse_4jkjb343_6");
+        assertThat(warehouseSummaries.get(2).name()).isEqualTo("Warehouse 6");
+        assertThat(warehouseSummaries.get(2).isRefrigerated()).isTrue();
+        assertThat(warehouseSummaries.get(3).code()).isEqualTo("warehouse_4jkjb343_8");
+        assertThat(warehouseSummaries.get(3).name()).isEqualTo("Warehouse 8");
         assertThat(warehouseSummaries.get(3).isRefrigerated()).isTrue();
-        assertThat(warehouseSummaries.get(4).code()).isEqualTo("warehouse_4jkjb343_15");
-        assertThat(warehouseSummaries.get(4).name()).isEqualTo("Warehouse 15");
-        assertThat(warehouseSummaries.get(4).isRefrigerated()).isFalse();
-        assertThat(warehouseSummaries.get(5).code()).isEqualTo("warehouse_4jkjb343_16");
-        assertThat(warehouseSummaries.get(5).name()).isEqualTo("Warehouse 16");
+        assertThat(warehouseSummaries.get(4).code()).isEqualTo("warehouse_4jkjb343_10");
+        assertThat(warehouseSummaries.get(4).name()).isEqualTo("Warehouse 10");
+        assertThat(warehouseSummaries.get(4).isRefrigerated()).isTrue();
+        assertThat(warehouseSummaries.get(5).code()).isEqualTo("warehouse_4jkjb343_12");
+        assertThat(warehouseSummaries.get(5).name()).isEqualTo("Warehouse 12");
         assertThat(warehouseSummaries.get(5).isRefrigerated()).isTrue();
-        assertThat(warehouseSummaries.get(6).code()).isEqualTo("warehouse_4jkjb343_17");
-        assertThat(warehouseSummaries.get(6).name()).isEqualTo("Warehouse 17");
-        assertThat(warehouseSummaries.get(6).isRefrigerated()).isFalse();
-        assertThat(warehouseSummaries.get(7).code()).isEqualTo("warehouse_4jkjb343_18");
-        assertThat(warehouseSummaries.get(7).name()).isEqualTo("Warehouse 18");
+        assertThat(warehouseSummaries.get(6).code()).isEqualTo("warehouse_4jkjb343_14");
+        assertThat(warehouseSummaries.get(6).name()).isEqualTo("Warehouse 14");
+        assertThat(warehouseSummaries.get(6).isRefrigerated()).isTrue();
+        assertThat(warehouseSummaries.get(7).code()).isEqualTo("warehouse_4jkjb343_16");
+        assertThat(warehouseSummaries.get(7).name()).isEqualTo("Warehouse 16");
         assertThat(warehouseSummaries.get(7).isRefrigerated()).isTrue();
-        assertThat(warehousePage.getTotalElements()).isEqualTo(18);
-        assertThat(warehousePage.getNumber()).isEqualTo(1);
-        assertThat(warehousePage.getTotalPages()).isEqualTo(2);
-        assertThat(warehousePage.isFirst()).isFalse();
+        assertThat(warehouseSummaries.get(8).code()).isEqualTo("warehouse_4jkjb343_18");
+        assertThat(warehouseSummaries.get(8).name()).isEqualTo("Warehouse 18");
+        assertThat(warehouseSummaries.get(8).isRefrigerated()).isTrue();
+        assertThat(warehousePage.getTotalElements()).isEqualTo(9);
+        assertThat(warehousePage.getNumber()).isEqualTo(0);
+        assertThat(warehousePage.getTotalPages()).isEqualTo(1);
+        assertThat(warehousePage.isFirst()).isTrue();
         assertThat(warehousePage.isLast()).isTrue();
         assertThat(warehousePage.hasNext()).isFalse();
-        assertThat(warehousePage.hasPrevious()).isTrue();
+        assertThat(warehousePage.hasPrevious()).isFalse();
     }
 }
