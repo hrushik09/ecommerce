@@ -55,7 +55,8 @@ class ListingServiceTest {
 
     @BeforeEach
     void setUp() {
-        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of("UTC"));
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.DEFAULT_TIMESTAMP_PATTERN)
+                .withZone(ZoneId.of(DefaultApplicationProperties.DEFAULT_ZONE_ID));
         listingService = new ListingService(listingRepository, generateCode, inventoryServiceProductClient, regionService, defaultTimestampFormatter);
     }
 

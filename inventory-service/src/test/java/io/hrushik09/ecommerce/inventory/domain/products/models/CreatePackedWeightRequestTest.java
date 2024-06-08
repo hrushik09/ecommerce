@@ -46,7 +46,7 @@ class CreatePackedWeightRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void unitShouldBeNonBlank(String unit) {
         CreatePackedWeightRequest request = aPackedWeightRequest().withUnit(unit).build();
         Set<ConstraintViolation<CreatePackedWeightRequest>> violations = validator.validate(request);

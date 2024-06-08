@@ -50,8 +50,8 @@ class RegionServiceTest {
 
     @BeforeEach
     void setUp() {
-        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern)
-                .withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.DEFAULT_TIMESTAMP_PATTERN)
+                .withZone(ZoneId.of(DefaultApplicationProperties.DEFAULT_ZONE_ID));
         regionService = new RegionService(regionRepository, generateCode, defaultTimestampFormatter, countryService);
     }
 
@@ -62,7 +62,7 @@ class RegionServiceTest {
             String countryCode = "country_does_not_exist_klakfnal";
             when(countryService.getCountryEntityByCode(countryCode)).thenThrow(new CountryDoesNotExist(countryCode));
 
-            assertThatThrownBy(() -> regionService.createRegion(new CreateRegionCommand(countryCode, "doesn't matter")))
+            assertThatThrownBy(() -> regionService.createRegion(new CreateRegionCommand(countryCode, "doesnt matter")))
                     .isInstanceOf(CountryDoesNotExist.class)
                     .hasMessageContaining("Country with code " + countryCode + " does not exist");
         }

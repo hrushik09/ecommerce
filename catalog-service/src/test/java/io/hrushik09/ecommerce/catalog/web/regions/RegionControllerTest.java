@@ -40,14 +40,14 @@ class RegionControllerTest {
         @Test
         void shouldReturnErrorWhenCountryDoesNotExist() throws Exception {
             String countryCode = "country_does_not_exist_ajsnkjas";
-            when(regionService.createRegion(new CreateRegionCommand(countryCode, "doesn't matter")))
+            when(regionService.createRegion(new CreateRegionCommand(countryCode, "doesnt matter")))
                     .thenThrow(new CountryDoesNotExist(countryCode));
 
             mockMvc.perform(post("/api/countries/{countryCode}/regions", countryCode)
                             .contentType(APPLICATION_JSON)
                             .content("""
                                     {
-                                    "name": "doesn't matter"
+                                    "name": "doesnt matter"
                                     }
                                     """))
                     .andExpect(status().isBadRequest())

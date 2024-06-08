@@ -42,8 +42,8 @@ class LocationServiceTest {
 
     @BeforeEach
     void setUp() {
-        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern)
-                .withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
+        DateTimeFormatter defaultTimestampFormatter = DateTimeFormatter.ofPattern(DefaultApplicationProperties.DEFAULT_TIMESTAMP_PATTERN)
+                .withZone(ZoneId.of(DefaultApplicationProperties.DEFAULT_ZONE_ID));
         locationService = new LocationService(locationRepository, generateCode, defaultTimestampFormatter);
     }
 
