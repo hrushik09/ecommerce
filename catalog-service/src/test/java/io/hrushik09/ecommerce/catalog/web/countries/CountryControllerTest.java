@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.web.countries;
 
-import io.hrushik09.ecommerce.catalog.TestProperties;
+import io.hrushik09.ecommerce.catalog.TestParams;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.countries.CountryAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.countries.CountryDoesNotExist;
@@ -178,8 +178,8 @@ class CountryControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code", equalTo(code)))
                     .andExpect(jsonPath("$.name", equalTo(name)))
-                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
-                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

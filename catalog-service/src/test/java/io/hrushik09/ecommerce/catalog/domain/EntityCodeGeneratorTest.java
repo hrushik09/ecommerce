@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.domain;
 
-import io.hrushik09.ecommerce.catalog.TestProperties;
+import io.hrushik09.ecommerce.catalog.TestParams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +27,7 @@ class EntityCodeGeneratorTest {
         String code = entityCodeGenerator.forEntityType(entityType);
         String uuid = code.substring(prefixLength + 1);
 
-        assertThat(uuid).matches(TestProperties.UUID_REGEX);
+        assertThat(uuid).matches(TestParams.UUID_REGEX);
     }
 
     @Test
