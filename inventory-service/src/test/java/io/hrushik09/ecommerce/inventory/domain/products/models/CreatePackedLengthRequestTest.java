@@ -46,7 +46,7 @@ class CreatePackedLengthRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void unitShouldBeNonBlank(String unit) {
         CreatePackedLengthRequest request = aPackedLengthRequest().withUnit(unit).build();
         Set<ConstraintViolation<CreatePackedLengthRequest>> violations = validator.validate(request);

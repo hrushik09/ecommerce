@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.catalog.web.listings;
 
-import io.hrushik09.ecommerce.catalog.TestParams;
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.PagedResult;
 import io.hrushik09.ecommerce.catalog.domain.listings.ListingAlreadyExists;
 import io.hrushik09.ecommerce.catalog.domain.listings.ListingDoesNotExist;
@@ -277,8 +277,8 @@ class ListingControllerTest {
                     .andExpect(jsonPath("$.description", equalTo("Description for Listing 8")))
                     .andExpect(jsonPath("$.price", equalTo("362.23")))
                     .andExpect(jsonPath("$.currency", equalTo("INR")))
-                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX)))
-                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX)));
+                    .andExpect(jsonPath("$.createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)))
+                    .andExpect(jsonPath("$.updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX)));
         }
     }
 }

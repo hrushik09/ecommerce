@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.catalog.web.listings;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
-import io.hrushik09.ecommerce.catalog.TestParams;
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import io.hrushik09.ecommerce.catalog.domain.listings.model.CreateListingResponse;
 import io.hrushik09.ecommerce.catalog.domain.regions.model.CreateRegionResponse;
@@ -188,8 +188,8 @@ class ListingEndToEndTest extends AbstractEndToEndTest {
                     .body("description", equalTo("Description for Listing 11"))
                     .body("price", equalTo("9124.00"))
                     .body("currency", equalTo("USD"))
-                    .body("createdAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX))
-                    .body("updatedAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX));
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

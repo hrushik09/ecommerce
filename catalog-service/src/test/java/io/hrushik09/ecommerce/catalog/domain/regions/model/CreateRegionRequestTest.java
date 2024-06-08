@@ -14,7 +14,7 @@ class CreateRegionRequestTest {
     private final CommonAssertions<CreateRegionRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
     void nameShouldBeNonBlank(String name) {
         CreateRegionRequest request = new CreateRegionRequest(name);
         Set<ConstraintViolation<CreateRegionRequest>> violations = validator.validate(request);

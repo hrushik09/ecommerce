@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.catalog.web.countries;
 
 import io.hrushik09.ecommerce.catalog.AbstractEndToEndTest;
 import io.hrushik09.ecommerce.catalog.EndToEndTestDataPersister;
-import io.hrushik09.ecommerce.catalog.TestParams;
+import io.hrushik09.ecommerce.catalog.TestProperties;
 import io.hrushik09.ecommerce.catalog.domain.countries.model.CreateCountryResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -131,8 +131,8 @@ class CountryEndToEndTest extends AbstractEndToEndTest {
                     .statusCode(OK.value())
                     .body("code", equalTo(country.code()))
                     .body("name", equalTo(country.name()))
-                    .body("createdAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX))
-                    .body("updatedAt", matchesPattern(TestParams.DEFAULT_TIMESTAMP_REGEX));
+                    .body("createdAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX))
+                    .body("updatedAt", matchesPattern(TestProperties.DEFAULT_TIMESTAMP_REGEX));
         }
     }
 }

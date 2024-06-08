@@ -46,7 +46,7 @@ class CreatePackedWidthRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void unitShouldBeNonBlank(String unit) {
         CreatePackedWidthRequest request = aPackedWidthRequest().withUnit(unit).build();
         Set<ConstraintViolation<CreatePackedWidthRequest>> violations = validator.validate(request);

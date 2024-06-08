@@ -21,7 +21,7 @@ class CreateLocationRequestTest {
     @Nested
     class NameValidation {
         @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
         void nameShouldBeNonBlank(String name) {
             CreateLocationRequest request = aRequest().withName(name).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);

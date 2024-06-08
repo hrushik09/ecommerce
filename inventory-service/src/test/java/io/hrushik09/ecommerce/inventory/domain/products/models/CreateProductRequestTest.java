@@ -17,7 +17,7 @@ class CreateProductRequestTest {
     private final CommonAssertions<CreateProductRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void nameShouldBeNonBlank(String name) {
         CreateProductRequest request = aRequest().withName(name).build();
         Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
@@ -25,7 +25,7 @@ class CreateProductRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void descriptionShouldBeNonBlank(String description) {
         CreateProductRequest request = aRequest().withDescription(description).build();
         Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
@@ -33,7 +33,7 @@ class CreateProductRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void categoryShouldBeNonBlank(String category) {
         CreateProductRequest request = aRequest().withCategory(category).build();
         Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);

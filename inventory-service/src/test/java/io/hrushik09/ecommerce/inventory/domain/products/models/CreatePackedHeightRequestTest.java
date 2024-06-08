@@ -46,7 +46,7 @@ class CreatePackedHeightRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
     void unitShouldBeNonBlank(String unit) {
         CreatePackedHeightRequest request = aPackedHeightRequest().withUnit(unit).build();
         Set<ConstraintViolation<CreatePackedHeightRequest>> violations = validator.validate(request);
