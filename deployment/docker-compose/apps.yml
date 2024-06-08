@@ -83,3 +83,22 @@ services:
           memory: 700m
     labels:
       logging: "promtail"
+
+  user-service:
+    image: hrushik09/ecommerce-user-service
+    container_name: user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:mysql://user-db:3306/user-db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootroot
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    depends_on:
+      user-db:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 700m

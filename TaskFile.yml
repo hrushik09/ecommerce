@@ -22,6 +22,7 @@ tasks:
       - "{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
       - "{{.MVNW}} -pl webapp spring-boot:build-image -DskipTests"
       - "{{.MVNW}} -pl catalog-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl user-service spring-boot:build-image -DskipTests"
   start_infra:
     cmds:
       - "docker compose -f {{.INFRA_DC_FILE}} up -d"
