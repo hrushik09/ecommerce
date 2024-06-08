@@ -16,4 +16,8 @@ public class CommonAssertions<T> {
         assertThat(violations).hasSize(count);
         assertThat(violations).extracting("message").contains(message);
     }
+
+    public void hasNoViolations(Set<ConstraintViolation<T>> violations) {
+        assertThat(violations).hasSize(0);
+    }
 }
