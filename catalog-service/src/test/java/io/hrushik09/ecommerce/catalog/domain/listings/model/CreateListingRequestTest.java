@@ -18,7 +18,7 @@ class CreateListingRequestTest {
     private final CommonAssertions<CreateListingRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
     void productCodeShouldBeNonBlank(String productCode) {
         CreateListingRequest request = aCreateListingRequest().withProductCode(productCode).build();
         Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
@@ -26,7 +26,7 @@ class CreateListingRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
     void regionCodeShouldBeNonBlank(String regionCode) {
         CreateListingRequest request = aCreateListingRequest().withRegionCode(regionCode).build();
         Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
@@ -34,7 +34,7 @@ class CreateListingRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
     void titleShouldBeNonBlank(String title) {
         CreateListingRequest request = aCreateListingRequest().withTitle(title).build();
         Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
@@ -50,7 +50,7 @@ class CreateListingRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
     void descriptionShouldBeNonBlank(String description) {
         CreateListingRequest request = aCreateListingRequest().withDescription(description).build();
         Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);

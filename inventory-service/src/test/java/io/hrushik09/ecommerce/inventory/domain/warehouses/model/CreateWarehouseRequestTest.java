@@ -17,7 +17,7 @@ class CreateWarehouseRequestTest {
     private final CommonAssertions<CreateWarehouseRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
     void nameShouldBeNonBlank(String name) {
         CreateWarehouseRequest request = aRequest().withName(name).build();
         Set<ConstraintViolation<CreateWarehouseRequest>> violations = validator.validate(request);

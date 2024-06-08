@@ -14,7 +14,7 @@ class CreateCountryRequestTest {
     private final CommonAssertions<CreateCountryRequest> commonAssertions = new CommonAssertions();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.catalog.TestParams#blankStrings")
     void nameShouldBeNonBlank(String name) {
         CreateCountryRequest request = new CreateCountryRequest(name);
         Set<ConstraintViolation<CreateCountryRequest>> violations = validator.validate(request);

@@ -16,7 +16,7 @@ class CreateLocationRequestTest {
     private final CommonAssertions<CreateLocationRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
     void nameShouldBeNonBlank(String name) {
         CreateLocationRequest request = aRequest().withName(name).build();
         Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
@@ -24,7 +24,7 @@ class CreateLocationRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#invalidSimpleStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#invalidSimpleStrings")
     void nameShouldContainValidCharacters(String name) {
         CreateLocationRequest request = aRequest().withName(name).build();
         Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
@@ -32,7 +32,7 @@ class CreateLocationRequestTest {
     }
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
     void addressShouldBeNonBlank(String address) {
         CreateLocationRequest request = aRequest().withAddress(address).build();
         Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);

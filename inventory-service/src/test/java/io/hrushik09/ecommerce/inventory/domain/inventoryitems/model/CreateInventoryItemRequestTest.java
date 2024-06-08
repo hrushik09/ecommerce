@@ -18,7 +18,7 @@ class CreateInventoryItemRequestTest {
     private final CommonAssertions<CreateInventoryItemRequest> commonAssertions = new CommonAssertions<>();
 
     @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.inventory.ParameterizedTestParams#blankStrings")
+    @MethodSource("io.hrushik09.ecommerce.inventory.TestParams#blankStrings")
     void productCodeShouldBeNonBlank(String productCode) {
         CreateInventoryItemRequest request = aCreateInventoryItem().withProductCode(productCode).build();
         Set<ConstraintViolation<CreateInventoryItemRequest>> violations = validator.validate(request);

@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.inventory;
 
 import java.util.stream.Stream;
 
-class ParameterizedTestParams {
+class TestParams {
     public static Stream<String> blankStrings() {
         return Stream.of(null, "", "      ");
     }
