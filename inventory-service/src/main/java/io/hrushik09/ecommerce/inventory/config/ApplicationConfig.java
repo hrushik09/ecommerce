@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 class ApplicationConfig {
     @Bean
     DateTimeFormatter defaultTimestampFormatter() {
-        return DateTimeFormatter.ofPattern(DefaultApplicationProperties.defaultTimestampPattern).withZone(ZoneId.of(DefaultApplicationProperties.defaultZoneId));
+        return DateTimeFormatter.ofPattern(DefaultApplicationProperties.DEFAULT_TIMESTAMP_PATTERN)
+                .withZone(ZoneId.of(DefaultApplicationProperties.DEFAULT_ZONE_ID));
     }
 }
