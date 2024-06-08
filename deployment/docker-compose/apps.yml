@@ -102,3 +102,5 @@ services:
       resources:
         limits:
           memory: 700m
+    labels:
+      logging: "promtail"
