@@ -3,6 +3,8 @@ package io.hrushik09.ecommerce.user;
 import java.util.stream.Stream;
 
 public class TestProperties {
+    public static final String UUID_REGEX = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+
     public static Stream<String> invalidUsernameStrings() {
         return Stream.of("", "   ", "9", "38792", "d&", "j%", "o#", "w@", "abcd1234_123efghp");
     }
