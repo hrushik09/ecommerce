@@ -1,15 +1,9 @@
 package io.hrushik09.ecommerce.user.domain.customer;
 
-class CustomerRepository {
-    public boolean existsByUsername(String username) {
-        return false;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public boolean existsByEmail(String email) {
-        return false;
-    }
+interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
+    boolean existsByUsername(String username);
 
-    public CustomerEntity save(CustomerEntity customerEntity) {
-        return null;
-    }
+    boolean existsByEmail(String email);
 }

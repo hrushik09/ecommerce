@@ -1,6 +1,9 @@
 package io.hrushik09.ecommerce.user.domain.customer;
 
+import java.time.Instant;
+
 class CustomerEntityBuilder {
+    private Long id = 23L;
     private String code = "dummy_customer_eknlanf";
     private String username = "someusername";
     private String email = "someemail@gmail.com";
@@ -8,11 +11,14 @@ class CustomerEntityBuilder {
     private String lastName = "somelastname";
     private String country = "somecountry";
     private String region = "someregion";
+    private Instant createdAt = Instant.parse("2020-10-23T03:10:00Z");
+    private Instant updatedAt = Instant.parse("2020-10-24T04:20:00Z");
 
     private CustomerEntityBuilder() {
     }
 
     private CustomerEntityBuilder(CustomerEntityBuilder copy) {
+        this.id = copy.id;
         this.code = copy.code;
         this.username = copy.username;
         this.email = copy.email;
@@ -20,6 +26,8 @@ class CustomerEntityBuilder {
         this.lastName = copy.lastName;
         this.country = copy.country;
         this.region = copy.region;
+        this.createdAt = copy.createdAt;
+        this.updatedAt = copy.updatedAt;
     }
 
     public static CustomerEntityBuilder aCustomerEntity() {
@@ -32,6 +40,7 @@ class CustomerEntityBuilder {
 
     public CustomerEntity build() {
         CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity.setId(id);
         customerEntity.setCode(code);
         customerEntity.setUsername(username);
         customerEntity.setEmail(email);
@@ -39,7 +48,14 @@ class CustomerEntityBuilder {
         customerEntity.setLastName(lastName);
         customerEntity.setCountry(country);
         customerEntity.setRegion(region);
+        customerEntity.setCreatedAt(createdAt);
+        customerEntity.setUpdatedAt(updatedAt);
         return customerEntity;
+    }
+
+    public CustomerEntityBuilder withId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public CustomerEntityBuilder withCode(String code) {
@@ -74,6 +90,16 @@ class CustomerEntityBuilder {
 
     public CustomerEntityBuilder withRegion(String region) {
         this.region = region;
+        return this;
+    }
+
+    public CustomerEntityBuilder withCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public CustomerEntityBuilder withUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
         return this;
     }
 }

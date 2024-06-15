@@ -1,13 +1,44 @@
 package io.hrushik09.ecommerce.user.domain.customer;
 
+import jakarta.persistence.*;
+
+import java.time.Instant;
+
+@Entity
+@Table(name = "customers",
+        uniqueConstraints = {@UniqueConstraint(name = "UK_customers_code", columnNames = "code"),
+                @UniqueConstraint(name = "UK_customers_username", columnNames = "username"),
+                @UniqueConstraint(name = "UK_customers_email", columnNames = "email")})
 class CustomerEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
     private String code;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
     private String region;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant createdAt;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant updatedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCode() {
         return code;
@@ -63,5 +94,21 @@ class CustomerEntity {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
