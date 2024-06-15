@@ -28,7 +28,7 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/users")
+                    .post("/api/customers")
                     .then()
                     .statusCode(CREATED.value())
                     .body("code", hasLength(4 + 1 + 36))
@@ -56,7 +56,7 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/users")
+                    .post("/api/customers")
                     .then()
                     .statusCode(CREATED.value());
 
@@ -73,7 +73,7 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/users")
+                    .post("/api/customers")
                     .then()
                     .statusCode(BAD_REQUEST.value())
                     .body("detail", equalTo("Customer with username user33 already exists"));
@@ -94,7 +94,7 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/users")
+                    .post("/api/customers")
                     .then()
                     .statusCode(CREATED.value());
 
@@ -111,7 +111,7 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             }
                             """)
                     .when()
-                    .post("/api/users")
+                    .post("/api/customers")
                     .then()
                     .statusCode(BAD_REQUEST.value())
                     .body("detail", equalTo("Customer with email user13@gmail.com already exists"));

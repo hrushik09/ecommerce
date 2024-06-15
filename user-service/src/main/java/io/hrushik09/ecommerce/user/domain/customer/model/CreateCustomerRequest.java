@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 import static io.hrushik09.ecommerce.user.config.DefaultApplicationProperties.*;
 
-record CreateCustomerRequest(
+public record CreateCustomerRequest(
         @NotNull(message = "username {non.null}")
         @Pattern(regexp = VALID_USERNAME_REGEX, message = "username {valid.characters}")
         String username,
