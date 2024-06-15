@@ -21,24 +21,24 @@ class CustomerEndToEndTest extends AbstractEndToEndTest {
                             {
                             "username": "user1_2",
                             "email": "user1_2@gmail.com",
-                            "firstName": "Jane",
+                            "firstName": "Jane M",
                             "lastName": "Doe",
                             "country": "India",
-                            "region": "West"
+                            "region": "West Region"
                             }
                             """)
                     .when()
                     .post("/api/customers")
                     .then()
                     .statusCode(CREATED.value())
-                    .body("code", hasLength(4 + 1 + 36))
-                    .body("code", startsWith("user_"))
+                    .body("code", hasLength(8 + 1 + 36))
+                    .body("code", startsWith("customer_"))
                     .body("username", equalTo("user1_2"))
                     .body("email", equalTo("user1_2@gmail.com"))
-                    .body("firstName", equalTo("John"))
+                    .body("firstName", equalTo("Jane M"))
                     .body("lastName", equalTo("Doe"))
                     .body("country", equalTo("India"))
-                    .body("region", equalTo("West"));
+                    .body("region", equalTo("West Region"));
         }
 
         @Test
