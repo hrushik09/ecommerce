@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<body>
+<div layout:fragment="content">
+    <div x-data="initData">
+        <form @submit.prevent="createCustomer" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control" id="username" type="text" x-model="customer.username">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" type="text" x-model="customer.email">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="firstName">First Name</label>
+                <input class="form-control" id="firstName" type="text" x-model="customer.firstName">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="lastName">Last Name</label>
+                <input class="form-control" id="lastName" type="text" x-model="customer.lastName">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="country">Country</label>
+                <input class="form-control" id="country" type="text" x-model="customer.country">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="region">Region</label>
+                <input class="form-control" id="region" type="text" x-model="customer.region">
+            </div>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </form>
+        <template x-if="createCustomerErrorDetail">
+            <div class="mt-3 alert alert-warning" role="alert" x-text="createCustomerErrorDetail"></div>
+        </template>
+    </div>
+</div>
+<div layout:fragment="pageScripts">
+    <script src="/js/user/customers/create_customer.js"></script>
+</div>
+</body>
+</html>

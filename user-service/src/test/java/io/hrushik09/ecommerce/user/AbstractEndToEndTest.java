@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.userservice;
+package io.hrushik09.ecommerce.user;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;

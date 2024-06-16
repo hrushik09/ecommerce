@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.userservice;
+package io.hrushik09.ecommerce.user;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
