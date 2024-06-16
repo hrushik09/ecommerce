@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ValidQuantityConstraintValidator.class)
 public @interface ValidQuantityConstraint {
-    String message() default "quantities should be valid";
+    String message() default "";
 
     Class<?>[] groups() default {};
 
