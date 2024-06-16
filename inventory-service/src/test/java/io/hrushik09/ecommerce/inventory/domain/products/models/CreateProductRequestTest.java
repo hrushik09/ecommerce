@@ -20,17 +20,17 @@ class CreateProductRequestTest {
 
     @Nested
     class NameValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String name) {
-            CreateProductRequest request = aRequest().withName(name).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateProductRequest request = aRequest().withName(null).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "name should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "name should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateProductRequest request = aRequest().withName(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidProductNameStrings")
+        void shouldContainValidCharacters(String name) {
+            CreateProductRequest request = aRequest().withName(name).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
         }
@@ -48,17 +48,17 @@ class CreateProductRequestTest {
 
     @Nested
     class DescriptionValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String description) {
-            CreateProductRequest request = aRequest().withDescription(description).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateProductRequest request = aRequest().withDescription(null).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "description should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "description should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateProductRequest request = aRequest().withDescription(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidProductDescriptionStrings")
+        void shouldContainValidCharacters(String description) {
+            CreateProductRequest request = aRequest().withDescription(description).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "description should contain valid characters");
         }
@@ -76,17 +76,17 @@ class CreateProductRequestTest {
 
     @Nested
     class CategoryValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String category) {
-            CreateProductRequest request = aRequest().withCategory(category).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateProductRequest request = aRequest().withCategory(null).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "category should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "category should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateProductRequest request = aRequest().withCategory(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidProductCategoryStrings")
+        void shouldContainValidCharacters(String category) {
+            CreateProductRequest request = aRequest().withCategory(category).build();
             Set<ConstraintViolation<CreateProductRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "category should contain valid characters");
         }

@@ -1,7 +1,6 @@
 package io.hrushik09.ecommerce.inventory.domain.warehouses.model;
 
 import io.hrushik09.ecommerce.inventory.CommonAssertions;
-import io.hrushik09.ecommerce.inventory.TestProperties;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -22,17 +21,17 @@ class CreateWarehouseRequestTest {
 
     @Nested
     class NameValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String name) {
-            CreateWarehouseRequest request = aRequest().withName(name).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateWarehouseRequest request = aRequest().withName(null).build();
             Set<ConstraintViolation<CreateWarehouseRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "name should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "name should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateWarehouseRequest request = aRequest().withName(TestProperties.INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidWarehouseNameStrings")
+        void shouldContainValidCharacters(String name) {
+            CreateWarehouseRequest request = aRequest().withName(name).build();
             Set<ConstraintViolation<CreateWarehouseRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
         }
