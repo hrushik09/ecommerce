@@ -16,4 +16,12 @@ public class TestProperties {
     public static Stream<String> blankStrings() {
         return Stream.of(null, "", "      ");
     }
+
+    public static Stream<String> invalidLocationNameStrings() {
+        return Stream.of("", "   ", "287", "d&", "ou&", "n@#", "q^%");
+    }
+
+    public static Stream<String> invalidLocationAddressStrings() {
+        return Stream.of("", "   ", "287", "d&", "ou&", "n@#", "q^%");
+    }
 }
