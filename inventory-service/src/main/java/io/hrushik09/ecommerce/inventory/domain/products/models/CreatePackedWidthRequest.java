@@ -5,12 +5,12 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 public record CreatePackedWidthRequest(
-        @NotNull(message = "value should be non-null")
-        @DecimalMin(value = "0", inclusive = false, message = "value should be greater than 0")
-        @DecimalMax(value = "100000", inclusive = false, message = "value should be less than 100000")
-        @Digits(integer = 5, fraction = 2, message = "value out of bounds, expected <5 digits>.<2 digits>")
+        @NotNull(message = "value {non.null}")
+        @DecimalMin(value = "0", inclusive = false, message = "value {decimal.greater.than}")
+        @DecimalMax(value = "100000", inclusive = false, message = "value {decimal.less.than}")
+        @Digits(integer = 5, fraction = 2, message = "value {decimal.out.of.bounds}")
         BigDecimal value,
-        @NotBlank(message = "unit should be non-blank")
+        @NotBlank(message = "unit {non.blank}")
         String unit
 ) implements CreatePackedDimensionRequest {
 }

@@ -19,35 +19,41 @@ class CreateListingRequestTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final CommonAssertions<CreateListingRequest> commonAssertions = new CommonAssertions<>();
 
-    @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-    void productCodeShouldBeNonBlank(String productCode) {
-        CreateListingRequest request = aCreateListingRequest().withProductCode(productCode).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "productCode should be non-blank");
+    @Nested
+    class ProductCodeValidation {
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
+        void productCodeShouldBeNonBlank(String productCode) {
+            CreateListingRequest request = aCreateListingRequest().withProductCode(productCode).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "productCode should be non-blank");
+        }
     }
 
-    @ParameterizedTest
-    @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-    void regionCodeShouldBeNonBlank(String regionCode) {
-        CreateListingRequest request = aCreateListingRequest().withRegionCode(regionCode).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "regionCode should be non-blank");
+    @Nested
+    class RegionCodeValidation {
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
+        void regionCodeShouldBeNonBlank(String regionCode) {
+            CreateListingRequest request = aCreateListingRequest().withRegionCode(regionCode).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "regionCode should be non-blank");
+        }
     }
 
     @Nested
     class TitleValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-        void shouldBeNonBlank(String title) {
-            CreateListingRequest request = aCreateListingRequest().withTitle(title).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateListingRequest request = aCreateListingRequest().withTitle(null).build();
             Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "title should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "title should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateListingRequest request = aCreateListingRequest().withTitle(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#invalidListingTitleStrings")
+        void shouldContainValidCharacters(String title) {
+            CreateListingRequest request = aCreateListingRequest().withTitle(title).build();
             Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "title should contain valid characters");
         }
@@ -65,17 +71,17 @@ class CreateListingRequestTest {
 
     @Nested
     class DescriptionValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-        void shouldBeNonBlank(String description) {
-            CreateListingRequest request = aCreateListingRequest().withDescription(description).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateListingRequest request = aCreateListingRequest().withDescription(null).build();
             Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "description should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "description should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateListingRequest request = aCreateListingRequest().withDescription(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#invalidListingDescriptionStrings")
+        void shouldContainValidCharacters(String description) {
+            CreateListingRequest request = aCreateListingRequest().withDescription(description).build();
             Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "description should contain valid characters");
         }
@@ -91,45 +97,51 @@ class CreateListingRequestTest {
         }
     }
 
-    @Test
-    void priceShouldBeNonNull() {
-        CreateListingRequest request = aCreateListingRequest().withPrice(null).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "price should be non-null");
+    @Nested
+    class PriceValidation {
+        @Test
+        void priceShouldBeNonNull() {
+            CreateListingRequest request = aCreateListingRequest().withPrice(null).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "price should be non-null");
+        }
+
+        @Test
+        void priceShouldBeGreaterThan0() {
+            CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("0")).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "price should be greater than 0");
+        }
+
+        @Test
+        void priceShouldBeLowerThan10000() {
+            CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("10000")).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "price should be less than 10000");
+        }
+
+        @Test
+        void priceShouldHaveUnscaledValueOf5AndScaleOf2() {
+            CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("545.757")).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "price out of bounds, expected <5 digits>.<2 digits>");
+        }
     }
 
-    @Test
-    void priceShouldBeGreaterThan0() {
-        CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("0")).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "price should be greater than 0");
-    }
+    @Nested
+    class CurrencyValidation {
+        @Test
+        void currencyShouldBeNonNull() {
+            CreateListingRequest request = aCreateListingRequest().withCurrency(null).build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasCountAndMessage(violations, 2, "currency should be non-null");
+        }
 
-    @Test
-    void priceShouldBeLowerThan10000() {
-        CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("10000")).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "price should be lower than 10000");
-    }
-
-    @Test
-    void priceShouldHaveUnscaledValueOf5AndScaleOf2() {
-        CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("545.757")).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "price out of bounds, expected <5 digits>.<2 digits>");
-    }
-
-    @Test
-    void currencyShouldBeNonNull() {
-        CreateListingRequest request = aCreateListingRequest().withCurrency(null).build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasCountAndMessage(violations, 2, "currency should be non-null");
-    }
-
-    @Test
-    void currencyShouldBeValidEnumValue() {
-        CreateListingRequest request = aCreateListingRequest().withCurrency("random-currency").build();
-        Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-        commonAssertions.hasSingleMessage(violations, "currency should be valid");
+        @Test
+        void currencyShouldBeValidEnumValue() {
+            CreateListingRequest request = aCreateListingRequest().withCurrency("random-currency").build();
+            Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
+            commonAssertions.hasSingleMessage(violations, "currency should be valid");
+        }
     }
 }

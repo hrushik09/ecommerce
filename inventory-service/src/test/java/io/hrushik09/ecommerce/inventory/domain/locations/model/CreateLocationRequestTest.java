@@ -20,17 +20,17 @@ class CreateLocationRequestTest {
 
     @Nested
     class NameValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String name) {
-            CreateLocationRequest request = aRequest().withName(name).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateLocationRequest request = aRequest().withName(null).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "name should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "name should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateLocationRequest request = aRequest().withName(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidLocationNameStrings")
+        void shouldContainValidCharacters(String name) {
+            CreateLocationRequest request = aRequest().withName(name).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
         }
@@ -48,17 +48,17 @@ class CreateLocationRequestTest {
 
     @Nested
     class AddressValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#blankStrings")
-        void shouldBeNonBlank(String address) {
-            CreateLocationRequest request = aRequest().withAddress(address).build();
+        @Test
+        void shouldBeNonNull() {
+            CreateLocationRequest request = aRequest().withAddress(null).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "address should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "address should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateLocationRequest request = aRequest().withAddress(INVALID_CHARACTERS_FOR_SIMPLE_TEXT).build();
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.inventory.TestProperties#invalidLocationAddressStrings")
+        void shouldContainValidCharacters(String address) {
+            CreateLocationRequest request = aRequest().withAddress(address).build();
             Set<ConstraintViolation<CreateLocationRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "address should contain valid characters");
         }

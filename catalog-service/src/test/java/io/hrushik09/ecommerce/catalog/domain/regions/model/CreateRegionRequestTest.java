@@ -11,7 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
 
-import static io.hrushik09.ecommerce.catalog.TestProperties.*;
+import static io.hrushik09.ecommerce.catalog.TestProperties.STRING_WITH_LENGTH_100;
+import static io.hrushik09.ecommerce.catalog.TestProperties.STRING_WITH_LENGTH_101;
 
 class CreateRegionRequestTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -19,17 +20,17 @@ class CreateRegionRequestTest {
 
     @Nested
     class NameValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-        void shouldBeNonBlank(String name) {
-            CreateRegionRequest request = new CreateRegionRequest(name);
+        @Test
+        void shouldBeNonNull() {
+            CreateRegionRequest request = new CreateRegionRequest(null);
             Set<ConstraintViolation<CreateRegionRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "name should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "name should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateRegionRequest request = new CreateRegionRequest(INVALID_CHARACTERS_FOR_SIMPLE_TEXT);
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#invalidRegionNameStrings")
+        void shouldContainValidCharacters(String name) {
+            CreateRegionRequest request = new CreateRegionRequest(name);
             Set<ConstraintViolation<CreateRegionRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
         }

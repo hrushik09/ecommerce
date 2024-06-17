@@ -5,21 +5,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-@ValidQuantityConstraint
+@ValidQuantityConstraint(message = "quantities should be valid")
 public record CreateInventoryItemRequest(
-        @NotBlank(message = "productCode should be non-blank")
+        @NotBlank(message = "productCode {non.blank}")
         String productCode,
-        @NotNull(message = "quantityAvailable should be non-null")
-        @Positive(message = "quantityAvailable should be positive")
+        @NotNull(message = "quantityAvailable {non.null}")
+        @Positive(message = "quantityAvailable {is.positive}")
         Integer quantityAvailable,
-        @NotNull(message = "minimumStockLevel should be non-null")
-        @Positive(message = "minimumStockLevel should be positive")
+        @NotNull(message = "minimumStockLevel {non.null}")
+        @Positive(message = "minimumStockLevel {is.positive}")
         Integer minimumStockLevel,
-        @NotNull(message = "maximumStockLevel should be non-null")
-        @Positive(message = "maximumStockLevel should be positive")
+        @NotNull(message = "maximumStockLevel {non.null}")
+        @Positive(message = "maximumStockLevel {is.positive}")
         Integer maximumStockLevel,
-        @NotNull(message = "reorderPoint should be non-null")
-        @Positive(message = "reorderPoint should be positive")
+        @NotNull(message = "reorderPoint {non.null}")
+        @Positive(message = "reorderPoint {is.positive}")
         Integer reorderPoint
 ) {
 }

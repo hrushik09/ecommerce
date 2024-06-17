@@ -8,24 +8,24 @@ import java.math.BigDecimal;
 import static io.hrushik09.ecommerce.catalog.config.DefaultApplicationProperties.SIMPLE_TEXT_REGEX;
 
 public record CreateListingRequest(
-        @NotBlank(message = "productCode should be non-blank")
+        @NotBlank(message = "productCode {non.blank}")
         String productCode,
-        @NotBlank(message = "regionCode should be non-blank")
+        @NotBlank(message = "regionCode {non.blank}")
         String regionCode,
-        @NotBlank(message = "title {not.blank}")
+        @NotNull(message = "title {non.null}")
         @Pattern(regexp = SIMPLE_TEXT_REGEX, message = "title {valid.characters}")
         @Size(max = 100, message = "title {max.characters}")
         String title,
-        @NotBlank(message = "description {not.blank}")
+        @NotNull(message = "description {non.null}")
         @Pattern(regexp = SIMPLE_TEXT_REGEX, message = "description {valid.characters}")
         @Size(max = 500, message = "description {max.characters}")
         String description,
-        @NotNull(message = "price should be non-null")
-        @DecimalMin(value = "0", inclusive = false, message = "price should be greater than 0")
-        @DecimalMax(value = "10000", inclusive = false, message = "price should be lower than 10000")
-        @Digits(integer = 5, fraction = 2, message = "price out of bounds, expected <5 digits>.<2 digits>")
+        @NotNull(message = "price {non.null}")
+        @DecimalMin(value = "0", inclusive = false, message = "price {decimal.greater.than}")
+        @DecimalMax(value = "10000", inclusive = false, message = "price {decimal.less.than}")
+        @Digits(integer = 5, fraction = 2, message = "price {decimal.out.of.bounds}")
         BigDecimal price,
-        @NotNull(message = "currency should be non-null")
+        @NotNull(message = "currency {non.null}")
         @ValueOfEnumConstraint(enumClass = CreateListingRequestCurrencyEnum.class, message = "currency should be valid")
         String currency
 ) {
