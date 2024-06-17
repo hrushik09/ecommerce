@@ -117,7 +117,7 @@ class CreateListingRequestTest {
         void priceShouldBeLowerThan10000() {
             CreateListingRequest request = aCreateListingRequest().withPrice(new BigDecimal("10000")).build();
             Set<ConstraintViolation<CreateListingRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "price should be lower than 10000");
+            commonAssertions.hasSingleMessage(violations, "price should be less than 10000");
         }
 
         @Test

@@ -4,16 +4,16 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateMeasurementRequest(
-        @NotNull(message = "packedWeight should be non-null")
+        @NotNull(message = "packedWeight {non.null}")
         @Valid
         CreatePackedWeightRequest packedWeight,
-        @NotNull(message = "packedLength should be non-null")
+        @NotNull(message = "packedLength {non.null}")
         @Valid
         CreatePackedLengthRequest packedLength,
-        @NotNull(message = "packedWidth should be non-null")
+        @NotNull(message = "packedWidth {non.null}")
         @Valid
         CreatePackedWidthRequest packedWidth,
-        @NotNull(message = "packedHeight should be non-null")
+        @NotNull(message = "packedHeight {non.null}")
         @Valid
         CreatePackedHeightRequest packedHeight
 ) {

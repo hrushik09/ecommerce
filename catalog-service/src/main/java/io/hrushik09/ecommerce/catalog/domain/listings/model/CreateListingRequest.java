@@ -21,9 +21,9 @@ public record CreateListingRequest(
         @Size(max = 500, message = "description {max.characters}")
         String description,
         @NotNull(message = "price {non.null}")
-        @DecimalMin(value = "0", inclusive = false, message = "price should be greater than {value}")
-        @DecimalMax(value = "10000", inclusive = false, message = "price should be lower than {value}")
-        @Digits(integer = 5, fraction = 2, message = "price out of bounds, expected <{integer} digits>.<{fraction} digits>")
+        @DecimalMin(value = "0", inclusive = false, message = "price {decimal.greater.than}")
+        @DecimalMax(value = "10000", inclusive = false, message = "price {decimal.less.than}")
+        @Digits(integer = 5, fraction = 2, message = "price {decimal.out.of.bounds}")
         BigDecimal price,
         @NotNull(message = "currency {non.null}")
         @ValueOfEnumConstraint(enumClass = CreateListingRequestCurrencyEnum.class, message = "currency should be valid")
