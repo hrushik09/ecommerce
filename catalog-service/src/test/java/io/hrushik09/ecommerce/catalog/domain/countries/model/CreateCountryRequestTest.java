@@ -11,7 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
 
-import static io.hrushik09.ecommerce.catalog.TestProperties.*;
+import static io.hrushik09.ecommerce.catalog.TestProperties.STRING_WITH_LENGTH_100;
+import static io.hrushik09.ecommerce.catalog.TestProperties.STRING_WITH_LENGTH_101;
 
 class CreateCountryRequestTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -19,17 +20,17 @@ class CreateCountryRequestTest {
 
     @Nested
     class NameValidation {
-        @ParameterizedTest
-        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#blankStrings")
-        void shouldBeNonBlank(String name) {
-            CreateCountryRequest request = new CreateCountryRequest(name);
+        @Test
+        void shouldBeNonNull() {
+            CreateCountryRequest request = new CreateCountryRequest(null);
             Set<ConstraintViolation<CreateCountryRequest>> violations = validator.validate(request);
-            commonAssertions.hasSingleMessage(violations, "name should be non-blank");
+            commonAssertions.hasSingleMessage(violations, "name should be non-null");
         }
 
-        @Test
-        void shouldContainValidCharacters() {
-            CreateCountryRequest request = new CreateCountryRequest(INVALID_CHARACTERS_FOR_SIMPLE_TEXT);
+        @ParameterizedTest
+        @MethodSource("io.hrushik09.ecommerce.catalog.TestProperties#invalidCountryNameStrings")
+        void shouldContainValidCharacters(String name) {
+            CreateCountryRequest request = new CreateCountryRequest(name);
             Set<ConstraintViolation<CreateCountryRequest>> violations = validator.validate(request);
             commonAssertions.hasSingleMessage(violations, "name should contain valid characters");
         }
