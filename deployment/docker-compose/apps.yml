@@ -107,3 +107,26 @@ services:
           memory: 700m
     labels:
       logging: "promtail"
+
+  auth-service:
+    image: hrushik09/ecommerce-auth-service
+    container_name: auth-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:mysql://auth-db:3306/auth-db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootroot
+      - MANAGEMENT_TRACING_ENABLED=true
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://tempo:9411
+    ports:
+      - "8084:8084"
+    restart: unless-stopped
+    depends_on:
+      auth-db:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    labels:
+      logging: "promtail"
