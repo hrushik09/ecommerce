@@ -47,7 +47,7 @@ class AuthorityEndToEndTest extends AbstractEndToEndTest {
                                     }
                                     """))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.error", equalTo("Authority with value create already exists")));
+                    .andExpect(jsonPath("$.detail", equalTo("Authority with value create already exists")));
         }
     }
 }

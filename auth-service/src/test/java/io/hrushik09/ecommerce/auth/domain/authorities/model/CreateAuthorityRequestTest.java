@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.auth.domain.authorities;
+package io.hrushik09.ecommerce.auth.domain.authorities.model;
 
 import io.hrushik09.ecommerce.auth.CommonAssertions;
 import jakarta.validation.ConstraintViolation;
