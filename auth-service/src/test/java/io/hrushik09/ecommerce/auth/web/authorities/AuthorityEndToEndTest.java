@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.auth.authorities;
+package io.hrushik09.ecommerce.auth.web.authorities;
 
 import io.hrushik09.ecommerce.auth.AbstractEndToEndTest;
 import org.junit.jupiter.api.Nested;
