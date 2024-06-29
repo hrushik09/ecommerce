@@ -16,20 +16,10 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String SERVICE_NAME = "auth-service";
-
-    @ExceptionHandler(Exception.class)
-    ProblemDetail handleException(Exception e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(INTERNAL_SERVER_ERROR, e.getMessage());
-        problemDetail.setTitle("Internal Server Error");
-        problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("timestamp", Instant.now());
-        return problemDetail;
-    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -53,4 +43,3 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 }
-

@@ -1,11 +1,7 @@
 package io.hrushik09.ecommerce.auth.domain.authorities;
 
-class AuthorityRepository {
-    public boolean existsByValue(String value) {
-        return false;
-    }
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    public AuthorityEntity save(AuthorityEntity authorityEntity) {
-        return null;
-    }
+interface AuthorityRepository extends JpaRepository<AuthorityEntity, Long> {
+    boolean existsByValue(String value);
 }
