@@ -15,6 +15,9 @@ class UserEndToEndTest extends AbstractEndToEndTest {
     class CreateUser {
         @Test
         void shouldCreateUserSuccessfully() throws Exception {
+            havingPersisted.authority("api:read");
+            havingPersisted.authority("api:write");
+
             mockMvc.perform(post("/api/users")
                             .contentType(APPLICATION_JSON)
                             .content("""
@@ -37,13 +40,15 @@ class UserEndToEndTest extends AbstractEndToEndTest {
 
         @Test
         void shouldNotCreateWhenUserWithUsernameAlreadyExists() throws Exception {
+            havingPersisted.authority("dummy:value");
+
             mockMvc.perform(post("/api/users")
                             .contentType(APPLICATION_JSON)
                             .content("""
                                     {
                                     "username": "hehkdf",
-                                    "email": "dummy@example.com",
-                                    "password": "dummy",
+                                    "email": "dummy1@example.com",
+                                    "password": "dummyPass",
                                     "authorities": [
                                     "dummy:value"
                                     ]
@@ -56,8 +61,8 @@ class UserEndToEndTest extends AbstractEndToEndTest {
                             .content("""
                                     {
                                     "username": "hehkdf",
-                                    "email": "dummy@example.com",
-                                    "password": "dummy",
+                                    "email": "dummy2@example.com",
+                                    "password": "dummyPass",
                                     "authorities": [
                                     "dummy:value"
                                     ]
@@ -69,13 +74,15 @@ class UserEndToEndTest extends AbstractEndToEndTest {
 
         @Test
         void shouldNotCreateWhenUserWithEmailAlreadyExists() throws Exception {
+            havingPersisted.authority("dummy:value");
+
             mockMvc.perform(post("/api/users")
                             .contentType(APPLICATION_JSON)
                             .content("""
                                     {
-                                    "username": "dummy",
+                                    "username": "dummy1",
                                     "email": "abfks@example.com",
-                                    "password": "dummy",
+                                    "password": "dummyPass",
                                     "authorities": [
                                     "dummy:value"
                                     ]
@@ -87,9 +94,9 @@ class UserEndToEndTest extends AbstractEndToEndTest {
                             .contentType(APPLICATION_JSON)
                             .content("""
                                     {
-                                    "username": "dummy",
+                                    "username": "dummy2",
                                     "email": "abfks@example.com",
-                                    "password": "dummy",
+                                    "password": "dummyPass",
                                     "authorities": [
                                     "dummy:value"
                                     ]

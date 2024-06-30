@@ -20,6 +20,8 @@ public class AbstractEndToEndTest {
     protected MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
+    @Autowired
+    protected EndToEndTestDataPersister havingPersisted;
 
     @BeforeEach
     void setUp() {
