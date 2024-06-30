@@ -33,4 +33,8 @@ public class AuthorityService {
         return authorityRepository.findByValue(value)
                 .orElseThrow(() -> new AuthorityDoesNotExist(value));
     }
+
+    public boolean existsByValue(String value) {
+        return authorityRepository.existsByValue(value);
+    }
 }
