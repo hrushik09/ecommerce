@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.auth.config;
+package io.hrushik09.ecommerce.auth.config.security;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -14,9 +14,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -32,7 +29,6 @@ import org.springframework.security.oauth2.server.authorization.settings.OAuth2T
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
@@ -116,21 +112,6 @@ public class SecurityConfig {
                 .build();
         JWKSet jwkSet = new JWKSet(rsaKey);
         return new ImmutableJWKSet<>(jwkSet);
-    }
-
-    @Bean
-    UserDetailsService userDetailsService(@Value("${temp.user.password}") String tempPassword,
-                                          @Value("${admin.user.password}") String adminPassword,
-                                          PasswordEncoder passwordEncoder) {
-        UserDetails userDetails = User.withUsername("temp")
-                .password(passwordEncoder.encode(tempPassword))
-                .authorities("read", "write")
-                .build();
-        UserDetails defaultAdmin = User.withUsername("default-admin")
-                .password(passwordEncoder.encode(adminPassword))
-                .authorities("defaultAdmin")
-                .build();
-        return new InMemoryUserDetailsManager(userDetails, defaultAdmin);
     }
 
     @Bean

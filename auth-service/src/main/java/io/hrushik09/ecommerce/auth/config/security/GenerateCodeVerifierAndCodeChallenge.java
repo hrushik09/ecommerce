@@ -1,4 +1,4 @@
-package io.hrushik09.ecommerce.auth.config;
+package io.hrushik09.ecommerce.auth.config.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

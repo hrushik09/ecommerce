@@ -31,7 +31,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Build with Maven
-        run: ./mvnw -ntp verify -Decommerce-default.client.secret=${{ secrets.ECOMMERCE_DEFAULT_CLIENT_SECRET }} -Dtemp.user.password=${{ secrets.TEMP_USER_PASSWORD }} -Dadmin.user.password=${{ secrets.ADMIN_USER_PASSWORD }}
+        run: ./mvnw -ntp verify -Decommerce-default.client.secret=${{ secrets.ECOMMERCE_DEFAULT_CLIENT_SECRET }} -Dadmin.password=${{ secrets.ADMIN_PASSWORD }}
 
       - if: ${{ github.ref == 'refs/heads/main' }}
         name: Login to Docker Hub
