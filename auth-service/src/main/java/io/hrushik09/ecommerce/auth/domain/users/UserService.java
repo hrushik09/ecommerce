@@ -6,10 +6,14 @@ import io.hrushik09.ecommerce.auth.domain.authorities.AuthorityService;
 import io.hrushik09.ecommerce.auth.domain.users.model.CreateUserCommand;
 import io.hrushik09.ecommerce.auth.domain.users.model.CreateUserResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final AuthorityService authorityService;
@@ -23,6 +27,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public CreateUserResponse createUser(CreateUserCommand cmd) {
         if (userRepository.existsByUsername(cmd.username())) {
             throw new UserWithUsernameAlreadyExists(cmd.username());
