@@ -197,6 +197,7 @@ class CountryServiceTest {
             CountryEntity countryEntity = countryService.getCountryEntityByCode(code);
 
             assertThat(countryEntity).isNotNull();
+            assertThat(countryEntity.getId()).isNotNull();
             assertThat(countryEntity.getCode()).isEqualTo(code);
             assertThat(countryEntity.getName()).isEqualTo(name);
             assertThat(countryEntity.getCreatedAt()).isNotNull();

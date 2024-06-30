@@ -11,6 +11,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static io.hrushik09.ecommerce.auth.domain.authorities.AuthorityEntityBuilder.aAuthorityEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,6 +81,38 @@ class AuthorityServiceTest {
             assertThat(created).isNotNull();
             assertThat(created.code()).isEqualTo(code);
             assertThat(created.value()).isEqualTo(value);
+        }
+    }
+
+    @Nested
+    class GetAuthorityEntityByValue {
+        @Test
+        void shouldThrowWhenAuthorityDoesNotExist() {
+            String value = "absent";
+            when(authorityRepository.findByValue(value)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> authorityService.getAuthorityEntityByValue(value))
+                    .isInstanceOf(AuthorityDoesNotExist.class)
+                    .hasMessage("Authority with value " + value + " does not exist");
+        }
+
+        @Test
+        void shouldGetAuthorityEntityByValueSuccessfully() {
+            String code = "authority_ajfna";
+            String value = "api:read";
+            AuthorityEntityBuilder authorityEntityBuilder = aAuthorityEntity()
+                    .withCode(code)
+                    .withValue(value);
+            when(authorityRepository.findByValue(value)).thenReturn(Optional.of(authorityEntityBuilder.build()));
+
+            AuthorityEntity authorityEntity = authorityService.getAuthorityEntityByValue(value);
+
+            assertThat(authorityEntity).isNotNull();
+            assertThat(authorityEntity.getId()).isNotNull();
+            assertThat(authorityEntity.getCode()).isEqualTo(code);
+            assertThat(authorityEntity.getValue()).isEqualTo(value);
+            assertThat(authorityEntity.getCreatedAt()).isNotNull();
+            assertThat(authorityEntity.getUpdatedAt()).isNotNull();
         }
     }
 }

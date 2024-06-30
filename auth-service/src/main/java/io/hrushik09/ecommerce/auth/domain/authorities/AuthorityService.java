@@ -30,6 +30,7 @@ public class AuthorityService {
     }
 
     public AuthorityEntity getAuthorityEntityByValue(String value) {
-        return null;
+        return authorityRepository.findByValue(value)
+                .orElseThrow(() -> new AuthorityDoesNotExist(value));
     }
 }
