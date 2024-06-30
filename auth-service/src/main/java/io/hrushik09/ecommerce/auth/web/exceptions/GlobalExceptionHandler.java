@@ -1,6 +1,9 @@
 package io.hrushik09.ecommerce.auth.web.exceptions;
 
 import io.hrushik09.ecommerce.auth.domain.authorities.AuthorityAlreadyExists;
+import io.hrushik09.ecommerce.auth.domain.authorities.AuthorityDoesNotExist;
+import io.hrushik09.ecommerce.auth.domain.users.UserWithEmailAlreadyExists;
+import io.hrushik09.ecommerce.auth.domain.users.UserWithUsernameAlreadyExists;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -34,8 +37,17 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(problemDetail);
     }
 
-    @ExceptionHandler(AuthorityAlreadyExists.class)
+    @ExceptionHandler({AuthorityAlreadyExists.class, UserWithUsernameAlreadyExists.class, UserWithEmailAlreadyExists.class})
     ProblemDetail handleAlreadyExists(AlreadyExists e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle("Bad Request");
+        problemDetail.setProperty("service", SERVICE_NAME);
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(AuthorityDoesNotExist.class)
+    ProblemDetail handleDoesNotExist(DoesNotExist e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Bad Request");
         problemDetail.setProperty("service", SERVICE_NAME);

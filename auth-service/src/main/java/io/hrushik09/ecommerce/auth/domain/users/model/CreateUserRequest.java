@@ -9,7 +9,7 @@ import java.util.List;
 
 import static io.hrushik09.ecommerce.auth.config.DefaultApplicationProperties.*;
 
-record CreateUserRequest(
+public record CreateUserRequest(
         @NotNull(message = "username {non.null}")
         @Pattern(regexp = VALID_USERNAME_REGEX, message = "username {valid.characters}")
         String username,
