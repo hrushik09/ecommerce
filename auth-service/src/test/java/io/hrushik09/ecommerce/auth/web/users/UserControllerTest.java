@@ -1,6 +1,6 @@
 package io.hrushik09.ecommerce.auth.web.users;
 
-import io.hrushik09.ecommerce.auth.config.SecurityConfig;
+import io.hrushik09.ecommerce.auth.config.security.SecurityConfig;
 import io.hrushik09.ecommerce.auth.domain.authorities.AuthorityDoesNotExist;
 import io.hrushik09.ecommerce.auth.domain.users.UserService;
 import io.hrushik09.ecommerce.auth.domain.users.UserWithEmailAlreadyExists;

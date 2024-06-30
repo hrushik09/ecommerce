@@ -115,4 +115,23 @@ class AuthorityServiceTest {
             assertThat(authorityEntity.getUpdatedAt()).isNotNull();
         }
     }
+
+    @Nested
+    class ExistsByValue {
+        @Test
+        void shouldReturnFalseWhenAuthorityDoesNotExist() {
+            String value = "missing";
+            when(authorityRepository.existsByValue(value)).thenReturn(false);
+
+            assertThat(authorityService.existsByValue(value)).isFalse();
+        }
+
+        @Test
+        void shouldReturnTrueWhenAuthorityExists() {
+            String value = "api:read";
+            when(authorityRepository.existsByValue(value)).thenReturn(true);
+
+            assertThat(authorityService.existsByValue(value)).isTrue();
+        }
+    }
 }

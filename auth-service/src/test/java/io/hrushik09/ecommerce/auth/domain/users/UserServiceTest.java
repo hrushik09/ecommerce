@@ -146,4 +146,23 @@ class UserServiceTest {
             assertThat(created.email()).isEqualTo(email);
         }
     }
+
+    @Nested
+    class ExistsByUsername {
+        @Test
+        void shouldReturnFalseWhenUserDoesNotExist() {
+            String username = "missing";
+            when(userRepository.existsByUsername(username)).thenReturn(false);
+
+            assertThat(userService.existsByUsername(username)).isFalse();
+        }
+
+        @Test
+        void shouldReturnTrueWhenUserExists() {
+            String username = "ofakjbf";
+            when(userRepository.existsByUsername(username)).thenReturn(true);
+
+            assertThat(userService.existsByUsername(username)).isTrue();
+        }
+    }
 }

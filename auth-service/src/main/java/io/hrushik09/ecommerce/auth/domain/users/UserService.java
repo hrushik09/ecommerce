@@ -47,4 +47,8 @@ public class UserService {
         UserEntity saved = userRepository.save(userEntity);
         return UserMapper.convertToCreateUserResponse(saved);
     }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }
