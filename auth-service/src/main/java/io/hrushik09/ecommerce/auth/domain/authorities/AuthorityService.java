@@ -28,4 +28,8 @@ public class AuthorityService {
         AuthorityEntity saved = authorityRepository.save(authorityEntity);
         return AuthorityMapper.convertToCreateAuthorityResponse(saved);
     }
+
+    public AuthorityEntity getAuthorityEntityByValue(String value) {
+        return null;
+    }
 }

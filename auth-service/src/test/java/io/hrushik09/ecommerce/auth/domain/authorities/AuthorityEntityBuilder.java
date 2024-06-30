@@ -2,7 +2,7 @@ package io.hrushik09.ecommerce.auth.domain.authorities;
 
 import java.time.Instant;
 
-class AuthorityEntityBuilder {
+public class AuthorityEntityBuilder {
     private Long id = 643L;
     private String code = "authority_dummy_euasjb";
     private String value = "dummy";
